@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NovaHubs — Learn English by Reading Short Stories (A1–C1) with Audio &amp; Arabic Translation</title>
+<meta name="description" content="NovaHubs is a free graded reader. Read short English stories from level A1 to C1, listen to every word or sentence at normal or slow speed, translate to Arabic instantly, and save sentences into level folders." />
+<meta name="keywords" content="learn English, graded readers, English short stories, A1 A2 B1 B2 C1, English listening, English to Arabic translation, sentence bank, reading practice" />
+<meta name="author" content="NovaHubs" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="NovaHubs — Learn English by Reading" />
+<meta property="og:description" content="Read, listen and remember. Graded English stories A1 to C1 with audio and instant Arabic translation." />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=Special+Elite&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"WebSite",
+  "name":"NovaHubs",
+  "description":"Free graded English reader with audio and Arabic translation, levels A1 to C1.",
+  "inLanguage":"en"
+}
+</script>
+<style>
+  :root{
+    --paper:#efe6d2; --paper-2:#e7dcc4;
+    --ink:#211d17; --ink-soft:#4a4339; --faint:#8a7f6c;
+    --line:#2a251d;
+    --accent:#a63422; --accent-2:#bf5a2a;
+    --sel:rgba(166,52,34,.16); --read:rgba(191,90,42,.22);
+    --serif:"Source Serif 4", Georgia, "Times New Roman", serif;
+    --display:"Playfair Display", Georgia, serif;
+    --type:"Special Elite","Courier New",monospace;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  html{scrollbar-gutter:stable;}
+  body{
+    font-family:var(--serif);color:var(--ink);min-height:100vh;
+    background:#e3d6ba;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='0.05'/%3E%3C/svg%3E");
+    -webkit-font-smoothing:antialiased;
+  }
+  #app{
+    max-width:1180px;margin:0 auto;min-height:100vh;background:var(--paper);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='q'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23q)' opacity='0.04'/%3E%3C/svg%3E");
+    border-left:1px solid #c5b693;border-right:1px solid #c5b693;
+    display:flex;flex-direction:column;
+  }
+
+  /* masthead (scrolls) */
+  header.mast{padding:18px 20px 12px;border-bottom:1px solid var(--line);}
+  .mast-top{display:flex;justify-content:space-between;align-items:center;
+    font-family:var(--type);font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--ink-soft);}
+  .nameplate{font-family:var(--display);font-weight:900;text-align:center;line-height:.92;
+    font-size:clamp(40px,9vw,76px);margin:8px 0 4px;letter-spacing:-1px;}
+  .nameplate em{color:var(--accent);font-style:normal;}
+  .mast-kicker{text-align:center;font-family:var(--type);font-size:10px;letter-spacing:3px;
+    text-transform:uppercase;color:var(--faint);}
+  .mast-rule{display:flex;align-items:center;gap:12px;margin-top:10px;}
+  .mast-rule::before,.mast-rule::after{content:"";height:2px;background:var(--line);flex:1;}
+  .mast-rule span{font-family:var(--type);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-soft);}
+
+  /* sticky toolbar with persistent BACK */
+  nav.topbar{position:sticky;top:0;z-index:45;background:var(--paper);
+    border-bottom:3px double var(--line);display:flex;align-items:stretch;justify-content:space-between;}
+  .tb-left{display:flex;align-items:center;padding-left:14px;min-width:0;}
+  #wordmark{font-family:var(--display);font-weight:900;font-size:18px;letter-spacing:-.5px;}
+  #wordmark em{color:var(--accent);font-style:normal;}
+  #backTop{display:none;align-items:center;gap:7px;background:none;border:none;cursor:pointer;
+    font-family:var(--type);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink);padding:12px 0;}
+  #backTop svg{width:15px;height:15px;}
+  .tb-nav{display:flex;}
+  .tb-nav button,.tb-nav a{background:none;border:none;border-left:1px solid var(--line);cursor:pointer;
+    padding:14px 16px;font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:1px;
+    text-transform:uppercase;color:var(--ink-soft);transition:.15s;text-decoration:none;display:flex;align-items:center;}
+  .tb-nav button.on,.tb-nav a.on{background:var(--ink);color:var(--paper);}
+  @media(max-width:480px){ .tb-nav button,.tb-nav a{padding:14px 11px;font-size:11px;} #wordmark{font-size:16px;} }
+
+  main{flex:1;padding:22px 20px 40px;}
+  body.reading-mode main{padding-bottom:40px;}
+  .wrap{max-width:1080px;margin:0 auto;}
+  .wrap-read{max-width:720px;margin:0 auto;}
+  .reveal{opacity:0;transform:translateY(10px);animation:rise .5s cubic-bezier(.2,.7,.2,1) forwards;}
+  @keyframes rise{to{opacity:1;transform:none;}}
+
+  /* section head */
+  .sec-head{margin:2px 0 20px;border-bottom:1px solid var(--line);padding-bottom:14px;}
+  .sec-kicker{font-family:var(--type);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);}
+  .sec-title{font-family:var(--display);font-weight:900;font-size:clamp(28px,5vw,42px);line-height:1.02;margin:4px 0 8px;}
+  .sec-sub{font-style:italic;color:var(--ink-soft);font-size:15px;}
+
+  /* level tabs */
+  .levels{display:flex;border:1px solid var(--line);margin-bottom:22px;max-width:560px;}
+  .levels button{flex:1;background:none;border:none;border-right:1px solid var(--line);cursor:pointer;
+    padding:10px 2px 8px;font-family:var(--display);font-weight:700;font-size:15px;color:var(--ink-soft);}
+  .levels button:last-child{border-right:none;}
+  .levels button .lab{display:block;font-family:var(--type);font-size:7.5px;letter-spacing:1px;color:var(--faint);margin-top:1px;text-transform:uppercase;}
+  .levels button.on{background:var(--accent);color:#fff;}
+  .levels button.on .lab{color:#f3d8cf;}
+
+  /* grid */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:24px 18px;}
+  .card{cursor:pointer;}
+  .cover{width:100%;border:1px solid var(--line);display:block;background:var(--paper-2);
+    box-shadow:4px 5px 0 rgba(33,29,23,.16);transition:.18s;}
+  .card:hover .cover{transform:translate(-1px,-2px);box-shadow:6px 8px 0 rgba(33,29,23,.18);}
+  .cap{margin-top:10px;}
+  .cap .tt{font-family:var(--display);font-weight:700;font-size:16px;line-height:1.08;}
+  .cap .au{font-style:italic;color:var(--ink-soft);font-size:12px;margin-top:2px;}
+  .cap .meta{font-family:var(--type);font-size:8.5px;letter-spacing:.6px;color:var(--faint);text-transform:uppercase;
+    margin-top:5px;border-top:1px solid var(--line);padding-top:5px;}
+  .cover-photo{aspect-ratio:300/420;object-fit:cover;}
+  .forth .cover{display:flex;align-items:center;justify-content:center;text-align:center;aspect-ratio:300/420;
+    border-style:dashed;box-shadow:none;background:repeating-linear-gradient(45deg,var(--paper),var(--paper) 8px,var(--paper-2) 8px,var(--paper-2) 16px);}
+  .forth .ftxt{font-family:var(--display);font-style:italic;color:var(--faint);font-size:14px;padding:10px;}
+
+  /* detail */
+  .detail-cover{display:flex;gap:26px;align-items:flex-start;flex-wrap:wrap;}
+  .detail-cover .cover{width:200px;flex:none;}
+  @media(max-width:520px){ .detail-cover .cover{width:138px;} .detail-cover{gap:16px;} }
+  .detail-head{flex:1;min-width:230px;}
+  .lvl-tag{display:inline-block;font-family:var(--type);font-size:9px;letter-spacing:1.5px;
+    text-transform:uppercase;background:var(--ink);color:var(--paper);padding:3px 9px;}
+  .detail-head h1{font-family:var(--display);font-weight:900;font-size:clamp(24px,4.5vw,34px);line-height:1.02;margin:10px 0 4px;}
+  .detail-head .by{font-style:italic;color:var(--ink-soft);font-size:15px;}
+  .detail-head .nar{font-family:var(--type);font-size:10px;color:var(--faint);letter-spacing:.5px;margin-top:6px;}
+  .blurb{font-size:16px;line-height:1.65;margin:22px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0;}
+  .blurb::first-letter{font-family:var(--display);font-weight:900;font-size:50px;float:left;line-height:.8;margin:4px 9px 0 0;color:var(--accent);}
+  .specs{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);margin-bottom:20px;}
+  .specs div{padding:11px 13px;border-right:1px solid var(--line);}
+  .specs div:last-child{border-right:none;}
+  @media(max-width:520px){ .specs{grid-template-columns:1fr 1fr;} .specs div:nth-child(2n){border-right:none;}
+    .specs div:nth-child(-n+2){border-bottom:1px solid var(--line);} }
+  .specs .k{font-family:var(--type);font-size:8.5px;letter-spacing:1px;text-transform:uppercase;color:var(--faint);}
+  .specs .v{font-family:var(--display);font-weight:700;font-size:16px;margin-top:3px;}
+  .btn-row{display:flex;gap:12px;flex-wrap:wrap;}
+  .btn{flex:1;min-width:200px;border:1px solid var(--line);cursor:pointer;font-family:var(--display);font-weight:700;
+    letter-spacing:1px;text-transform:uppercase;font-size:13px;padding:14px;display:flex;align-items:center;justify-content:center;gap:9px;}
+  .btn svg{width:16px;height:16px;}
+  .btn-primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .btn-ghost{background:var(--paper);color:var(--ink);}
+
+  /* reader / article body */
+  .reader-head{border-bottom:3px double var(--line);padding-bottom:14px;margin-bottom:20px;}
+  .reader-head h1{font-family:var(--display);font-weight:900;font-size:clamp(26px,4.5vw,38px);line-height:1.03;margin:9px 0 3px;}
+  .reader-head .by{font-style:italic;color:var(--ink-soft);font-size:14px;}
+  .hint{font-family:var(--type);font-size:10.5px;color:var(--faint);letter-spacing:.4px;line-height:1.55;
+    border:1px solid var(--line);padding:10px 12px;margin-bottom:18px;background:var(--paper-2);}
+  .hint b{color:var(--accent);}
+  .mode-toggle{display:flex;border:1px solid var(--line);margin-bottom:16px;max-width:420px;}
+  .mode-toggle button{flex:1;background:none;border:none;border-right:1px solid var(--line);cursor:pointer;
+    padding:9px;font-family:var(--type);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-soft);}
+  .mode-toggle button:last-child{border-right:none;}
+  .mode-toggle button.on{background:var(--ink);color:var(--paper);}
+  .story-body{font-size:18px;line-height:1.85;}
+  .story-body p{margin:0 0 17px;text-align:justify;hyphens:auto;}
+  .story-body p:first-of-type::first-letter{font-family:var(--display);font-weight:900;font-size:62px;float:left;
+    line-height:.72;margin:7px 10px 0 0;color:var(--ink);}
+  .w{cursor:pointer;border-radius:2px;padding:0 .5px;transition:background .12s;}
+  .s{cursor:pointer;}
+  .word-mode .w:hover{background:var(--sel);}
+  .sentence-mode .s:hover{background:var(--sel);}
+  .sel{background:var(--sel);box-shadow:0 1px 0 var(--accent);}
+  .reading{background:var(--read);box-shadow:0 1px 0 var(--accent-2);}
+  .story-figure{margin:28px auto;max-width:100%;border:1px solid var(--line);padding:8px;background:var(--paper);box-shadow:4px 4px 0 var(--line),0 6px 18px rgba(0,0,0,.09);}
+  .story-fig-row{display:flex;gap:16px;margin:28px 0;}
+  .story-fig-row .story-figure{margin:0;flex:1 1 0;min-width:0;}
+  .story-img{display:block;width:100%;height:auto;border-radius:4px;}
+  .endcap{text-align:center;font-family:var(--type);font-size:11px;letter-spacing:3px;color:var(--faint);margin:26px 0 8px;}
+  .endcap::before,.endcap::after{content:"———— ";color:var(--line);}
+
+  /* ===== bottom dock (sheet stacked above audio bar — no overlap) ===== */
+  #dock{position:fixed;left:0;right:0;bottom:0;z-index:60;display:none;justify-content:center;pointer-events:none;}
+  body.reading-mode #dock{display:flex;}
+  .dock-inner{width:100%;max-width:760px;display:flex;flex-direction:column;pointer-events:auto;
+    box-shadow:0 -14px 40px rgba(40,30,15,.22);}
+  #sheet{background:var(--paper);border-top:3px double var(--line);max-height:0;overflow:hidden;transition:max-height .3s ease;}
+  #sheet.up{max-height:62vh;overflow:auto;}
+  .sheet-pad{padding:14px 18px 16px;position:relative;}
+  .sheet-pad .sclose{position:absolute;right:14px;top:12px;background:none;border:none;cursor:pointer;color:var(--ink-soft);}
+  .sheet-pad .sclose svg{width:17px;height:17px;}
+  .sheet-kicker{font-family:var(--type);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);}
+  .sheet-en{font-family:var(--display);font-size:19px;line-height:1.3;margin:6px 0 2px;padding-right:22px;}
+  .sheet-ar{direction:rtl;text-align:right;font-size:19px;line-height:1.65;color:var(--ink);
+    margin-top:10px;border-top:1px dashed var(--line);padding-top:10px;display:none;font-family:var(--serif);}
+  .sheet-ar.show{display:block;}
+  .sheet-ar.loading{color:var(--faint);font-style:italic;}
+  .sheet-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(72px,1fr));gap:9px;margin-top:16px;}
+  .act{background:var(--paper-2);border:1px solid var(--line);cursor:pointer;padding:10px 4px;
+    font-family:var(--type);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--ink);
+    display:flex;flex-direction:column;align-items:center;gap:6px;}
+  .act svg{width:19px;height:19px;}
+  .act.saved{background:var(--ink);color:var(--paper);}
+  .act:active{transform:translateY(1px);}
+  body.article-mode #actSave{display:none;}
+
+  /* ===== inline story audio player ===== */
+  .reader-audio{margin-top:18px;border:1px solid var(--line);background:var(--paper-2);padding:14px 16px;}
+  .ra-main{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .ra-play{background:var(--ink);color:var(--paper);border:none;cursor:pointer;font-family:var(--display);
+    font-weight:700;letter-spacing:1px;text-transform:uppercase;font-size:12px;
+    padding:11px 22px;display:inline-flex;align-items:center;gap:9px;transition:.15s;flex-shrink:0;}
+  .ra-play:hover{opacity:.82;}
+  .ra-play svg{width:14px;height:14px;flex-shrink:0;}
+  .ra-nav{display:flex;align-items:center;gap:5px;}
+  .ra-nav-btn{background:var(--paper);border:1px solid var(--line);cursor:pointer;width:30px;height:30px;
+    display:flex;align-items:center;justify-content:center;color:var(--ink);transition:.15s;}
+  .ra-nav-btn:hover{background:var(--ink);color:var(--paper);}
+  .ra-nav-btn svg{width:12px;height:12px;}
+  .ra-pos{font-family:var(--type);font-size:10px;letter-spacing:.5px;color:var(--faint);min-width:44px;text-align:center;}
+  .speed-strip{display:flex;margin-top:12px;border:1px solid var(--line);width:fit-content;}
+  .sp{background:var(--paper);border:none;border-right:1px solid var(--line);cursor:pointer;
+    font-family:var(--type);font-size:10px;letter-spacing:.3px;padding:6px 11px;color:var(--faint);transition:.15s;}
+  .sp:last-child{border-right:none;}
+  .sp:hover{background:var(--paper-2);color:var(--ink);}
+  .sp.on{background:var(--ink);color:var(--paper);font-weight:700;}
+
+  /* saved */
+  .empty{text-align:center;padding:44px 16px;font-style:italic;color:var(--faint);border:1px dashed var(--line);font-size:15px;line-height:1.6;}
+  .folder-stat{display:grid;grid-template-columns:repeat(5,1fr);border:1px solid var(--line);margin-bottom:20px;max-width:560px;}
+  .folder-stat div{text-align:center;padding:9px 2px;border-right:1px solid var(--line);}
+  .folder-stat div:last-child{border-right:none;}
+  .folder-stat .n{font-family:var(--display);font-weight:900;font-size:21px;}
+  .folder-stat .l{font-family:var(--type);font-size:8px;letter-spacing:1px;color:var(--faint);text-transform:uppercase;}
+  .clip-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;}
+  .clip{border:1px solid var(--line);background:var(--paper);}
+  .clip .clip-en{font-family:var(--display);font-size:16px;line-height:1.4;padding:14px 15px 4px;cursor:pointer;}
+  .clip .clip-ar{direction:rtl;text-align:right;font-size:16px;line-height:1.6;color:var(--ink-soft);padding:0 15px 4px;}
+  .clip .clip-src{font-family:var(--type);font-size:9px;letter-spacing:.5px;text-transform:uppercase;color:var(--faint);
+    border-top:1px dashed var(--line);margin-top:9px;padding:9px 15px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;}
+  .clip .clip-src .from{flex:1;min-width:120px;}
+  .clip .clip-tools{display:flex;gap:6px;}
+  .clip .ct{background:none;border:1px solid var(--line);cursor:pointer;padding:5px 8px;color:var(--ink);
+    display:flex;align-items:center;gap:4px;font-family:var(--type);font-size:8px;letter-spacing:.5px;text-transform:uppercase;}
+  .clip .ct svg{width:12px;height:12px;}
+  .clip .ct.del{color:var(--accent);border-color:var(--accent);}
+
+  /* articles list */
+  .art-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:22px;}
+  .art-card{border:1px solid var(--line);background:var(--paper);cursor:pointer;display:flex;flex-direction:column;transition:.18s;}
+  .art-card:hover{transform:translateY(-2px);box-shadow:5px 7px 0 rgba(33,29,23,.14);}
+  .art-card .ac-cov{height:120px;border-bottom:1px solid var(--line);}
+  .art-card .ac-cov svg{width:100%;height:100%;display:block;}
+  .art-card .ac-body{padding:14px 15px 16px;}
+  .art-card .ac-kicker{font-family:var(--type);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);}
+  .art-card h3{font-family:var(--display);font-weight:900;font-size:19px;line-height:1.1;margin:6px 0 6px;}
+  .art-card p{font-size:14px;color:var(--ink-soft);line-height:1.5;margin:0;}
+  .art-card .ac-meta{font-family:var(--type);font-size:9px;color:var(--faint);letter-spacing:.5px;margin-top:10px;text-transform:uppercase;}
+
+  .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(20px);
+    background:var(--ink);color:var(--paper);font-family:var(--type);font-size:11px;letter-spacing:1px;
+    text-transform:uppercase;padding:11px 20px;z-index:90;opacity:0;transition:.3s;pointer-events:none;border:1px solid var(--line);}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  footer{padding:22px 20px 26px;border-top:3px double var(--line);text-align:center;
+    font-family:var(--type);font-size:9.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint);line-height:1.8;}
+
+  /* PDF download button */
+  .dl-pdf-row{margin-top:32px;border-top:1px solid var(--line);padding-top:22px;text-align:center;}
+  .dl-pdf{background:var(--paper);border:1px solid var(--line);cursor:pointer;font-family:var(--display);font-weight:700;
+    letter-spacing:1px;text-transform:uppercase;font-size:12px;padding:12px 28px;
+    display:inline-flex;align-items:center;gap:9px;color:var(--ink);transition:.15s;}
+  .dl-pdf:hover{background:var(--ink);color:var(--paper);}
+  .dl-pdf svg{width:15px;height:15px;flex-shrink:0;}
+
+  /* ===== print / PDF ===== */
+  @media print{
+    nav.topbar,footer,.mode-toggle,.hint,.reader-audio,#sheet,.toast,.dl-pdf-row{display:none!important;}
+    html,body{background:#fff!important;}
+    body.reading-mode main{padding-bottom:0!important;}
+    main{padding:0!important;}
+    .reveal{opacity:1!important;transform:none!important;animation:none!important;}
+    .wrap-read{max-width:100%!important;padding:0!important;}
+    article{padding:1.5cm 2cm!important;}
+    .lvl-tag{background:#2a251d!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    .reader-head{border-bottom:2px solid #2a251d;padding-bottom:16px;margin-bottom:20px;}
+    .reader-head h1{font-size:26pt;margin:10px 0 4px;}
+    .story-body{font-size:12pt;line-height:1.85;}
+    .story-body p{margin:0 0 14pt;text-align:justify;hyphens:auto;}
+    .story-figure{break-inside:avoid;border:1px solid #2a251d!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    .story-img{width:100%;height:auto;border-radius:0;}
+    .endcap{display:block!important;}
+    h1{break-after:avoid;}
+    p{orphans:3;widows:3;}
+    .done-row,.rev-row{display:none!important;}
+  }
+
+  /* ===== quiz & review ===== */
+  .quiz-wrap{max-width:720px;margin:0 auto;}
+  .quiz-kicker{font-family:var(--type);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
+  .qz-bar-wrap{height:5px;background:var(--paper-2);border:1px solid var(--line);}
+  .qz-bar-fill{height:100%;background:var(--accent);transition:width .4s;}
+  .quiz-count{font-family:var(--type);font-size:10px;letter-spacing:.8px;color:var(--faint);text-transform:uppercase;margin-top:7px;}
+  .quiz-card{border:1px solid var(--line);padding:26px 22px;background:var(--paper);box-shadow:3px 3px 0 rgba(33,29,23,.1);margin-top:18px;}
+  .qz-type-tag{font-family:var(--type);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:12px;}
+  .qz-q{font-family:var(--display);font-size:clamp(16px,2.5vw,20px);line-height:1.65;margin-bottom:18px;}
+  .qz-blank{color:var(--accent);text-decoration:underline;text-decoration-style:dotted;font-style:italic;}
+  .qz-input{width:100%;border:2px solid var(--line);background:var(--paper);padding:12px 14px;
+    font-family:var(--display);font-size:16px;color:var(--ink);box-sizing:border-box;outline:none;transition:.15s;}
+  .qz-input:focus{border-color:var(--ink);}
+  .qz-input.ok{border-color:#4a7a4a;background:#f5fbf5;}
+  .qz-input.err{border-color:#b03030;background:#fdf5f5;}
+  .qz-feedback{margin-top:14px;padding:12px 15px;font-size:13px;font-family:var(--type);letter-spacing:.3px;display:none;}
+  .qz-feedback.ok{display:block;background:#f5fbf5;border-left:3px solid #4a7a4a;color:#2d5a2d;}
+  .qz-feedback.err{display:block;background:#fdf5f5;border-left:3px solid #b03030;color:#7a1c1c;}
+  .qz-btns{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;align-items:center;}
+  .qz-ar{font-size:21px;direction:rtl;text-align:right;font-family:var(--serif);color:var(--ink);
+    padding:14px 16px;border:1px dashed var(--line);margin-bottom:18px;background:var(--paper-2);line-height:1.6;}
+  .qz-mic{background:var(--paper);border:1px solid var(--line);cursor:pointer;font-family:var(--display);font-weight:700;
+    letter-spacing:1px;text-transform:uppercase;font-size:11px;padding:11px 18px;display:inline-flex;align-items:center;gap:8px;color:var(--ink);transition:.15s;}
+  .qz-mic:hover,.qz-mic.active{background:var(--ink);color:var(--paper);}
+  .qz-mic svg{width:14px;height:14px;flex-shrink:0;}
+  .qz-skip{background:none;border:none;cursor:pointer;font-family:var(--type);font-size:11px;letter-spacing:.5px;
+    color:var(--faint);text-decoration:underline;padding:4px 0;cursor:pointer;}
+  .qr-ring{width:88px;height:88px;border-radius:50%;border:3px solid var(--accent);display:flex;align-items:center;
+    justify-content:center;font-family:var(--display);font-weight:900;font-size:28px;margin:0 auto 18px;}
+  .qr-label{font-family:var(--display);font-weight:900;font-size:22px;margin-bottom:8px;text-align:center;}
+  .qr-sub{font-size:15px;color:var(--ink-soft);margin-bottom:24px;line-height:1.5;text-align:center;}
+  .qr-list{border:1px solid var(--line);margin-bottom:22px;}
+  .qr-row{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;border-bottom:1px solid var(--line);font-size:13px;}
+  .qr-row:last-child{border-bottom:none;}
+  .qr-ok{color:#4a7a4a;font-weight:700;font-size:16px;}
+  .qr-no{color:#b03030;font-weight:700;font-size:16px;}
+  .qz-results{padding:36px 20px;}
+  /* done-reading button */
+  .done-row{margin-top:28px;text-align:center;}
+  .done-btn{background:var(--accent);color:#fff;border:none;cursor:pointer;font-family:var(--display);font-weight:700;
+    letter-spacing:1px;text-transform:uppercase;font-size:13px;padding:15px 32px;
+    display:inline-flex;align-items:center;gap:10px;transition:.15s;}
+  .done-btn:hover{opacity:.85;}
+  .done-btn svg{width:17px;height:17px;}
+  /* review button in folders */
+  .rev-row{margin-top:20px;padding-top:18px;border-top:1px solid var(--line);text-align:center;}
+  .rev-btn{background:var(--paper);border:1px solid var(--line);cursor:pointer;font-family:var(--display);font-weight:700;
+    letter-spacing:1px;text-transform:uppercase;font-size:12px;padding:12px 28px;
+    display:inline-flex;align-items:center;gap:9px;color:var(--ink);transition:.15s;}
+  .rev-btn:hover{background:var(--ink);color:var(--paper);}
+  .rev-btn svg{width:14px;height:14px;}
+  /* dictation */
+  .qz-dict-hint{font-size:14px;color:var(--ink-soft);margin-bottom:16px;line-height:1.5;font-family:var(--type);}
+  /* word-level result */
+  .qz-word-result{font-family:var(--display);font-size:18px;line-height:2.3;}
+  .qw-ok{background:#d4edda;border-radius:3px;padding:2px 5px;}
+  .qw-close{background:#fff3cd;border-radius:3px;padding:2px 5px;}
+  .qw-miss{background:#f8d7da;border-radius:3px;padding:2px 5px;text-decoration:line-through;opacity:.8;}
+  .qz-spoken-line{font-size:12px;color:var(--faint);margin-top:8px;font-style:italic;font-family:var(--type);}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="mast">
+    <div class="mast-top"><span>Vol. I — No. 1</span><span>Free Reading Edition</span></div>
+    <div class="nameplate">Nova<em>Hubs</em></div>
+    <div class="mast-kicker">The Reading Press</div>
+    <div class="mast-rule"><span id="dateline">Read &middot; Listen &middot; Remember</span></div>
+  </header>
+
+  <nav class="topbar">
+    <div class="tb-left">
+      <button id="backTop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg><span id="backLabel">Back</span></button>
+      <span id="wordmark">Nova<em>Hubs</em></span>
+    </div>
+    <div class="tb-nav">
+      <button data-nav="library" class="on">Library</button>
+      <a href="articles.html">Journal</a>
+      <button data-nav="saved">Folders</button>
+    </div>
+  </nav>
+
+  <main id="view"></main>
+
+  <footer>
+    NovaHubs &middot; A free graded reader for learners of English<br>
+    Read &middot; Listen &middot; Remember &middot; <a href="articles.html" style="color:inherit;text-decoration:none;">Journal</a>
+  </footer>
+</div>
+
+<!-- bottom dock: selection sheet stacked ABOVE the audio bar -->
+<div id="dock">
+  <div class="dock-inner">
+    <div id="sheet">
+      <div class="sheet-pad">
+        <button class="sclose" id="sheetClose" aria-label="close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>
+        </button>
+        <div class="sheet-kicker" id="sheetKicker">Selected Word</div>
+        <div class="sheet-en" id="sheetEn"></div>
+        <div class="sheet-ar" id="sheetAr"></div>
+        <div class="sheet-actions">
+          <button class="act" id="actListen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5a4 4 0 010 7"/></svg>Listen</button>
+          <button class="act" id="actSlow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9.5a3 3 0 010 5"/></svg>Slow</button>
+          <button class="act" id="actTranslate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h7M7.5 5c0 4-2 7-4 8M5 9c0 2 2 4 5 5"/><path d="M13 19l4-9 4 9M14.5 16h5"/></svg>Translate</button>
+          <button class="act" id="actSave"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg>Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<noscript>
+  <div style="padding:30px;font-family:Georgia,serif;">
+    <h1>NovaHubs — Learn English by Reading</h1>
+    <p>NovaHubs is a free graded reader. Read short English stories from level A1 to C1, listen to every
+    word or sentence, translate to Arabic, and save sentences into folders by level. Please enable JavaScript to use the reader.</p>
+  </div>
+</noscript>
+
+<script>
+/* ======================================================================
+   NovaHubs — single-file reading app (stories + journal + folders)
+   ====================================================================== */
+
+/* ---------- engraving-style motifs ---------- */
+const M = {
+  door:`<rect x="30" y="14" width="60" height="92" rx="1"/><rect x="38" y="22" width="44" height="76"/><rect x="44" y="28" width="14" height="28"/><rect x="62" y="28" width="14" height="28"/><rect x="44" y="62" width="14" height="28"/><rect x="62" y="62" width="14" height="28"/><circle cx="50" cy="70" r="2.5"/>`,
+  cat:`<path d="M44 46l5-16 9 14"/><path d="M62 44l8-14 6 15"/><circle cx="60" cy="55" r="17"/><circle cx="53" cy="54" r="2"/><circle cx="67" cy="54" r="2"/><path d="M58 60q2 2 4 0"/><path d="M44 68c-4 27 6 32 16 32s20-5 16-32"/><path d="M76 95c19 0 19-26 7-30"/><path d="M40 58l-12-3M40 62l-12 1M76 58l12-3M76 62l12 1"/>`,
+  market:`<path d="M28 30h64"/><path d="M28 30v8q5 6 10 0 5-6 10 0 5 6 10 0 5-6 10 0 5 6 10 0 5-6 6 0v-8"/><path d="M32 42v62M88 42v62"/><path d="M28 78h64"/><ellipse cx="60" cy="90" rx="16" ry="10"/><path d="M48 85h24M44 90h32M50 95h20"/>`,
+  key:`<circle cx="42" cy="58" r="18"/><circle cx="42" cy="58" r="8"/><path d="M60 58h36"/><path d="M82 58v12M90 58v9M96 58v6"/>`,
+  train:`<rect x="22" y="46" width="68" height="30" rx="4"/><rect x="30" y="52" width="14" height="11"/><rect x="50" y="52" width="14" height="11"/><rect x="30" y="32" width="9" height="16"/><circle cx="36" cy="84" r="8"/><circle cx="60" cy="84" r="8"/><circle cx="82" cy="84" r="6"/><path d="M90 60h8v16"/><circle cx="40" cy="24" r="3"/><circle cx="50" cy="20" r="4"/><circle cx="62" cy="17" r="5"/>`,
+  map:`<path d="M26 32l22-8 24 8 22-8v60l-22 8-24-8-22 8z"/><path d="M48 24v60M72 32v60"/><path d="M40 50q12-10 22 2 10 12 24 2" stroke-dasharray="3 4"/><path d="M82 50l6 6M88 50l-6 6"/><path d="M34 36l4 4M38 36l-4 4"/>`,
+  lighthouse:`<path d="M50 100h22l-4-58H54z"/><path d="M52 60h18M53 76h16"/><rect x="52" y="30" width="18" height="13"/><path d="M50 30l11-9 11 9"/><path d="M52 36l-16-6M70 36l16-6M52 30l-12-12M70 30l12-12M61 24V8"/><path d="M40 100q21 8 42 0"/>`,
+  clock:`<circle cx="60" cy="60" r="38"/><circle cx="60" cy="60" r="32"/><path d="M60 31v6M60 83v6M31 60h6M83 60h6"/><path d="M60 60V40M60 60l15 9"/><circle cx="60" cy="60" r="3" fill="currentColor"/>`,
+  ship:`<path d="M26 80h68l-9 16H35z"/><path d="M60 80V26"/><path d="M60 30q22 6 0 44z"/><path d="M60 34q-16 5 0 34z"/><path d="M22 92q8 6 16 0 8-6 16 0 8 6 16 0 8-6 16 0 8 6 12 0"/>`,
+  house:`<rect x="38" y="54" width="44" height="48"/><path d="M32 56l28-26 28 26"/><rect x="54" y="76" width="14" height="26"/><rect x="44" y="62" width="12" height="11"/><rect x="72" y="36" width="8" height="14"/><circle cx="76" cy="26" r="3"/><circle cx="82" cy="20" r="4"/>`,
+  gears:`<circle cx="46" cy="62" r="16"/><circle cx="46" cy="62" r="6"/><path d="M46 46v-7M46 78v7M30 62h-7M62 62h7M35 51l-5-5M57 73l5 5M57 51l5-5M35 73l-5 5"/><circle cx="80" cy="48" r="11"/><circle cx="80" cy="48" r="4"/><path d="M80 37v-6M80 59v6M69 48h-6M91 48h6M73 41l-4-4M87 55l4 4M87 41l4-4M73 55l-4 4"/>`,
+  mountains:`<path d="M16 96l26-46 16 22 18-34 24 58z"/><path d="M42 50l-6 9 8 4 6-8M76 38l-6 11 9 3 6-9"/><circle cx="86" cy="30" r="9"/><path d="M86 14v-6M86 52v6M64 30h-6M108 30h6" stroke-width="1.6"/>`,
+  tree:`<path d="M56 100q4-28 4-44"/><path d="M64 100q-4-28-4-44"/><path d="M60 56q-10-4-10-14 0-12 12-12M60 56q12-2 16-12 4-12-8-18M60 30q-2-12-12-12-14 0-12 16M60 56q14 0 18-10"/><path d="M60 56q-12 2-18-6"/><path d="M52 70l-8-4M68 72l8-4M58 84l-9 3"/>`,
+  theatre:`<path d="M26 26q34 10 68 0"/><path d="M26 26v68q6 6 8 0V40M94 26v68q-6 6-8 0V40"/><path d="M34 40q12 6 24 0M62 40q12 6 24 0"/><path d="M34 50v40q5 5 9 0V54M86 50v40q-5 5-9 0V54"/><path d="M60 16l3 8 8 1-6 6 2 8-7-4-7 4 2-8-6-6 8-1z"/>`,
+  book:`<path d="M60 30v62"/><path d="M60 30C50 24 36 24 28 28v60c8-4 22-4 32 2"/><path d="M60 30c10-6 24-6 32-2v60c-8-4-22-4-32 2"/><path d="M36 42h16M36 52h16M36 62h16M68 42h16M68 52h16M68 62h16"/>`,
+  quill:`<path d="M28 96c22-8 46-32 58-68"/><path d="M86 28c-20 4-36 18-46 38 8 0 18-2 26-8"/><path d="M28 96l10-12"/><path d="M24 100h20"/>`,
+  lamp:`<path d="M44 38h32l-7 22H51z"/><path d="M60 60v28"/><path d="M46 88h28"/><path d="M60 38V24"/><path d="M51 24h18"/><path d="M53 49h14"/>`,
+  ear:`<path d="M42 88c0-6-6-10-6-26 0-18 12-30 28-30 14 0 22 10 22 22 0 12-12 14-12 24 0 8-6 12-12 12-8 0-10-6-10-12 0-6 6-6 6-12"/>`
+};
+
+let coverUID=0;
+function cover(motif, label, accent, coverImg){
+  if(coverImg) return `<img src="${esc(coverImg)}" class="cover cover-photo" alt="">`;
+  const uid="ht"+(++coverUID);
+  return `<svg class="cover" viewBox="0 0 300 420" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+    <defs><pattern id="${uid}" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#2a251d" opacity="0.5"/></pattern></defs>
+    <rect width="300" height="420" fill="#e9dcc1"/>
+    <rect x="10" y="10" width="280" height="400" fill="none" stroke="#2a251d" stroke-width="2"/>
+    <rect x="16" y="16" width="268" height="388" fill="none" stroke="#2a251d" stroke-width="1"/>
+    <line x1="24" y1="52" x2="276" y2="52" stroke="#2a251d" stroke-width="1"/>
+    <text x="150" y="40" text-anchor="middle" font-family="Special Elite, monospace" font-size="12" letter-spacing="4" fill="#2a251d">NOVAHUBS</text>
+    <circle cx="252" cy="78" r="20" fill="${accent}"/>
+    <text x="252" y="83" text-anchor="middle" font-family="Playfair Display, serif" font-weight="700" font-size="15" fill="#fff">${label}</text>
+    <rect x="60" y="120" width="180" height="180" fill="url(#${uid})" opacity="0.35"/>
+    <rect x="60" y="120" width="180" height="180" fill="none" stroke="#2a251d" stroke-width="1"/>
+    <g transform="translate(90,150)" fill="none" stroke="#2a251d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">${M[motif]||M.book}</g>
+    <line x1="24" y1="336" x2="276" y2="336" stroke="#2a251d" stroke-width="1"/>
+    <text x="150" y="362" text-anchor="middle" font-family="Playfair Display, serif" font-style="italic" font-size="15" fill="#2a251d">An Illustrated Tale</text>
+    <text x="150" y="386" text-anchor="middle" font-family="Special Elite, monospace" font-size="9" letter-spacing="2" fill="#8a7f6c">FROM LIFE &amp; IMAGINATION</text>
+  </svg>`;
+}
+function bannerCover(motif, accent){
+  const uid="hb"+(++coverUID);
+  return `<svg viewBox="0 0 300 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    <defs><pattern id="${uid}" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#2a251d" opacity="0.45"/></pattern></defs>
+    <rect width="300" height="120" fill="#e9dcc1"/>
+    <rect width="300" height="120" fill="url(#${uid})" opacity="0.3"/>
+    <rect x="124" y="14" width="52" height="92" fill="${accent}" opacity="0.12"/>
+    <g transform="translate(94,4) scale(0.93)" fill="none" stroke="#2a251d" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">${M[motif]||M.book}</g>
+  </svg>`;
+}
+
+/* ---------- stories ---------- */
+const STORIES = [
+  { id:"a1-1", level:"A1", motif:"door", title:"The Red Door", author:"E. Hartwell",
+    blurb:"A quiet man, a small bird, and a door the colour of morning. Sometimes a friend is the smallest thing in the garden.",
+    cover:"images/A1/cover.webp",
+    images:["images/A1/1.webp",["images/A1/2.webp","images/A1/4.webp"],"images/A1/3.webp"],
+    body:[
+      "Tom lives in a small town. His house is white. The door is red. Every morning, he opens the red door. He looks at the sky. The sky is blue. A small bird sits on the wall. The bird is brown.",
+      "\"Good morning, bird,\" says Tom. The bird looks at him. Then it flies away. Tom walks to the shop. He buys bread and milk. The shop is near the park. In the park, children play. A dog runs after a ball. Tom smiles. He likes the park.",
+      "At noon, Tom goes home. He opens the red door again. He makes tea. He sits by the window. The brown bird comes back. It sits on the wall. Tom is happy. \"You are my friend,\" he says. The bird sings a little song. Tom drinks his tea. It is a good day."
+    ]},
+  { id:"a1-2", level:"A1", motif:"cat", title:"Anna and the Cat", author:"M. Foley",
+    blurb:"Pip the cat likes milk and sleep. But one afternoon Pip is gone, and a small search begins in the garden.",
+    body:[
+      "Anna has a cat. The cat is black and white. Its name is Pip. Pip is small. Pip likes milk. Every day, Anna gives Pip some milk. Pip drinks the milk. Then Pip sleeps on the bed.",
+      "One day, Pip is not in the house. Anna looks in the kitchen. No cat. She looks under the bed. No cat. She looks in the garden. There is Pip! Pip is in a tree. \"Come down, Pip,\" says Anna. But Pip does not come down.",
+      "Anna gets a chair. She stands on the chair. She takes Pip in her arms. \"You are a bad cat,\" she says. But she is not angry. She loves Pip. They go into the house. Anna gives Pip some milk. Pip is happy now. Pip sleeps on the bed again."
+    ]},
+  { id:"a1-3", level:"A1", motif:"market", title:"A Day at the Market", author:"R. Okonkwo",
+    blurb:"On Saturday the market is full of colour and noise. Mrs. Lee has a basket, a few coins, and a soft spot for one pink flower.",
+    body:[
+      "It is Saturday. Mrs. Lee goes to the market. The market is big. There are many people. There are red apples and green pears. There is yellow cheese and fresh fish. Mrs. Lee has a basket.",
+      "\"How much is the bread?\" she asks. \"Two coins,\" says the man. Mrs. Lee buys the bread. She buys apples too. The apples are sweet. She buys some fish for dinner.",
+      "A little girl sells flowers. The flowers are white and pink. \"Please buy a flower,\" says the girl. Mrs. Lee buys one pink flower. She gives the girl a coin. \"Thank you,\" says the girl.",
+      "Mrs. Lee goes home. Her basket is full. She is tired but happy. At home, she puts the flower in water. The kitchen smells good."
+    ]},
+  { id:"a1-4", level:"A1", motif:"tree", title:"The Apple Tree", author:"H. Blake",
+    blurb:"An old tree, a yellow bird, and a cool red apple. Tom finds that the best things in life are already growing outside the door.",
+    body:[
+      "Tom has a small garden behind his house. In the garden, there is a big tree. The tree is very old. It has green leaves and many red apples. Tom loves the tree. Every morning, he goes outside and looks at it.",
+      "One day, Tom sees a small yellow bird in the tree. The bird sits on a branch and sings. Tom stands under the tree and listens. The song is beautiful. He does not move. The bird looks at him and sings again.",
+      "Tom picks one red apple from the tree. It is sweet and cold. He eats it slowly. Then a cat walks into the garden. The cat sees the bird and stops. But the bird flies away. The cat sits under the tree and looks at Tom.",
+      "In the afternoon, Tom's sister, Lisa, comes to the garden. She looks at the tree. \"It is beautiful!\" she says. Tom gives her an apple. They sit under the tree together. The sun is warm. It is a good afternoon."
+    ]},
+  { id:"a2-1", level:"A2", motif:"key", title:"The Lost Key", author:"J. Marlowe",
+    blurb:"Daniel is late, and his key is nowhere to be found. The rescue comes from the last place he thought to look: next door.",
+    body:[
+      "Daniel was late for work. He put on his coat and looked for his key. It was not on the table. It was not in his pocket. He looked everywhere, but he could not find it.",
+      "\"Where did I leave it?\" he asked himself. He remembered the night before. He had come home in the rain. He had been very tired. Perhaps the key was still in the door? He ran outside, but the key was not there.",
+      "Then he saw his neighbour, Mrs. Carter. She was holding something shiny. \"Is this yours?\" she asked with a smile. \"I found it on the path last night.\" It was his key! Daniel was so happy. \"Thank you so much,\" he said. \"You saved my morning.\"",
+      "He took the key, locked the door carefully, and hurried to the bus. This time, he was only a little late."
+    ]},
+  { id:"a2-2", level:"A2", motif:"train", title:"The Night Train", author:"S. Bellamy",
+    blurb:"A girl travels alone toward the mountains. An old man with a newspaper makes her a quiet promise about the morning.",
+    body:[
+      "The night train left the city at ten o'clock. Sara sat by the window with a small bag on her knees. Outside, the lights of the houses grew smaller and smaller. Soon there was only darkness and the sound of the wheels.",
+      "An old man sat opposite her. He was reading a newspaper. After some time, he looked up. \"Are you travelling far?\" he asked kindly. \"To the mountains,\" said Sara. \"My grandmother lives there. I have not seen her for two years.\"",
+      "The old man nodded. \"The mountains are beautiful in the morning,\" he said. \"When the sun comes up, you will see the snow on the high peaks.\" Sara smiled. She closed her eyes and tried to sleep. The train moved through the quiet night.",
+      "When she woke up, the sky was turning pink, and far away she could see the mountains, white and bright, just as the old man had promised."
+    ]},
+  { id:"a2-3", level:"A2", motif:"map", title:"The Old Map", author:"P. Greaves",
+    blurb:"Behind the old books, James finds a yellow map with a small red cross. What waits at the river is not gold, but something he keeps forever.",
+    body:[
+      "In the corner of the library, behind the old books, James found a map. It was very old. The paper was yellow and soft. There were strange marks on it, and a small red cross near the river.",
+      "\"What is this place?\" he thought. He showed the map to his sister, Lucy. \"Maybe it is treasure,\" she said with bright eyes. \"Let's find out!\" The next morning, they took the map and walked to the river.",
+      "They followed the old path between the trees. The map was difficult to read, but at last they came to a big stone near the water. Lucy looked behind the stone. There was a small metal box!",
+      "Inside the box, there was no gold. There were old letters and a photograph of two children, long ago. \"It is not treasure,\" said James quietly. \"It is a memory.\" They put the box back, but they kept the map forever."
+    ]},
+  { id:"a2-4", level:"A2", motif:"lamp", title:"The Birthday Surprise", author:"T. Lawson",
+    blurb:"Omar has an idea, a few friends, and very little money. Sometimes the best gifts are the ones nobody had to buy.",
+    body:[
+      "It was Emma's birthday next Saturday. Her friend, Omar, wanted to make it special. He knew that Emma loved flowers, books, and chocolate cake. But he did not have much money, and the shops were very expensive. He thought about it for two days. Then he had an idea. He called their other friends — Yuki, Carlos, and Sophie — and told them his plan. They all agreed. It was going to be a good surprise.",
+      "On Friday afternoon, they met at Omar's house. Yuki brought flowers from her garden: yellow and white ones. Carlos made a chocolate cake at home. It was not very beautiful, but it smelled wonderful. Sophie found a small book of poems in a second-hand shop and wrapped it in blue paper. Omar cleaned his kitchen and put a white cloth on the table. By seven o'clock, everything was ready.",
+      "They sent a message to Emma and asked her to come to Omar's house. They said only that they needed her help with something. Emma was a little surprised, but she came. When she opened the door, the room was dark. Then the lights came on. All her friends shouted \"Happy birthday!\" Emma stopped. She looked at the flowers, the cake, and the small blue present on the table. Her eyes became wet. \"I didn't know you remembered,\" she said quietly.",
+      "They had dinner together. Carlos's cake was a little too sweet, but everyone ate two pieces. Yuki told a funny story about the flowers — she had to carry them on the bus, and a woman thought she was going to a wedding. They all laughed. After dinner, Emma opened her present. She read the first poem out loud. It was about friendship. Nobody spoke when she finished. Then Omar smiled and said, \"Shall we have more cake?\"",
+      "Emma stayed until late. When she left, she hugged everyone at the door. The night was cold and the street was quiet. She walked home slowly. She moved to the city only one year ago, and sometimes she felt lonely. But tonight was different. She put her hand in her coat pocket and felt the small book. She smiled and walked faster."
+    ]},
+  { id:"b1-1", level:"B1", motif:"lighthouse", title:"The Lighthouse Keeper", author:"A. Whitlock",
+    blurb:"For thirty years Edward has kept the light on Grey Rock. On the worst night of the year, a small steady flame becomes everything.",
+    body:[
+      "For thirty years, Edward had kept the lighthouse on Grey Rock. Every evening, as the sun sank into the sea, he climbed the narrow stairs and lit the great lamp. Its light turned slowly through the night, warning ships of the dangerous rocks below.",
+      "Edward lived alone, but he was never truly lonely. He knew every bird that nested on the cliffs and every change in the colour of the water. The sailors who passed never saw his face, yet they trusted him completely. His light meant that someone was watching, that the way home was safe.",
+      "One stormy night, the wind screamed and the waves rose like grey mountains. Through the rain, Edward saw a small fishing boat in trouble, too close to the rocks. He could not reach it, but he did the only thing he could: he kept the lamp burning, bright and steady. The fishermen saw the light and turned their boat just in time.",
+      "The next morning, the sea was calm again. A young fisherman climbed up to the lighthouse to say thank you. \"We would have died without your light,\" he said. Edward only smiled. \"That is why I am here,\" he answered. \"A light is a small thing, but on a dark night, it can be everything.\""
+    ]},
+  { id:"b1-2", level:"B1", motif:"clock", title:"The Clockmaker's Daughter", author:"L. Renner",
+    blurb:"In a shop full of ticking hearts, Mira inherits her father's craft, and learns why a single tiny spring can return a man his grandfather.",
+    body:[
+      "In a quiet street in the old town, there was a small shop full of clocks. They covered every wall, and all day long they ticked together like a hundred small hearts. The shop belonged to Mr. Albrecht, an old clockmaker, and his daughter, Mira.",
+      "Mira had grown up among the clocks. She knew how to open them, clean them, and listen to their tiny voices. Her father had taught her that every clock had a character of its own. \"Some are nervous, some are lazy, and some are proud,\" he used to say with a smile.",
+      "When her father became ill, the work of the shop fell to Mira. Many customers were surprised to find a young woman behind the counter. \"Can she really fix a clock?\" they whispered. But when they saw how carefully she worked, their doubts disappeared.",
+      "One day, a rich man brought in a clock that no one in the city could repair. It had belonged to his grandfather, and it had been silent for many years. Mira worked on it for three days. She found a broken spring, no bigger than a hair, deep inside the machine.",
+      "When she finished, the clock began to tick again, soft and steady. The man had tears in his eyes. \"You have given my grandfather back to me,\" he said. And Mira understood, at last, why her father loved his work so much."
+    ]},
+  { id:"b1-3", level:"B1", motif:"ship", title:"Letters from the Sea", author:"C. Doran",
+    blurb:"An old sailor's letters teach his niece about distant ports, and about the one harbour he most wanted to reach.",
+    body:[
+      "Every summer, when she was young, Helen visited her uncle by the sea. He had once been a sailor, and his house was full of strange objects from faraway places: shells, maps, and a brass telescope that smelled of salt.",
+      "The thing Helen loved most was a wooden box of letters. They had been written by her uncle to his family, many years before, from ships all over the world. In them, he described storms and quiet seas, foreign ports and the friends he had made. Helen read them again and again until she knew them almost by heart.",
+      "\"Why did you stop sailing?\" she asked him one evening, as they watched the waves. The old man was quiet for a moment. \"Because one day I realised that the place I most wanted to reach was home,\" he said. \"The sea taught me many things, but it also taught me what I had left behind.\"",
+      "Years later, when her uncle had died, Helen found the box of letters again. This time she added one of her own, written to him, full of all the things she had never said. She did not post it, of course. She simply placed it in the box with the others and closed the lid gently, as if she were closing a door between two worlds."
+    ]},
+  { id:"b2-1", level:"B2", motif:"house", title:"The House on Marsh Lane", author:"V. Ashcombe",
+    blurb:"A writer buys a house the village would rather forget. What she finds inside is not ghosts, but the traces of those who lived and lost there.",
+    body:[
+      "No one had lived in the house on Marsh Lane for nearly twenty years, and the village had grown used to its silence. Children dared one another to touch its gate; older people simply looked away when they passed, as though the building reminded them of something they preferred to forget.",
+      "When Clara bought the house, the villagers were polite but distant. She was an outsider, a writer from the city who claimed she wanted \"peace and quiet.\" What she found instead was a house full of voices, not ghosts exactly, but the traces of the people who had lived there: a child's height marked in pencil on a doorframe, initials carved into a windowsill, a faded photograph left in a drawer.",
+      "As the weeks passed, Clara became curious. She began to ask questions in the village shop, and slowly the story came out. The house had belonged to a family that had lost everything in a single hard winter. After that, the place had simply been left to the damp and the wind.",
+      "Clara could have sold the house and moved on. Instead, she stayed. She repaired the broken windows and planted a garden where the marsh had crept too close. Little by little, the villagers began to visit. They brought stories of their own, and the house, which had been a monument to loss, slowly became something else: a place where the past was remembered without fear."
+    ]},
+  { id:"b2-2", level:"B2", motif:"gears", title:"The Watchmaker of Vienna", author:"H. Strauss",
+    blurb:"The finest watchmaker in Vienna measures time for everyone but himself, until a clumsy apprentice teaches him how to spend it.",
+    body:[
+      "Herr Brandt was, by any reasonable measure, the finest watchmaker in Vienna. His instruments were so precise that the city's musicians used them to keep time, and so beautiful that wealthy families passed them down from one generation to the next. Yet for all his skill, Herr Brandt was a deeply unhappy man.",
+      "The problem, as he saw it, was time itself. He spent his days measuring it, dividing it into ever smaller pieces, and yet he felt that his own life was slipping through his fingers, unmeasured and unlived. He had no family, few friends, and no memory of the last time he had laughed without thinking of work.",
+      "One winter, a young apprentice named Lotte came to work in his shop. She was clumsy at first, and impatient, but she possessed something that Herr Brandt had lost long ago: a sense of wonder. She would hold a finished watch to her ear and listen as though it were telling her a secret. She asked endless questions, not about how watches worked, but about why they mattered.",
+      "Slowly, almost against his will, Herr Brandt began to change. He started to take walks in the afternoon. He noticed the light on the river and the sound of bells across the city. When at last he gave Lotte her own bench in the shop, he realised that the most valuable thing he had ever made was not a watch at all, but the time he had finally learned to spend."
+    ]},
+  { id:"b2-3", level:"B2", motif:"mountains", title:"Smoke over the Valley", author:"D. Petrova",
+    blurb:"As wildfire crawls down the mountain, an old man refuses to leave his orchard. His granddaughter stays to learn what the land remembers.",
+    body:[
+      "The fire had started somewhere high in the mountains, and for three days the wind had carried it steadily down toward the valley. From the village, the people watched the line of smoke grow thicker, an orange glow appearing at night above the dark shape of the hills.",
+      "Most of the younger families had already packed their cars and left. But old Mr. Sava refused to go. He had lived in the same stone house all his life, as had his father before him, and he could not imagine abandoning the orchard he had spent fifty years tending. \"The trees cannot run,\" he said simply. \"So neither will I.\"",
+      "His granddaughter, Mira, stayed with him, though she was afraid. Together they cleared the dry grass around the house and soaked the roof with water from the well. They worked until their hands were raw and the sky had turned the colour of rust. When the fire finally reached the edge of their land, they stood together and watched, ready to run if they had to.",
+      "But the wind changed. In the cool of the early morning, rain began to fall, light at first, then heavy and steady, and the fire died into hissing smoke. The orchard was scorched at its edges, but it had survived. Mr. Sava knelt and touched the wet earth. \"You see,\" he said quietly to his granddaughter, \"the land remembers those who stay.\""
+    ]},
+  { id:"c1-1", level:"C1", motif:"map", title:"The Cartographer's Confession", author:"A. Reyes",
+    blurb:"For forty years he drew coastlines he had never seen. Near the end, the most honest map he ever made was of the limits of his own knowledge.",
+    body:[
+      "For the better part of forty years, Augustin Reyes had drawn maps for an empire that no longer existed. He had charted coastlines that other men had only glimpsed through fog, named rivers that no European had previously crossed, and filled the blank spaces of distant continents with mountains, forests, and the occasional, half-imagined beast. His maps hung in palaces and naval academies; his reputation was, in the language of his time, beyond reproach.",
+      "And yet, in the quiet of his study, Augustin kept a secret that would have destroyed him. Many of the lands he had drawn so confidently, he had never seen. He had inferred them, guessed at them, stitched them together from the contradictory reports of sailors who were often drunk and always exaggerating. Where the evidence ran out, he had simply continued the line, trusting that the world would be kind enough to match his imagination.",
+      "Most of the time, it was. But occasionally, ships sailed by his maps and found nothing where he had promised a harbour, or rocks where he had drawn open water. Men had died, he understood, following the elegant certainty of his ink. This knowledge sat in him like a stone.",
+      "Near the end of his life, Augustin began a final map, not of any real place, but of the limits of his own knowledge. He marked, with painful honesty, every coast he had invented and every river he had imagined. He labelled the vast interior of his most famous continent with a single phrase, repeated in his careful hand: \"Here I did not know.\" It was, he thought, the truest thing he had ever drawn. He left it unsigned, and asked that it be burned. His apprentice, who loved him, did not."
+    ]},
+  { id:"c1-2", level:"C1", motif:"tree", title:"An Inheritance of Silence", author:"E. Vance",
+    blurb:"After eleven years of estrangement, Eleanor inherits her quiet aunt's house, and discovers that silence was never the same thing as indifference.",
+    body:[
+      "When the lawyer's letter arrived, Eleanor had not spoken to her family in eleven years. The estrangement had been gradual rather than dramatic, not a single quarrel but a slow accumulation of unanswered calls and unsaid things, until the silence between them had hardened into something that felt permanent. So it was with a peculiar sense of unreality that she read that her aunt Margaret had died and left her the house in the country, along with everything in it.",
+      "She had not expected to be remembered at all. Margaret had always been the most reserved of her relatives, a woman who measured her words as though they were expensive, and who had watched the family's quarrels from a distance with an expression that gave nothing away. Eleanor had assumed, in the careless way of the young, that her aunt simply did not care.",
+      "The house, when she finally visited, told a different story. In the attic, Eleanor found boxes carefully labelled in Margaret's handwriting, each containing things that belonged to a different member of the family: a child's drawing, a wedding invitation, a newspaper clipping about a graduation. Her aunt, it seemed, had been quietly collecting the family's life for decades, preserving the very connections that the rest of them had been so careless to break.",
+      "At the bottom of one box, Eleanor found a letter addressed to her, written years before, and never sent. It was brief. \"I am not good with words,\" her aunt had written, \"so I have kept things instead. When you are ready, they will tell you that you were always loved.\" Eleanor sat on the dusty floor of the attic for a long time. The silence around her, she realised, had never been emptiness. It had been a kind of waiting."
+    ]},
+  { id:"c1-3", level:"C1", motif:"theatre", title:"The Last Performance", author:"V. Mercer",
+    blurb:"A forgotten actress is offered a role of a single scene. In a few minutes of stage light, she rediscovers what the work was always for.",
+    body:[
+      "Vivienne Mercer had been a great actress, once. The theatres of three continents had emptied their seats for her; critics had exhausted their vocabularies trying to describe what she did on a stage. But that had been a long time ago, and the public, which adores nothing so much as a new face, had gradually forgotten the old one. By the time she was seventy, Vivienne lived alone in a small flat above a bakery, surrounded by the photographs of a woman who no longer seemed to exist.",
+      "When a young director approached her about a new play, she assumed at first that it was a mistake, or worse, an act of charity. The role was small, an old woman who appears in a single scene and speaks for no more than a few minutes. Vivienne nearly refused. Her pride, which had survived everything else, recoiled at the idea of returning to the stage as a footnote.",
+      "But something in the lines stayed with her. The character, like Vivienne herself, was a person whom the world had decided to overlook, and the few minutes she was given were her only chance to insist that she had existed, that she had mattered. Vivienne understood the part completely, because she was living it.",
+      "On opening night, she walked onto the stage for the first time in fifteen years. The audience, who did not recognise her, grew quiet not out of respect but out of attention, for there was something in the way this old woman held the silence that made them lean forward in their seats. When she finished, there was a pause, the rarest and most honest of all theatrical sounds, before the applause began.",
+      "Vivienne stood very still in the light. She had not come back to be remembered, she realised. She had come back to remind herself of what she had always known: that the work, and not the fame, had been the point all along."
+    ]}
+];
+
+/* ---------- journal / SEO articles ---------- */
+const ARTICLES = [
+  { id:"art-1", motif:"book", kicker:"Method", title:"How to Learn English by Reading Short Stories", author:"The NovaHubs Editors", date:"Reading Guide",
+    excerpt:"Short stories give you complete, meaningful language in a small package. Here is how to turn them into real progress.",
+    body:[
+      "Reading short stories is one of the most effective and pleasant ways to learn a language. Unlike isolated word lists, a story gives you whole sentences in a real context. You see how words behave, which other words they keep company with, and what they actually mean when people use them.",
+      "Begin with a level that feels slightly easy. If you understand almost every word, you can pay attention to rhythm and meaning rather than struggling. As your confidence grows, move up one level at a time. The jump from A1 to A2, or B1 to B2, should feel like a gentle step, not a cliff.",
+      "Read each story twice. The first time, read for the story itself: enjoy it, follow the characters, and do not stop for every unknown word. The second time, read more slowly. Now you can tap the words you did not know, listen to them, and save the sentences that taught you something.",
+      "Finally, return to your saved sentences a few days later. The act of meeting a sentence again, in your own collection, is what moves it from short-term memory into lasting knowledge. Reading builds the input; reviewing turns it into ability."
+    ]},
+  { id:"art-2", motif:"ear", kicker:"Listening", title:"The Power of Slow Listening: Training Your Ear", author:"The NovaHubs Editors", date:"Listening Guide",
+    excerpt:"Native speech is fast. Slowing it down, on purpose, is one of the fastest ways to understand it at full speed.",
+    body:[
+      "Many learners can read a sentence perfectly but freeze when they hear it spoken. The reason is simple: the eye can pause, but the ear cannot. Spoken English connects words, drops sounds, and moves quickly. Your ear needs training, and slow listening is the gym.",
+      "When you slow a sentence down, you can hear each individual sound and where one word ends and the next begins. This is the moment your brain builds a clear picture of the sentence. Listen slowly two or three times until the shape of the sentence is familiar.",
+      "Then switch back to normal speed. Suddenly, the same sentence that sounded like noise becomes a row of words you recognise. This contrast, between slow and normal, is the lesson. It teaches your ear what the fast version is really made of.",
+      "Use slow listening for difficult sentences only. For everything else, listen at normal speed, because that is the speed you will meet in conversation. Slow is the practice room; normal is the performance."
+    ]},
+  { id:"art-3", motif:"quill", kicker:"Memory", title:"Build a Sentence Bank: Why Saving Sentences Works", author:"The NovaHubs Editors", date:"Vocabulary Guide",
+    excerpt:"Single words are slippery. Whole sentences stick. A personal sentence bank is the quiet engine of real fluency.",
+    body:[
+      "When you save a single word, you save only half of what you need. You may remember the word but forget how to use it, which preposition follows it, or which tense it lives in. When you save a full sentence, you keep all of that information together, exactly as a native speaker would use it.",
+      "A sentence bank is simply a personal collection of the sentences that taught you something. The best sentences to save are not the hardest ones, but the most useful ones: sentences you can imagine saying yourself one day.",
+      "Organise your bank by level, and keep a note of where each sentence came from. The story behind a sentence is a powerful memory hook. Months later, you will recall not just the words, but the lighthouse, the night train, or the quiet aunt who kept the family's letters.",
+      "Review your bank in short, frequent sessions rather than long, rare ones. Five minutes a day will teach you more than one hour a week. Fluency is built from many small returns to the same material."
+    ]},
+  { id:"art-4", motif:"map", kicker:"Roadmap", title:"From A1 to C1: A Practical Reading Roadmap", author:"The NovaHubs Editors", date:"Level Guide",
+    excerpt:"The CEFR levels are not mysterious. Here is what each one means for a reader, and how to know when you are ready to climb.",
+    body:[
+      "The Common European Framework, or CEFR, describes language ability in six levels, from A1 to C2. For a reader, these levels are a helpful map. They tell you what kind of text to expect and how much effort it will demand.",
+      "At A1 and A2, sentences are short and direct. You read about everyday life: homes, food, family, simple journeys. The goal is to feel comfortable and to build a base of the most common words, which carry most of the meaning in any language.",
+      "At B1 and B2, the text grows. Sentences join together, characters have feelings and reasons, and the writer expects you to follow ideas across paragraphs. This is where reading becomes truly interesting, because the stories begin to reward attention.",
+      "At C1, the language becomes literary. Writers use nuance, irony, and long sentences that hold several ideas at once. You are no longer just understanding the words; you are appreciating the choices behind them. Move up only when your current level feels genuinely comfortable, and the climb will feel natural."
+    ]},
+  { id:"art-5", motif:"lamp", kicker:"Practice", title:"Reading Aloud: How Your Voice Helps You Remember", author:"The NovaHubs Editors", date:"Speaking Guide",
+    excerpt:"Reading silently uses one channel. Reading aloud uses three at once, and that is exactly why it works so well.",
+    body:[
+      "When you read silently, you use your eyes. When you read aloud, you add two more channels: your voice, which shapes the sounds, and your ears, which hear them. Three channels working together build a much stronger memory than one channel alone.",
+      "Reading aloud also reveals the music of English. You feel where the stress falls, where a sentence rises, and where it pauses. These patterns are part of meaning, and you cannot truly own a sentence until you can say it with the right rhythm.",
+      "A good method is to listen first, then imitate. Play a sentence, listen to how it moves, and then say it yourself in the same way. Compare. Adjust. Repeat until your version sounds close to the original. This is gentle, private practice with no audience and no pressure.",
+      "Do this for just a few sentences from each story you read. Over weeks, your mouth learns the shapes that your eyes already know, and the gap between reading and speaking quietly closes."
+    ]}
+];
+
+const LEVELS = ["A1","A2","B1","B2","C1"];
+const LEVEL_DESC = {
+  A1:"Beginner — short sentences, present tense",
+  A2:"Elementary — everyday past and future",
+  B1:"Intermediate — longer narrative, feeling",
+  B2:"Upper-intermediate — nuance and atmosphere",
+  C1:"Advanced — literary prose and complexity"
+};
+const ACCENTS = { A1:"#5b7d4f", A2:"#3f6b8a", B1:"#a63422", B2:"#8a5a1f", C1:"#5a3a6b" };
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const view = $("#view");
+const wordCount = o => o.body.join(" ").trim().split(/\s+/).length;
+const readMin = o => Math.max(1, Math.round(wordCount(o)/130));
+function esc(t){return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+
+/* ---------- storage (artifact storage if present, else localStorage, else memory) ---------- */
+const hasArtifactStore = (typeof window!=="undefined" && window.storage && typeof window.storage.get==="function");
+function lsGet(k){ try{return localStorage.getItem(k);}catch(e){return null;} }
+function lsSet(k,v){ try{localStorage.setItem(k,v);}catch(e){} }
+const mem={};
+async function loadJSON(key, fallback){
+  if(hasArtifactStore){ try{ const r=await window.storage.get(key,false); return r&&r.value?JSON.parse(r.value):fallback; }catch(e){ return fallback; } }
+  const v=lsGet(key); if(v){ try{return JSON.parse(v);}catch(e){} }
+  return (key in mem)?mem[key]:fallback;
+}
+async function saveJSON(key, obj){
+  const s=JSON.stringify(obj); mem[key]=obj;
+  if(hasArtifactStore){ try{ await window.storage.set(key,s,false); }catch(e){} }
+  lsSet(key,s);
+}
+let SAVED={}; let TR={};
+LEVELS.forEach(l=>SAVED[l]=[]);
+
+/* ---------- text to speech ---------- */
+let VOICE=null;
+function pickVoice(){
+  if(!("speechSynthesis" in window)) return;
+  const vs=speechSynthesis.getVoices();
+  VOICE=vs.find(v=>/en[-_]GB/i.test(v.lang))||vs.find(v=>/en[-_]US/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||vs[0]||null;
+}
+if("speechSynthesis" in window){ pickVoice(); speechSynthesis.onvoiceschanged=pickVoice; }
+function speak(text, rate, onend){
+  if(!("speechSynthesis" in window)) return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang=VOICE?VOICE.lang:"en-GB"; if(VOICE) u.voice=VOICE;
+  u.rate=rate; u.pitch=1; if(onend) u.onend=onend;
+  speechSynthesis.speak(u);
+}
+
+/* ---------- translation (free public APIs, works in any browser) ---------- */
+async function translate(text){
+  const key=text.trim();
+  if(TR[key]) return TR[key];
+  // 1) Google public endpoint
+  try{
+    const r=await fetch("https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ar&dt=t&q="+encodeURIComponent(key));
+    if(r.ok){ const d=await r.json(); const out=(d[0]||[]).map(s=>s[0]).join("").trim();
+      if(out){ TR[key]=out; saveJSON("nh-tr",TR); return out; } }
+  }catch(e){}
+  // 2) MyMemory fallback
+  try{
+    const r=await fetch("https://api.mymemory.translated.net/get?q="+encodeURIComponent(key)+"&langpair=en|ar");
+    if(r.ok){ const d=await r.json(); const out=(d.responseData&&d.responseData.translatedText||"").trim();
+      if(out){ TR[key]=out; saveJSON("nh-tr",TR); return out; } }
+  }catch(e){}
+  return "Translation unavailable — please check your internet connection.";
+}
+
+/* ---------- state ---------- */
+let curLevel="A1", curStory=null, curArticle=null, isArticle=false;
+let mode="word", selText="", sentenceEls=[];
+let abIndex=0, abPlaying=false, abRate=1;
+
+/* ---------- topbar / nav ---------- */
+function setActiveNav(section){
+  document.querySelectorAll(".tb-nav button").forEach(b=>b.classList.toggle("on", b.dataset.nav===section));
+}
+function setBack(show, label, handler){
+  const b=$("#backTop"), wm=$("#wordmark");
+  if(show){ b.style.display="flex"; wm.style.display="none"; $("#backLabel").textContent=label||"Back"; b.onclick=handler; }
+  else{ b.style.display="none"; wm.style.display=""; b.onclick=null; }
+}
+
+/* ---------- views ---------- */
+function leaveReader(){ document.body.classList.remove("reading-mode","article-mode"); hideSheet(); stopAudio(); }
+
+function setNav(section){
+  if(section==="library") renderLibrary();
+  else if(section==="articles") renderArticles();
+  else renderSaved();
+}
+
+function renderLibrary(){
+  leaveReader(); setActiveNav("library"); setBack(false);
+  const stories=STORIES.filter(s=>s.level===curLevel);
+  const tabs=LEVELS.map(l=>`<button data-level="${l}" class="${l===curLevel?'on':''}">${l}<span class="lab">${l==='A1'?'Start':l==='C1'?'Master':'Grow'}</span></button>`).join("");
+  let cards=stories.map((s,i)=>`
+    <div class="card reveal" data-story="${s.id}" style="animation-delay:${i*50}ms">
+      ${cover(s.motif,s.level,ACCENTS[s.level],s.cover)}
+      <div class="cap"><div class="tt">${esc(s.title)}</div><div class="au">by ${esc(s.author)}</div>
+      <div class="meta">${s.level} &middot; ${readMin(s)} min read</div></div>
+    </div>`).join("");
+  const rem=10-stories.length;
+  if(rem>0) cards+=`<div class="card forth reveal" style="animation-delay:${stories.length*50}ms">
+      <div class="cover"><div class="ftxt">${rem} more tales<br>forthcoming<br>in this level</div></div>
+      <div class="cap"><div class="meta">${curLevel} &middot; In the press</div></div></div>`;
+  view.innerHTML=`<div class="wrap">
+      <div class="sec-head"><div class="sec-kicker">The Reading Library</div>
+        <h1 class="sec-title">Choose a Tale to Your Level</h1>
+        <div class="sec-sub">${LEVEL_DESC[curLevel]}.</div></div>
+      <div class="levels">${tabs}</div>
+      <div class="grid">${cards}</div></div>`;
+  view.querySelectorAll(".levels button").forEach(b=>b.onclick=()=>{curLevel=b.dataset.level;renderLibrary();});
+  view.querySelectorAll(".card[data-story]").forEach(c=>c.onclick=()=>openStory(c.dataset.story));
+  window.scrollTo(0,0);
+}
+
+function openStory(id){ curStory=STORIES.find(s=>s.id===id); renderDetail(); }
+
+function renderDetail(){
+  leaveReader(); setActiveNav("library"); setBack(true,"Library",renderLibrary);
+  const s=curStory;
+  view.innerHTML=`<div class="wrap-read reveal">
+      <div class="detail-cover">
+        ${cover(s.motif,s.level,ACCENTS[s.level],s.cover)}
+        <div class="detail-head"><span class="lvl-tag">Level ${s.level}</span>
+          <h1>${esc(s.title)}</h1><div class="by">by ${esc(s.author)}</div>
+          <div class="nar">Narrated by the NovaHubs reader</div></div>
+      </div>
+      <p class="blurb">${esc(s.blurb)}</p>
+      <div class="specs">
+        <div><div class="k">Level</div><div class="v">${s.level}</div></div>
+        <div><div class="k">Reading time</div><div class="v">${readMin(s)} min</div></div>
+        <div><div class="k">Words</div><div class="v">${wordCount(s)}</div></div>
+        <div><div class="k">Format</div><div class="v">Read &amp; Listen</div></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-primary" id="readBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16M4 12h16M4 19h11"/></svg>Read this story</button>
+        <button class="btn btn-ghost" id="sampleBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l13 7-13 7z"/></svg>Listen to a sample</button>
+      </div></div>`;
+  $("#readBtn").onclick=()=>renderReader(false);
+  $("#sampleBtn").onclick=()=>{ const first=s.body[0].split(/(?<=[.!?])\s+/)[0]; speak(first,1); toast("Playing a sample"); };
+  window.scrollTo(0,0);
+}
+
+function splitSentences(p){ return (p.match(/[^.!?]+[.!?]*["']?/g)||[p]).map(x=>x.trim()).filter(Boolean); }
+
+function renderReader(asArticle){
+  const s = asArticle?curArticle:curStory;
+  isArticle=!!asArticle;
+  document.body.classList.add("reading-mode");
+  document.body.classList.toggle("article-mode", isArticle);
+  hideSheet();
+  setActiveNav(isArticle?"articles":"library");
+  setBack(true, isArticle?"Journal":"Details", isArticle?()=>{openArticle(curArticle.id,true);}:renderDetail);
+
+  let si=0;
+  const paras=s.body.map((p,i)=>{
+    const inner=splitSentences(p).map(sent=>{
+      const words=sent.split(/(\s+)/).map(tok=> /^\s+$/.test(tok)?tok:`<span class="w">${esc(tok)}</span>`).join("");
+      return `<span class="s" data-si="${si++}" data-text="${esc(sent)}">${words}</span>`;
+    }).join(" ");
+    const slot=s.images&&s.images[i];
+    const img=!slot?"":Array.isArray(slot)
+      ?`<div class="story-fig-row">${slot.map(src=>`<figure class="story-figure story-figure-half"><img src="${esc(src)}" alt="" class="story-img"></figure>`).join("")}</div>`
+      :`<figure class="story-figure"><img src="${esc(slot)}" alt="" class="story-img"></figure>`;
+    return `<p>${inner}</p>${img}`;
+  }).join("")+(s.images&&s.images[s.body.length]&&!Array.isArray(s.images[s.body.length])?`<figure class="story-figure"><img src="${esc(s.images[s.body.length])}" alt="" class="story-img"></figure>`:"");
+
+  const head = isArticle
+    ? `<span class="lvl-tag">${esc(s.kicker)} &middot; Journal</span><h1>${esc(s.title)}</h1><div class="by">by ${esc(s.author)}</div>`
+    : `<span class="lvl-tag">Chapter One &middot; Level ${s.level}</span><h1>${esc(s.title)}</h1><div class="by">by ${esc(s.author)}</div>`;
+
+  const audioPanel=!isArticle?`<div class="reader-audio reveal" style="animation-delay:120ms">
+    <div class="ra-main">
+      <button class="ra-play" id="abPlay"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l13 7-13 7z"/></svg>Listen to Story</button>
+      <div class="ra-nav">
+        <button class="ra-nav-btn" id="abPrev" title="Previous sentence"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h2v14H7zM20 5L10 12l10 7z"/></svg></button>
+        <span class="ra-pos" id="abPos">— / —</span>
+        <button class="ra-nav-btn" id="abNext" title="Next sentence"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M15 5h2v14h-2zM4 5l10 7-10 7z"/></svg></button>
+      </div>
+    </div>
+    <div class="speed-strip">
+      ${[0.5,0.75,1,1.25,1.5,2].map(r=>`<button class="sp${r===1?' on':''}" data-r="${r}">${r===1?'1':r}&times;</button>`).join('')}
+    </div>
+  </div>`:'';
+
+  view.innerHTML=`<div class="wrap-read">
+      <article>
+      <div class="reader-head reveal">${head}</div>
+      ${audioPanel}
+      <div class="mode-toggle reveal">
+        <button data-mode="word" class="${mode==='word'?'on':''}">Tap a word</button>
+        <button data-mode="sentence" class="${mode==='sentence'?'on':''}">Tap a sentence</button>
+      </div>
+      <div class="hint reveal">Tap any <b>word</b> or switch to <b>sentence</b> mode, then choose: listen, slow down, translate to Arabic${isArticle?'':', or save it to your level folder'}.</div>
+      <div class="story-body ${mode}-mode reveal" id="storyBody">${paras}</div>
+      <div class="endcap">${isArticle?'END OF ARTICLE':'THE END'}</div>
+      ${!isArticle?`<div class="done-row">
+        <button class="done-btn" id="doneBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Done Reading · Take the Quiz
+        </button>
+      </div>`:''}
+      <div class="dl-pdf-row">
+        <button class="dl-pdf" id="dlPdf">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download PDF
+        </button>
+      </div>
+      </article></div>`;
+
+  const body=$("#storyBody");
+  view.querySelectorAll(".mode-toggle button").forEach(b=>b.onclick=()=>{
+    mode=b.dataset.mode; clearSel(); hideSheet();
+    body.classList.toggle("word-mode",mode==="word");
+    body.classList.toggle("sentence-mode",mode==="sentence");
+    view.querySelectorAll(".mode-toggle button").forEach(x=>x.classList.toggle("on",x.dataset.mode===mode));
+  });
+  body.onclick=onBodyClick;
+  sentenceEls=Array.from(body.querySelectorAll(".s"));
+  abRate=1; abIndex=0; abPlaying=false; setPlayIcon(false); updatePos();
+  if(!isArticle){
+    $("#doneBtn").onclick=()=>startQuiz(qzGenStory(s),"story",s);
+    $("#abPlay").onclick=()=>{ abPlaying?stopAudio():playFrom(abIndex); };
+    $("#abNext").onclick=()=>{ const w=abPlaying; stopAudio(); abIndex=Math.min(abIndex+1,Math.max(0,sentenceEls.length-1)); updatePos(); hl(abIndex); if(w) playFrom(abIndex); };
+    $("#abPrev").onclick=()=>{ const w=abPlaying; stopAudio(); abIndex=Math.max(abIndex-1,0); updatePos(); hl(abIndex); if(w) playFrom(abIndex); };
+    view.querySelectorAll(".sp").forEach(b=>b.onclick=()=>{
+      abRate=+b.dataset.r;
+      view.querySelectorAll(".sp").forEach(x=>x.classList.toggle("on",x===b));
+      if(abPlaying){const i=abIndex;stopAudio();playFrom(i);}
+    });
+  }
+  $("#dlPdf").onclick=()=>{
+    const orig=document.title;
+    document.title=s.title+" — The Story Gazette";
+    window.print();
+    window.onafterprint=()=>{ document.title=orig; window.onafterprint=null; };
+  };
+  window.scrollTo(0,0);
+}
+
+function onBodyClick(e){
+  if(mode==="word"){
+    const w=e.target.closest(".w"); if(!w) return;
+    clearSel(); w.classList.add("sel"); selText=w.textContent.replace(/[.,;:!?"'()\u201C\u201D]/g,"").trim();
+    openSheet(selText,"Selected Word");
+  }else{
+    const sen=e.target.closest(".s"); if(!sen) return;
+    clearSel(); sen.classList.add("sel"); selText=sen.dataset.text;
+    openSheet(selText,"Selected Sentence");
+  }
+}
+function clearSel(){ document.querySelectorAll(".sel").forEach(el=>el.classList.remove("sel")); }
+
+/* ---------- selection sheet ---------- */
+const sheet=$("#sheet");
+function openSheet(text,kicker){
+  $("#sheetKicker").textContent=kicker;
+  $("#sheetEn").textContent=text;
+  const ar=$("#sheetAr"); ar.className="sheet-ar"; ar.textContent="";
+  refreshSaveBtn();
+  sheet.classList.add("up");
+}
+function hideSheet(){ sheet.classList.remove("up"); }
+$("#sheetClose").onclick=()=>{hideSheet();clearSel();};
+$("#actListen").onclick=()=>speak(selText,1);
+$("#actSlow").onclick=()=>speak(selText,0.6);
+$("#actTranslate").onclick=async()=>{
+  const ar=$("#sheetAr"); ar.className="sheet-ar show loading"; ar.textContent="translating to Arabic …";
+  const out=await translate(selText);
+  ar.className="sheet-ar show"; ar.textContent=out;
+};
+$("#actSave").onclick=async()=>{
+  if(isArticle) return;
+  const lvl=curStory.level;
+  if(SAVED[lvl].some(x=>x.en===selText && x.storyId===curStory.id)){ toast("Already in your "+lvl+" folder"); return; }
+  SAVED[lvl].unshift({en:selText, ar:TR[selText.trim()]||"", story:curStory.title, storyId:curStory.id, ts:Date.now()});
+  await saveJSON("nh-saved",SAVED); refreshSaveBtn(); toast("Saved to folder "+lvl);
+};
+function refreshSaveBtn(){
+  if(isArticle) return;
+  const lvl=curStory?curStory.level:null;
+  const ex=lvl && SAVED[lvl].some(x=>x.en===selText && x.storyId===curStory.id);
+  const btn=$("#actSave"); btn.classList.toggle("saved",!!ex); btn.lastChild.textContent=ex?"Saved":"Save";
+}
+
+/* ---------- audio ---------- */
+function setPlayIcon(p){
+  const btn=$("#abPlay");if(!btn)return;
+  btn.innerHTML=p
+    ?`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>Stop`
+    :`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l13 7-13 7z"/></svg>Listen to Story`;
+}
+function updatePos(){ const el=$("#abPos");if(el)el.textContent=(sentenceEls.length?(abIndex+1):0)+" / "+sentenceEls.length; }
+function hl(i){ document.querySelectorAll(".reading").forEach(e=>e.classList.remove("reading"));
+  const el=sentenceEls[i]; if(el){ el.classList.add("reading"); el.scrollIntoView({behavior:"smooth",block:"center"}); } }
+function playFrom(i){
+  if(i>=sentenceEls.length){ stopAudio(); abIndex=0; updatePos(); return; }
+  abIndex=i; abPlaying=true; setPlayIcon(true); updatePos(); hl(i);
+  speak(sentenceEls[i].dataset.text, abRate, ()=>{ if(abPlaying) playFrom(i+1); });
+}
+function stopAudio(){ abPlaying=false; if("speechSynthesis" in window) speechSynthesis.cancel(); setPlayIcon(false);
+  document.querySelectorAll(".reading").forEach(e=>e.classList.remove("reading")); }
+
+/* ---------- journal ---------- */
+function renderArticles(){
+  leaveReader(); setActiveNav("articles"); setBack(false);
+  const cards=ARTICLES.map((a,i)=>`
+    <div class="art-card reveal" data-art="${a.id}" style="animation-delay:${i*50}ms">
+      <div class="ac-cov">${bannerCover(a.motif,ACCENTS[LEVELS[i%5]])}</div>
+      <div class="ac-body"><div class="ac-kicker">${esc(a.kicker)}</div>
+        <h3>${esc(a.title)}</h3><p>${esc(a.excerpt)}</p>
+        <div class="ac-meta">${esc(a.date)} &middot; ${readMin(a)} min read</div></div>
+    </div>`).join("");
+  view.innerHTML=`<div class="wrap">
+      <div class="sec-head"><div class="sec-kicker">The Journal</div>
+        <h1 class="sec-title">Reading &amp; Learning Notes</h1>
+        <div class="sec-sub">Practical guides on reading, listening and remembering English. Tap any to read with audio and translation.</div></div>
+      <div class="art-grid">${cards}</div></div>`;
+  view.querySelectorAll(".art-card").forEach(c=>c.onclick=()=>openArticle(c.dataset.art,false));
+  window.scrollTo(0,0);
+}
+function openArticle(id, listView){
+  curArticle=ARTICLES.find(a=>a.id===id);
+  if(listView){ renderArticles(); return; }
+  renderReader(true);
+}
+
+/* ---------- folders ---------- */
+function renderSaved(){
+  leaveReader(); setActiveNav("saved"); setBack(false);
+  const counts=LEVELS.map(l=>`<div><div class="n">${SAVED[l].length}</div><div class="l">${l}</div></div>`).join("");
+  const tabs=LEVELS.map(l=>`<button data-level="${l}" class="${l===curLevel?'on':''}">${l}<span class="lab">${SAVED[l].length} saved</span></button>`).join("");
+  const items=SAVED[curLevel];
+  let list;
+  if(!items.length){
+    list=`<div class="empty">This folder is empty.<br>Open a Level ${curLevel} story, tap a word or sentence, and choose <em>Save</em> to keep it here.</div>`;
+  }else{
+    list=`<div class="clip-list">`+items.map((it,i)=>`
+      <div class="clip reveal" style="animation-delay:${i*35}ms">
+        <div class="clip-en" data-en="${esc(it.en)}">${esc(it.en)}</div>
+        ${it.ar?`<div class="clip-ar">${esc(it.ar)}</div>`:""}
+        <div class="clip-src"><span class="from">From &ldquo;${esc(it.story)}&rdquo; &middot; ${curLevel}</span>
+          <span class="clip-tools">
+            <button class="ct play" data-en="${esc(it.en)}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l13 7-13 7z"/></svg>Hear</button>
+            ${it.ar?"":`<button class="ct tr" data-i="${i}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h7M7.5 5c0 4-2 7-4 8M5 9c0 2 2 4 5 5"/><path d="M13 19l4-9 4 9M14.5 16h5"/></svg>Translate</button>`}
+            <button class="ct del" data-i="${i}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14M9 7V4h6v3M7 7l1 13h8l1-13"/></svg></button>
+          </span></div>
+      </div>`).join("")+`</div>`;
+  }
+  view.innerHTML=`<div class="wrap">
+      <div class="sec-head"><div class="sec-kicker">Your Saved Sentences</div>
+        <h1 class="sec-title">The Memory Folders</h1>
+        <div class="sec-sub">Every sentence you keep is filed by its level, and remembers the tale it came from.</div></div>
+      <div class="folder-stat">${counts}</div>
+      <div class="levels">${tabs}</div>
+      ${list}
+      ${SAVED[curLevel].length?`<div class="rev-row">
+        <button class="rev-btn" id="revBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          Start Review · ${curLevel}
+        </button>
+      </div>`:''}
+      </div>`;
+  view.querySelectorAll(".levels button").forEach(b=>b.onclick=()=>{curLevel=b.dataset.level;renderSaved();});
+  view.querySelectorAll(".clip-en").forEach(el=>el.onclick=()=>speak(el.dataset.en,1));
+  view.querySelectorAll(".ct.play").forEach(b=>b.onclick=()=>speak(b.dataset.en,1));
+  view.querySelectorAll(".ct.del").forEach(b=>b.onclick=async()=>{ SAVED[curLevel].splice(+b.dataset.i,1); await saveJSON("nh-saved",SAVED); renderSaved(); toast("Removed"); });
+  view.querySelectorAll(".ct.tr").forEach(b=>b.onclick=async()=>{ const i=+b.dataset.i; b.textContent="…";
+    const out=await translate(SAVED[curLevel][i].en); SAVED[curLevel][i].ar=out; await saveJSON("nh-saved",SAVED); renderSaved(); });
+  if($("#revBtn")) $("#revBtn").onclick=()=>startQuiz(qzGenReview(curLevel),"review",null);
+  window.scrollTo(0,0);
+}
+
+/* ---------- quiz ---------- */
+const QZ_STOP=new Set("a an the is are was were be been being have has had do does did will would could should may might shall must can i he she it we you they and or but in on at to of for with by from up out this that his her its our their him us them what who one two three then now said goes come went back each some all there here just very only still soon again already also even if though while as after before".split(" "));
+function qzNorm(s){return s.toLowerCase().replace(/[^a-z0-9 ]/g,"").trim();}
+function qzLev(a,b){
+  if(!a.length)return b.length;if(!b.length)return a.length;
+  const m=[];for(let i=0;i<=b.length;i++)m[i]=[i];for(let j=1;j<=a.length;j++)m[0][j]=j;
+  for(let i=1;i<=b.length;i++)for(let j=1;j<=a.length;j++)
+    m[i][j]=b[i-1]===a[j-1]?m[i-1][j-1]:1+Math.min(m[i-1][j],m[i][j-1],m[i-1][j-1]);
+  return m[b.length][a.length];
+}
+function qzMatch(user,correct){
+  const u=qzNorm(user),c=qzNorm(correct);
+  if(!u)return false;
+  return u===c||qzLev(u,c)<=Math.max(1,Math.floor(c.length*.2));
+}
+function qzMakeFill(sentence){
+  const clean=sentence.replace(/[.!?]$/,"");
+  const words=clean.split(/\s+/);
+  const cands=words.map((w,i)=>[w,i]).filter(([w])=>{
+    const cl=w.toLowerCase().replace(/[^a-z]/g,"");
+    return cl.length>3&&!QZ_STOP.has(cl);
+  });
+  if(!cands.length)return null;
+  const [word,idx]=cands[Math.floor(Math.random()*cands.length)];
+  const ans=word.replace(/[.,!?;:'"]/g,"");
+  const display=words.map((w,i)=>i===idx?`<span class="qz-blank">___</span>`:esc(w)).join(" ");
+  return{type:"fill",sentence,display,answer:ans.toLowerCase()};
+}
+function qzGenStory(story){
+  const sents=story.body.flatMap(p=>splitSentences(p)).filter(s=>s.split(/\s+/).length>=5);
+  const pool=[...sents].sort(()=>Math.random()-.5);
+  const qs=[];
+  for(const s of pool){if(qs.filter(q=>q.type==="fill").length>=3)break;const q=qzMakeFill(s);if(q)qs.push(q);}
+  const used=new Set(qs.map(q=>q.sentence));
+  pool.filter(s=>!used.has(s)).slice(0,2).forEach(s=>qs.push({type:"dictation",text:s}));
+  SAVED[story.level].filter(x=>x.storyId===story.id&&x.ar).slice(0,3).forEach(it=>qs.push({type:"write",prompt:it.ar,answer:it.en}));
+  return qs.sort(()=>Math.random()-.5);
+}
+function qzGenReview(level){
+  const items=[...SAVED[level]].sort(()=>Math.random()-.5).slice(0,12);
+  return items.map((it,i)=>{
+    if(i%3===0){const q=qzMakeFill(it.en);if(q)return q;}
+    if(i%3===1&&it.ar)return{type:"write",prompt:it.ar,answer:it.en};
+    return{type:"dictation",text:it.en};
+  }).filter(Boolean);
+}
+let qzQ=[],qzIdx=0,qzScore=0,qzSrc="",qzStory=null,qzLog=[];
+function startQuiz(questions,src,story){
+  if(!questions||!questions.length){toast("No items yet — read more stories and save words first!");return;}
+  qzQ=questions;qzIdx=0;qzScore=0;qzSrc=src;qzStory=story||null;qzLog=[];
+  document.body.classList.add("reading-mode");
+  leaveReader();
+  setActiveNav(src==="review"?"saved":"library");
+  setBack(true,src==="review"?"Folders":"Story",src==="review"?renderSaved:renderDetail);
+  qzShowQ();
+}
+function qzShowQ(){
+  const q=qzQ[qzIdx],total=qzQ.length,pct=Math.round((qzIdx/total)*100);
+  const typeLabel={fill:"Fill in the Blank",dictation:"Dictation — Listen & Write",write:"Write in English"}[q.type];
+  let inner="";
+  if(q.type==="fill"){
+    inner=`<div class="qz-type-tag">${typeLabel}</div>
+      <div class="qz-q">${q.display}</div>
+      <input class="qz-input" id="qzIn" type="text" placeholder="Type the missing word…" autocomplete="off" autocorrect="off" spellcheck="false">
+      <div class="qz-btns"><button class="btn btn-primary" id="qzCheck">Check</button><button class="qz-skip" id="qzSkip">Skip</button></div>`;
+  }else if(q.type==="write"){
+    inner=`<div class="qz-type-tag">${typeLabel}</div>
+      <div class="qz-ar">${esc(q.prompt)}</div>
+      <input class="qz-input" id="qzIn" type="text" placeholder="Type in English…" autocomplete="off" autocorrect="off" spellcheck="false">
+      <div class="qz-btns"><button class="btn btn-primary" id="qzCheck">Check</button><button class="qz-skip" id="qzSkip">Skip</button></div>`;
+  }else{
+    inner=`<div class="qz-type-tag">${typeLabel}</div>
+      <div class="qz-dict-hint">Press <strong>Play</strong> to hear the sentence, then type exactly what you heard.</div>
+      <div class="qz-btns" id="qzPlayRow">
+        <button class="qz-mic" id="qzPlay"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l13 7-13 7z"/></svg>Play Sentence</button>
+      </div>
+      <input class="qz-input" id="qzIn" type="text" placeholder="Type what you heard…" autocomplete="off" autocorrect="off" spellcheck="false" disabled style="opacity:.45">
+      <div class="qz-btns" id="qzCheckRow" style="display:none">
+        <button class="btn btn-primary" id="qzCheck">Check</button>
+        <button class="qz-skip" id="qzSkip">Skip</button>
+      </div>`;
+  }
+  view.innerHTML=`<div class="quiz-wrap">
+    <div class="quiz-head reveal">
+      <div class="quiz-kicker">${esc(qzSrc==="review"?"Vocabulary Review":"Story Quiz")}${qzStory?` · ${esc(qzStory.title)}`:""}</div>
+      <div class="qz-bar-wrap"><div class="qz-bar-fill" style="width:${pct}%"></div></div>
+      <div class="quiz-count">Question ${qzIdx+1} of ${total}</div>
+    </div>
+    <div class="quiz-card reveal" style="animation-delay:80ms">
+      ${inner}
+      <div class="qz-feedback" id="qzFb"></div>
+    </div></div>`;
+  const inp=$("#qzIn");
+  if(inp&&q.type!=="dictation")inp.focus();
+  const doCheck=()=>{
+    if(!inp||inp.disabled)return;
+    const val=inp.value.trim();
+    inp.disabled=true;
+    const ck=$("#qzCheck");if(ck)ck.style.display="none";
+    const fb=$("#qzFb");
+    if(q.type==="dictation"){
+      const res=qzWordAlign(val,q.text);
+      const matched=res.filter(r=>r.ok).length,ttl=res.length;
+      const ok=ttl>0&&matched/ttl>=.75;
+      qzScore+=ok?1:0;qzLog.push({q,val,ok});
+      const wordHtml=res.map(r=>
+        r.ok&&!r.close?`<span class="qw-ok">${esc(r.word)}</span>`:
+        r.ok&&r.close?`<span class="qw-close">${esc(r.word)}</span>`:
+        `<span class="qw-miss">${esc(r.word)}</span>`
+      ).join(" ");
+      fb.className="qz-feedback "+(ok?"ok":"err");
+      fb.innerHTML=`<div class="qz-word-result">${wordHtml}</div><div class="qz-spoken-line">${matched}/${ttl} words correct${ok?" — well done!":"."}</div>`;
+    }else{
+      const ok=qzMatch(val,q.answer);
+      qzScore+=ok?1:0;qzLog.push({q,val,ok});
+      inp.classList.add(ok?"ok":"err");
+      fb.className="qz-feedback "+(ok?"ok":"err");
+      fb.innerHTML=ok?"✓ Correct!":`✗ Answer: <strong>${esc(q.answer)}</strong>`;
+    }
+    qzNextBtn();
+  };
+  const ck=$("#qzCheck");if(ck)ck.onclick=doCheck;
+  if(inp)inp.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();doCheck();}};
+  const playBtn=$("#qzPlay");
+  if(playBtn){
+    let played=false;
+    playBtn.onclick=()=>{
+      speak(q.text,.9);
+      if(!played){
+        played=true;
+        playBtn.innerHTML=`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l13 7-13 7z"/></svg>Play Again`;
+        if(inp){inp.disabled=false;inp.style.opacity="1";inp.focus();}
+        const cr=$("#qzCheckRow");if(cr)cr.style.display="";
+      }
+    };
+  }
+  const skip=$("#qzSkip");
+  if(skip)skip.onclick=()=>{qzLog.push({q,val:"",ok:false});qzAdvance();};
+}
+function qzWordAlign(spoken,target){
+  const sw=qzNorm(spoken).split(/\s+/).filter(Boolean);
+  const tw=qzNorm(target).split(/\s+/).filter(Boolean);
+  const used=new Set();
+  return tw.map(t=>{
+    let bestD=Infinity,bestI=-1;
+    sw.forEach((s,i)=>{if(!used.has(i)){const d=qzLev(s,t);if(d<bestD){bestD=d;bestI=i;}}});
+    const thr=Math.max(1,Math.floor(t.length*.3));
+    if(bestI>=0&&bestD<=thr){used.add(bestI);return{word:t,ok:true,close:bestD>0};}
+    return{word:t,ok:false};
+  });
+}
+function qzNextBtn(){
+  const btns=view.querySelector(".qz-btns");if(!btns)return;
+  const b=document.createElement("button");
+  b.className="btn btn-ghost";
+  b.textContent=qzIdx+1<qzQ.length?"Next →":"See Results";
+  b.onclick=qzAdvance;btns.appendChild(b);
+  const sk=$("#qzSkip");if(sk)sk.style.display="none";
+}
+function qzAdvance(){qzIdx++;if(qzIdx>=qzQ.length)qzResult();else qzShowQ();}
+function qzResult(){
+  const total=qzQ.length,pct=Math.round((qzScore/total)*100);
+  const msg=pct>=80?"Excellent!":pct>=60?"Well done!":pct>=40?"Good effort!":"Keep practising!";
+  const rows=qzLog.map((a,i)=>`<div class="qr-row"><span>${i+1}. ${esc((a.q.answer||a.q.text||"").slice(0,48))}</span><span class="${a.ok?"qr-ok":"qr-no"}">${a.ok?"✓":"✗"}</span></div>`).join("");
+  const story=qzStory;
+  view.innerHTML=`<div class="quiz-wrap">
+    <div class="qz-results reveal">
+      <div class="qr-ring">${qzScore}/${total}</div>
+      <div class="qr-label">${msg}</div>
+      <div class="qr-sub">${qzScore} correct of ${total} · ${pct}%</div>
+      <div class="qr-list">${rows}</div>
+      <div class="btn-row">
+        ${story?`<button class="btn btn-primary" id="qrBack">Back to Story</button>`:`<button class="btn btn-primary" id="qrFolders">Back to Folders</button>`}
+        <button class="btn btn-ghost" id="qrAgain">Try Again</button>
+      </div>
+    </div></div>`;
+  if($("#qrBack"))$("#qrBack").onclick=renderDetail;
+  if($("#qrFolders"))$("#qrFolders").onclick=renderSaved;
+  $("#qrAgain").onclick=()=>startQuiz(qzSrc==="review"?qzGenReview(curLevel):qzGenStory(story),qzSrc,story);
+  window.scrollTo(0,0);
+}
+
+/* ---------- toast ---------- */
+let toastT;
+function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("show"),1700); }
+
+/* ---------- boot ---------- */
+document.querySelectorAll(".tb-nav button").forEach(b=>b.onclick=()=>setNav(b.dataset.nav));
+(function(){ try{ $("#dateline").textContent=new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"}); }catch(e){} })();
+(async function init(){
+  const sv=await loadJSON("nh-saved",null);
+  if(sv){ LEVELS.forEach(l=>SAVED[l]=Array.isArray(sv[l])?sv[l]:[]); }
+  TR=await loadJSON("nh-tr",{})||{};
+  const tab=new URLSearchParams(window.location.search).get("tab");
+  if(tab==="saved") renderSaved();
+  else renderLibrary();
+})();
+</script>
+</body>
+</html>
