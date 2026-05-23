@@ -1391,15 +1391,17 @@ function renderReader(asArticle){
       ${[0.5,0.75,1,1.25,1.5,2].map(r=>`<button class="sp${r===1?' on':''}" data-r="${r}">${r===1?'1':r}&times;</button>`).join('')}
     </div>
     <div class="voice-strip">
-      ${(()=>{
-        const vs=("speechSynthesis" in window)?speechSynthesis.getVoices().filter(v=>/^en/i.test(v.lang)):[];
-        if(!vs.length) return `<span class="vs-label">Voice</span><span class="vs-voice-name">${esc(VOICE_NAME||'Loading…')}</span>`;
-        const chips=vs.map(v=>{
-          const label=v.name.replace(/^google\s+/i,'').replace(/\s*english\s*/i,' ').replace(/\s+/g,' ').trim()||v.name;
-          return `<button class="vc${v.name===VOICE_NAME?' on':''}" data-vn="${esc(v.name)}" title="${esc(v.name)}">${esc(label)}</button>`;
-        }).join('');
-        return `<span class="vs-label">Voice</span><div class="vs-voices" id="vcVoiceList">${chips}</div>`;
-      })()}
+      <span class="vs-label">Accent</span>
+      <div class="vs-group">
+        <button class="vc${voicePref.accent==='US'?' on':''}" id="vcUS">US</button>
+        <button class="vc${voicePref.accent==='GB'?' on':''}" id="vcGB">GB</button>
+      </div>
+      <span class="vs-label">Voice</span>
+      <div class="vs-group">
+        <button class="vc${voicePref.gender==='M'?' on':''}" id="vcM">Male</button>
+        <button class="vc${voicePref.gender==='F'?' on':''}" id="vcF">Female</button>
+        <button class="vc${voicePref.gender===null?' on':''}" id="vcAny">Any</button>
+      </div>
     </div>
   </div>`:'';
 
@@ -1448,15 +1450,20 @@ function renderReader(asArticle){
       view.querySelectorAll(".sp").forEach(x=>x.classList.toggle("on",x===b));
       if(abPlaying){const i=abIndex;stopAudio();playFrom(i);}
     });
-    // Delegated handler — works even if voice list is built after render
-    view.querySelector('.voice-strip').addEventListener('click',e=>{
-      const btn=e.target.closest('[data-vn]');
-      if(!btn) return;
-      voicePref.voiceName=btn.dataset.vn;
+    function setReaderVoice(key,val){
+      voicePref[key]=val;
+      voicePref.voiceName=null;
       localStorage.setItem('nh-voice-pref',JSON.stringify(voicePref));
       pickVoice();
+      view.querySelectorAll("#vcUS,#vcGB").forEach(b=>b.classList.toggle('on',(b.id==='vcUS'&&voicePref.accent==='US')||(b.id==='vcGB'&&voicePref.accent==='GB')));
+      view.querySelectorAll("#vcM,#vcF,#vcAny").forEach(b=>b.classList.toggle('on',(b.id==='vcM'&&voicePref.gender==='M')||(b.id==='vcF'&&voicePref.gender==='F')||(b.id==='vcAny'&&voicePref.gender===null)));
       if(abPlaying){const i=abIndex;stopAudio();playFrom(i);}
-    });
+    }
+    $("#vcUS").onclick=()=>setReaderVoice('accent','US');
+    $("#vcGB").onclick=()=>setReaderVoice('accent','GB');
+    $("#vcM").onclick=()=>setReaderVoice('gender','M');
+    $("#vcF").onclick=()=>setReaderVoice('gender','F');
+    $("#vcAny").onclick=()=>setReaderVoice('gender',null);
   }
   $("#dlPdf").onclick=()=>{
     const orig=document.title;
