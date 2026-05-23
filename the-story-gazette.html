@@ -248,6 +248,7 @@
   .vc:last-child{border-right:none;}
   .vc.on{background:var(--ink);color:var(--paper);font-weight:700;}
   .vc:hover:not(.on){background:var(--paper-2);color:var(--ink);}
+  .vs-voice-name{font-family:var(--type);font-size:8px;letter-spacing:.6px;color:var(--faint);opacity:.75;align-self:center;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 
   /* saved */
   .empty{text-align:center;padding:44px 16px;font-style:italic;color:var(--faint);border:1px dashed var(--line);font-size:15px;line-height:1.6;}
@@ -865,15 +866,15 @@ let VOICE=null;
 let voicePref=(()=>{ try{ return JSON.parse(localStorage.getItem('nh-voice-pref'))||{accent:'GB',gender:'F'}; }catch(e){ return {accent:'GB',gender:'F'}; } })();
 function genderOfVoice(v){
   const n=v.name.toLowerCase();
-  // explicit label in name — most reliable
-  if(/female|woman/.test(n)) return 'F';
-  if(/\bmale\b/.test(n)) return 'M';
-  // "Google US English" has no label but sounds female
-  if(/google\s+us\s+english\s*$/.test(n)) return 'F';
-  // Known female: iOS · macOS · Android · Windows · Edge
-  if(/samantha|nicky|victoria|moira|fiona|karen|tessa|veena|zira|hazel|eva|emily|kate|susan|kathy|natasha|amelie|serena|ava|allison|joanna|salli|kendra|kimberly|ivy|aria|jenny|sonia|leah|grace|olivia|catherine/i.test(n)) return 'F';
-  // Known male: iOS · macOS · Android · Windows · Edge
-  if(/\b(daniel|james|rishi|alex|aaron|arthur|bruce|junior|fred|ralph|lee|tom|george|david|oliver|mark|ryan|liam|matthew|guy|christopher|eric|rohan|jamie|gordon|reed)\b/i.test(n)) return 'M';
+  // Explicit gender label in name — most reliable (covers "Google UK English Male/Female", Edge, etc.)
+  if(/\bfemale\b|\bwoman\b|\bgirl\b/.test(n)) return 'F';
+  if(/\bmale\b|\bman\b|\bboy\b/.test(n)) return 'M';
+  // Google unlabelled voices that sound female
+  if(/^google\s+(us\s+english|hindi|français|deutsch|español|italiano)\s*$/i.test(n)) return 'F';
+  // Known female names — iOS · macOS · Windows · Android · Edge · Samsung
+  if(/\b(samantha|nicky|victoria|moira|fiona|karen|tessa|veena|zira|hazel|eva|emily|kate|martha|susan|kathy|natasha|amelie|serena|ava|allison|joanna|salli|kendra|kimberly|ivy|aria|jenny|sonia|leah|grace|olivia|catherine|zoe|zosia|helena|monica|sandy|shelley|flo|linda|betty|mary|patricia|barbara|margaret|lisa|dorothy|sandra|ashley|anna|julia|sara|emma|claire|alice|laura|marie|sophie|sarah|nicole|jessica|amanda|melissa|elizabeth|jennifer|angela|brenda|virginia|kelly|lauren|rachel|janet|beverly|diana|ruby|evelyn|helen|gloria|hannah|charlotte|cheryl|amber|denise|bonnie|madison|lily|chloe|paige|sydney|aurora|iris|sienna|yuna|jihye|meijia|lekha|damayanti|luciana|francisca|marisol|paulina)\b/i.test(n)) return 'F';
+  // Known male names — iOS · macOS · Windows · Android · Edge · Samsung
+  if(/\b(daniel|james|rishi|alex|aaron|arthur|bruce|junior|fred|ralph|lee|tom|george|david|oliver|mark|ryan|liam|matthew|guy|christopher|eric|rohan|jamie|gordon|reed|eddy|rocko|evan|michael|joseph|steven|anthony|william|john|robert|charles|richard|thomas|paul|kenneth|kevin|brian|edward|ronald|timothy|gary|larry|jeffrey|frank|scott|stephen|jason|raymond|gregory|joshua|jerry|dennis|walter|patrick|peter|harold|douglas|henry|carl|roger|albert|jonathan|justin|terry|gerald|keith|samuel|lawrence|nicholas|roy|benjamin|brandon|adam|harry|wayne|billy|steve|louis|jeremy|alan|juan|austin|randy|howard|eugene|carlos|russell|bobby|victor|martin|ernest|phillip|todd|jesse|craig|shawn|sean|philip|chris|johnny|earl|jimmy|antonio|danny|bryan|tony|luis|mike|logan|noah|ethan|mason|jacob|jackson|aiden|elijah|lucas|caleb|isaiah|nathan|jack|clay|wade|tanner|dillon|hayden|drew|brett|chad|blake|cole|brent|derek|jared|tyler|chase|dylan|hunter|zach|travis|clint|dusty|cody|nash|tucker|devin|garrett|tae-yang|hyun-su|tingting|loon|kangkang|yunyang)\b/i.test(n)) return 'M';
   return null;
 }
 let _vpRetries=0;
@@ -881,21 +882,31 @@ function pickVoice(){
   if(!("speechSynthesis" in window)) return;
   const vs=speechSynthesis.getVoices();
   if(!vs.length){
-    // mobile loads voices async — retry a few times
-    if(_vpRetries++<6) setTimeout(pickVoice,250);
+    if(_vpRetries++<8) setTimeout(pickVoice,300);
     return;
   }
   _vpRetries=0;
   const {accent,gender}=voicePref;
   const accentRe=accent==='US'?/en[-_]US/i:/en[-_]GB/i;
   const fallbackAccentRe=accent==='US'?/en[-_]GB/i:/en[-_]US/i;
+  const anyEnRe=/^en/i;
   const match=(langRe,g)=>vs.find(v=>langRe.test(v.lang)&&(g===null||genderOfVoice(v)===g));
-  VOICE=match(accentRe,gender)
-     || match(fallbackAccentRe,gender)   // try same gender, other accent
-     || match(accentRe,null)             // any voice with right accent
-     || match(fallbackAccentRe,null)     // any voice, other accent
-     || vs.find(v=>/^en/i.test(v.lang)) // any English
-     || vs[0]||null;
+  // If targeting male but none found by name: prefer voices not explicitly female over random first
+  const matchNotF=(langRe)=>vs.find(v=>langRe.test(v.lang)&&genderOfVoice(v)!=='F');
+  VOICE= match(accentRe,gender)
+      || match(fallbackAccentRe,gender)
+      || (gender==='M'? matchNotF(accentRe)        : null)
+      || (gender==='M'? matchNotF(fallbackAccentRe) : null)
+      || (gender==='M'? vs.find(v=>anyEnRe.test(v.lang)&&genderOfVoice(v)!=='F') : null)
+      || match(accentRe,null)
+      || match(fallbackAccentRe,null)
+      || vs.find(v=>anyEnRe.test(v.lang))
+      || vs[0]||null;
+  // Keep voice label in sync wherever it's shown
+  const lbl=document.getElementById('voiceLabel');
+  if(lbl) lbl.textContent=VOICE?VOICE.name:'—';
+  const slbl=document.getElementById('vsVoiceName');
+  if(slbl) slbl.textContent=VOICE?VOICE.name:'';
 }
 if("speechSynthesis" in window){ pickVoice(); speechSynthesis.onvoiceschanged=()=>{ _vpRetries=0; pickVoice(); }; }
 function speak(text, rate, onend){
@@ -1361,6 +1372,7 @@ function renderReader(asArticle){
         <button class="vc${voicePref.gender==='F'?' on':''}" id="vcF">Female</button>
         <button class="vc${voicePref.gender===null?' on':''}" id="vcAny">Any</button>
       </div>
+      <span class="vs-voice-name" id="vsVoiceName">${VOICE?VOICE.name:''}</span>
     </div>
   </div>`:'';
 
