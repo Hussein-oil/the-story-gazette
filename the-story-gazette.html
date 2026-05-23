@@ -25,15 +25,16 @@
 </script>
 <style>
   :root{
-    --bg-outer:#e3d6ba; --app-border:#c5b693;
-    --paper:#efe6d2; --paper-2:#e7dcc4;
-    --ink:#211d17; --ink-soft:#4a4339; --faint:#8a7f6c;
-    --line:#2a251d;
+    --bg-outer:#c4b28e; --app-border:#9e8c68;
+    --paper:#ddd0b0; --paper-2:#cfc09a;
+    --ink:#0e0b07; --ink-soft:#2e2619; --faint:#5e5240;
+    --line:#1a1510;
     --accent:#a63422; --accent-2:#bf5a2a;
-    --sel:rgba(166,52,34,.16); --read:rgba(191,90,42,.22);
+    --sel:rgba(166,52,34,.18); --read:rgba(191,90,42,.24);
     --serif:"Source Serif 4", Georgia, "Times New Roman", serif;
     --display:"Playfair Display", Georgia, serif;
     --type:"Special Elite","Courier New",monospace;
+    --grid-line:rgba(42,37,29,.11);
   }
   [data-theme="dark"]{
     --bg-outer:#0a0806; --app-border:rgba(255,255,255,.07);
@@ -42,6 +43,7 @@
     --line:#2e2518;
     --accent:#c44232; --accent-2:#d46a30;
     --sel:rgba(196,66,50,.22); --read:rgba(208,106,48,.28);
+    --grid-line:rgba(255,255,255,.04);
   }
   .theme-ready *{transition:background-color .25s,color .2s,border-color .2s,box-shadow .2s;}
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -49,19 +51,26 @@
   html{scrollbar-gutter:stable;}
   body{
     font-family:var(--serif);color:var(--ink);min-height:100vh;
-    background:var(--bg-outer);
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='0.05'/%3E%3C/svg%3E");
+    background-color:var(--bg-outer);
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size:26px 26px;
     -webkit-font-smoothing:antialiased;
   }
   #app{
-    max-width:1180px;margin:0 auto;min-height:100vh;background:var(--paper);
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='q'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23q)' opacity='0.04'/%3E%3C/svg%3E");
-    border-left:1px solid var(--app-border);border-right:1px solid var(--app-border);
+    width:100%;min-height:100vh;
+    background-color:var(--paper);
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='q'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23q)' opacity='0.035'/%3E%3C/svg%3E");
+    background-size:26px 26px, 26px 26px, 200px 200px;
     display:flex;flex-direction:column;
   }
 
   /* masthead (scrolls) */
-  header.mast{padding:18px 20px 12px;border-bottom:1px solid var(--line);}
+  header.mast{padding:18px 20px 12px;border-bottom:1px solid var(--line);background:var(--paper);}
   .mast-top{display:flex;justify-content:space-between;align-items:center;
     font-family:var(--type);font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--ink-soft);}
   .nameplate{font-family:var(--display);font-weight:900;text-align:center;line-height:.92;
@@ -91,8 +100,9 @@
 
   main{flex:1;padding:22px 20px 40px;}
   body.reading-mode main{padding-bottom:40px;}
-  .wrap{max-width:1080px;margin:0 auto;}
-  .wrap-read{max-width:720px;margin:0 auto;}
+  .wrap{max-width:1080px;margin:0 auto;background:var(--paper);padding:32px 52px 40px;box-shadow:0 0 0 1px var(--app-border),4px 0 28px rgba(0,0,0,.06),-4px 0 28px rgba(0,0,0,.06);}
+  .wrap-read{max-width:720px;margin:0 auto;background:var(--paper);padding:32px 52px 40px;box-shadow:0 0 0 1px var(--app-border),4px 0 28px rgba(0,0,0,.06),-4px 0 28px rgba(0,0,0,.06);}
+  @media(max-width:600px){.wrap,.wrap-read{padding:22px 24px 32px;}}
   .reveal{opacity:0;transform:translateY(10px);animation:rise .5s cubic-bezier(.2,.7,.2,1) forwards;}
   @keyframes rise{to{opacity:1;transform:none;}}
 
@@ -227,11 +237,17 @@
   .ra-nav-btn svg{width:12px;height:12px;}
   .ra-pos{font-family:var(--type);font-size:10px;letter-spacing:.5px;color:var(--faint);min-width:44px;text-align:center;}
   .speed-strip{display:flex;margin-top:12px;border:1px solid var(--line);width:fit-content;}
-  .sp{background:var(--paper);border:none;border-right:1px solid var(--line);cursor:pointer;
-    font-family:var(--type);font-size:10px;letter-spacing:.3px;padding:6px 11px;color:var(--faint);transition:.15s;}
+  .sp{background:var(--paper);border:none;border-right:1px solid var(--line);cursor:pointer;font-family:var(--type);font-size:10px;letter-spacing:.3px;padding:6px 11px;color:var(--faint);transition:.15s;}
   .sp:last-child{border-right:none;}
   .sp:hover{background:var(--paper-2);color:var(--ink);}
   .sp.on{background:var(--ink);color:var(--paper);font-weight:700;}
+  .voice-strip{display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap;}
+  .vs-label{font-family:var(--type);font-size:8px;letter-spacing:1.4px;text-transform:uppercase;color:var(--faint);}
+  .vs-group{display:flex;border:1px solid var(--line);width:fit-content;}
+  .vc{background:var(--paper);border:none;border-right:1px solid var(--line);cursor:pointer;font-family:var(--type);font-size:9px;letter-spacing:.8px;text-transform:uppercase;padding:4px 11px;color:var(--ink-soft);transition:.12s;}
+  .vc:last-child{border-right:none;}
+  .vc.on{background:var(--ink);color:var(--paper);font-weight:700;}
+  .vc:hover:not(.on){background:var(--paper-2);color:var(--ink);}
 
   /* saved */
   .empty{text-align:center;padding:44px 16px;font-style:italic;color:var(--faint);border:1px dashed var(--line);font-size:15px;line-height:1.6;}
@@ -290,7 +306,7 @@
     text-transform:uppercase;padding:11px 20px;z-index:90;opacity:0;transition:.3s;pointer-events:none;border:1px solid var(--line);}
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
-  footer{padding:22px 20px 26px;border-top:3px double var(--line);text-align:center;
+  footer{padding:22px 20px 26px;border-top:3px double var(--line);text-align:center;background:var(--paper);
     font-family:var(--type);font-size:9.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint);line-height:1.8;}
   .blog-badge{color:var(--accent);text-decoration:none;border:1px solid var(--accent);padding:2px 10px;letter-spacing:1.5px;transition:background .18s,color .18s;}
   .blog-badge:hover{background:var(--accent);color:#fff;}
@@ -417,7 +433,7 @@
   [data-theme="dark"] .qw-miss{background:#3a1010;}
 
   /* ===== language picker modal ===== */
-  #langOverlay{position:fixed;inset:0;z-index:300;background:rgba(33,29,23,.75);display:flex;align-items:center;justify-content:center;padding:16px;}
+  #langOverlay,#siteLangOverlay{position:fixed;inset:0;z-index:300;background:rgba(33,29,23,.75);display:flex;align-items:center;justify-content:center;padding:16px;}
   #langModal{background:var(--paper);border:1px solid var(--line);max-width:480px;width:100%;max-height:88vh;display:flex;flex-direction:column;box-shadow:8px 10px 0 rgba(0,0,0,.22);}
   .lm-head{padding:22px 20px 16px;border-bottom:3px double var(--line);}
   .lm-kicker{font-family:var(--type);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
@@ -456,7 +472,7 @@
   .lv-confirm:disabled{opacity:.35;cursor:not-allowed;}
 
   /* ===== settings view ===== */
-  .settings-wrap{max-width:660px;margin:0 auto;padding:32px 20px 80px;}
+  .settings-wrap{max-width:660px;margin:0 auto;padding:36px 52px 80px;background:var(--paper);box-shadow:0 0 0 1px var(--app-border),4px 0 28px rgba(0,0,0,.06),-4px 0 28px rgba(0,0,0,.06);}
   .settings-section{margin-bottom:36px;}
   .settings-head{font-family:var(--display);font-size:18px;font-weight:900;color:var(--ink);padding-bottom:8px;border-bottom:3px double var(--line);margin-bottom:4px;}
   .settings-row{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--line);gap:12px;}
@@ -481,6 +497,14 @@
   .chart-labels{display:flex;justify-content:space-between;font-size:9px;color:var(--faint);margin-top:4px;}
   #settingsBtn{padding:0 14px;line-height:0;}
   #settingsBtn svg{display:block;}
+  .voice-section{padding:13px 0;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:10px;}
+  .voice-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+  .voice-row-label{font-size:10px;color:var(--ink-soft);min-width:54px;font-family:var(--type);letter-spacing:.8px;text-transform:uppercase;}
+  .voice-opts{display:flex;gap:6px;flex-wrap:wrap;}
+  .voice-chip{font-family:var(--type);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;border:1.5px solid var(--app-border);padding:6px 16px;cursor:pointer;background:transparent;color:var(--ink-soft);transition:.15s;line-height:1;}
+  .voice-chip.on{border-color:var(--accent);color:var(--accent);background:var(--sel);}
+  .voice-chip:hover:not(.on){border-color:var(--ink);color:var(--ink);}
+  .voice-active{font-size:11px;color:var(--faint);font-style:italic;margin-top:2px;}
 </style>
 </head>
 <body>
@@ -498,8 +522,8 @@
       <span id="wordmark">Nova<em>Hubs</em></span>
     </div>
     <div class="tb-nav">
-      <button data-nav="library" class="on">Library</button>
-      <button data-nav="saved">Folders</button>
+      <button data-nav="library" data-i18n="Library" class="on">Library</button>
+      <button data-nav="saved" data-i18n="Folders">Folders</button>
       <button data-nav="settings" id="settingsBtn" title="Settings" aria-label="Settings"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
       <button id="themeBtn" title="Toggle theme" aria-label="Toggle dark mode"></button>
     </div>
@@ -838,10 +862,24 @@ LEVELS.forEach(l=>SAVED[l]=[]);
 
 /* ---------- text to speech ---------- */
 let VOICE=null;
+let voicePref=(()=>{ try{ return JSON.parse(localStorage.getItem('nh-voice-pref'))||{accent:'GB',gender:'F'}; }catch(e){ return {accent:'GB',gender:'F'}; } })();
+function genderOfVoice(v){
+  const n=v.name.toLowerCase();
+  if(/female|woman/.test(n)) return 'F';
+  if(/\bmale\b/.test(n)) return 'M';
+  if(/samantha|victoria|moira|fiona|karen|tessa|veena|zira|hazel|eva|emily|kate|susan|kathy|natasha|amelie|serena/i.test(n)) return 'F';
+  if(/\b(daniel|james|rishi|alex|david|george|fred|mark|oliver|tom|lee|junior|bruce)\b/i.test(n)) return 'M';
+  return null;
+}
 function pickVoice(){
   if(!("speechSynthesis" in window)) return;
   const vs=speechSynthesis.getVoices();
-  VOICE=vs.find(v=>/en[-_]GB/i.test(v.lang))||vs.find(v=>/en[-_]US/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||vs[0]||null;
+  if(!vs.length) return;
+  const {accent,gender}=voicePref;
+  const accentRe=accent==='US'?/en[-_]US/i:/en[-_]GB/i;
+  const fallbackAccentRe=accent==='US'?/en[-_]GB/i:/en[-_]US/i;
+  const match=(langRe,g)=>vs.find(v=>langRe.test(v.lang)&&(g===null||genderOfVoice(v)===g));
+  VOICE=match(accentRe,gender)||match(accentRe,null)||match(fallbackAccentRe,gender)||match(fallbackAccentRe,null)||vs.find(v=>/^en/i.test(v.lang))||vs[0]||null;
 }
 if("speechSynthesis" in window){ pickVoice(); speechSynthesis.onvoiceschanged=pickVoice; }
 function speak(text, rate, onend){
@@ -855,7 +893,7 @@ function speak(text, rate, onend){
 
 /* ---------- translation (free public APIs, works in any browser) ---------- */
 async function translate(text){
-  const tl=userLang.code;
+  const tl=nativeLang.code;
   const key=text.trim()+"||"+tl;
   if(TR[key]) return TR[key];
   // 1) Google public endpoint
@@ -962,12 +1000,17 @@ const LANGS=[
   {code:"yo",name:"Yoruba",native:"Yorùbá",rtl:false},
   {code:"zu",name:"Zulu",native:"isiZulu",rtl:false}
 ];
-let userLang=LANGS[3]; // Arabic default until loaded
+let nativeLang=LANGS[3]; // for translating words/sentences during reading
+let siteLang={code:'en',name:'English',native:'English',rtl:false}; // for UI language (English by default)
 
 function initLang(){
-  const saved=lsGet("nh-lang");
-  if(saved){ userLang=LANGS.find(l=>l.code===saved)||LANGS[3]; }
+  // native language (word translation) — backward-compat: fall back to old nh-lang key
+  const savedNative=lsGet("nh-native-lang")||lsGet("nh-lang");
+  if(savedNative){ nativeLang=LANGS.find(l=>l.code===savedNative)||LANGS[3]; }
   else { showLangModal(); }
+  // site language (UI) — independent
+  const savedSite=lsGet("nh-site-lang");
+  if(savedSite){ siteLang=savedSite==='en'?{code:'en',name:'English',native:'English',rtl:false}:LANGS.find(l=>l.code===savedSite)||siteLang; }
 }
 
 function showLangModal(fromSettings){
@@ -976,7 +1019,7 @@ function showLangModal(fromSettings){
     <div class="lm-head">
       <div class="lm-kicker">Welcome to NovaHubs</div>
       <h2 class="lm-title">What is your native language?</h2>
-      <p class="lm-sub">We'll translate English words and sentences into your language as you read.</p>
+      <p class="lm-sub">Words and sentences will be translated into this language as you read. You can set the site interface language separately in Settings.</p>
     </div>
     <div class="lm-search-wrap">
       <input id="langSearch" class="lm-search" type="text" placeholder="Search your language…" autocomplete="off" spellcheck="false">
@@ -1001,12 +1044,55 @@ function showLangModal(fromSettings){
   render("");
   search.oninput=()=>render(search.value);
   search.addEventListener("keydown",e=>{ if(e.key==="Enter"){ const first=list.querySelector(".lm-item"); if(first&&!sel){ first.click(); } } });
-  confirm.onclick=()=>{
-    userLang=sel; lsSet("nh-lang",sel.code);
+  confirm.onclick=async()=>{
+    nativeLang=sel; lsSet("nh-native-lang",sel.code);
     TR={}; saveJSON("nh-tr",TR);
     ov.remove();
     if(fromSettings) renderSettings();
     else if(!lsGet("nh-user-level")) showLevelModal(false);
+  };
+  setTimeout(()=>search.focus(),120);
+}
+
+function showSiteLangModal(fromSettings){
+  const EN={code:'en',name:'English',native:'English',rtl:false};
+  const SITE_LANGS=[EN,...LANGS];
+  const ov=document.createElement("div"); ov.id="siteLangOverlay";
+  ov.innerHTML=`<div id="langModal">
+    <div class="lm-head">
+      <div class="lm-kicker">Interface Language</div>
+      <h2 class="lm-title">Choose Site Language</h2>
+      <p class="lm-sub">The site interface will appear in this language. Educational content (stories, quizzes, articles) always stays in English.</p>
+    </div>
+    <div class="lm-search-wrap">
+      <input id="siteLangSearch" class="lm-search" type="text" placeholder="Search language…" autocomplete="off" spellcheck="false">
+    </div>
+    <div class="lm-list" id="siteLangList"></div>
+    <div class="lm-foot">
+      <button class="lm-confirm" id="siteLangConfirm">Confirm &rarr;</button>
+    </div>
+  </div>`;
+  document.body.appendChild(ov);
+  let sel=siteLang;
+  const list=ov.querySelector("#siteLangList");
+  const search=ov.querySelector("#siteLangSearch");
+  const confirm=ov.querySelector("#siteLangConfirm");
+  function render(q){
+    const f=q.toLowerCase().trim();
+    const filtered=f?SITE_LANGS.filter(l=>l.name.toLowerCase().includes(f)||l.native.toLowerCase().includes(f)):SITE_LANGS;
+    if(!filtered.length){ list.innerHTML=`<div class="lm-empty">No language found</div>`; return; }
+    list.innerHTML=filtered.map(l=>`<div class="lm-item${sel&&sel.code===l.code?" on":""}" data-code="${l.code}"><span class="lm-native">${l.native}</span><span class="lm-eng">${l.name}</span></div>`).join("");
+    list.querySelectorAll(".lm-item").forEach(el=>el.onclick=()=>{ sel=SITE_LANGS.find(l=>l.code===el.dataset.code); render(search.value); });
+  }
+  render("");
+  search.oninput=()=>render(search.value);
+  confirm.onclick=async()=>{
+    siteLang=sel; lsSet("nh-site-lang",sel.code);
+    UI_TR={}; localStorage.removeItem('nh-ui-tr-'+sel.code);
+    ov.remove();
+    await translateUIStrings();
+    applyUITranslations();
+    if(fromSettings) renderSettings();
   };
   setTimeout(()=>search.focus(),120);
 }
@@ -1052,6 +1138,64 @@ function showLevelModal(fromSettings){
   };
 }
 
+/* ---------- UI i18n ---------- */
+const UI_KEYS=[
+  "Library","Folders","Settings","Back","Details","Story","Journal",
+  "The Reading Library","Choose a Tale to Your Level",
+  "Start","Master","Grow","min read","Read","In the press",
+  "Level","Reading time","Words","Format","Read & Listen",
+  "Read this story","Listen to a sample","Playing a sample",
+  "Narrated by the NovaHubs reader","Chapter One",
+  "Listen to Story",
+  "Fill in the Blank","Dictation — Listen & Write","Write in English",
+  "Type the missing word…","Type in English…","Type what you heard…",
+  "Press Play to hear the sentence, then type exactly what you heard.",
+  "Play Sentence","Play Again","Check","Skip","Question","of",
+  "Story Quiz","Vocabulary Review","Back to Story","Back to Folders","Try Again",
+  "My Saved Sentences","Quiz","Export","Start Practice",
+  "No items yet — read more stories and save words first!",
+  "Your Account","Preferences","Your Progress","Data",
+  "Native Language","Appearance","Reading Level","Change","Toggle",
+  "Dark mode","Light mode",
+  "Stories Read","Sentences Saved","Active Days","Daily Average",
+  "Reading Time This Week (minutes / day)",
+  "Export Progress","Import Progress",
+  "Download your saved sentences and reading history",
+  "Restore from a previously exported file",
+  "Progress exported!","Progress restored!","Invalid file","Could not read file",
+  "Keep Your Progress Safe","progress complete","level mastered!","keep reading to reach Level",
+  "Import","Removed","The Memory Folders","Start Review","saved",
+  "Site Language","Native Language","translating to",
+  "Voice","Accent","Gender","American","British","Male","Female","Any","Test Voice","Active voice"
+];
+let UI_TR={};
+function t(s){ return (siteLang&&siteLang.code!=='en'&&UI_TR[s]!==undefined)?UI_TR[s]:s; }
+async function translateUIRaw(text,code){
+  try{
+    const r=await fetch("https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl="+encodeURIComponent(code)+"&dt=t&q="+encodeURIComponent(text));
+    const d=await r.json(); return d[0]?.map(x=>x[0]).join('')||text;
+  }catch(e){
+    try{
+      const r2=await fetch("https://api.mymemory.translated.net/get?q="+encodeURIComponent(text)+"&langpair=en|"+encodeURIComponent(code));
+      const d2=await r2.json(); if(d2.responseStatus===200) return d2.responseData.translatedText||text;
+    }catch(e2){}
+    return text;
+  }
+}
+async function translateUIStrings(){
+  if(!siteLang||siteLang.code==='en'){ UI_TR={}; return; }
+  const code=siteLang.code;
+  try{ const c=localStorage.getItem('nh-ui-tr-'+code); if(c) UI_TR=JSON.parse(c)||{}; }catch(e){ UI_TR={}; }
+  const missing=UI_KEYS.filter(k=>!(k in UI_TR));
+  if(!missing.length) return;
+  const results=await Promise.all(missing.map(k=>translateUIRaw(k,code)));
+  missing.forEach((k,i)=>{ UI_TR[k]=results[i]; });
+  localStorage.setItem('nh-ui-tr-'+code,JSON.stringify(UI_TR));
+}
+function applyUITranslations(){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{ el.textContent=t(el.dataset.i18n); });
+}
+
 /* ---------- state ---------- */
 let curLevel="A1", curStory=null, curArticle=null, isArticle=false;
 let mode="word", selText="", sentenceEls=[];
@@ -1063,7 +1207,7 @@ function setActiveNav(section){
 }
 function setBack(show, label, handler){
   const b=$("#backTop"), wm=$("#wordmark");
-  if(show){ b.style.display="flex"; wm.style.display="none"; $("#backLabel").textContent=label||"Back"; b.onclick=handler; }
+  if(show){ b.style.display="flex"; wm.style.display="none"; $("#backLabel").textContent=t(label)||t("Back"); b.onclick=handler; }
   else{ b.style.display="none"; wm.style.display=""; b.onclick=null; }
 }
 
@@ -1080,37 +1224,37 @@ function setNav(section){
 function renderLibrary(){
   leaveReader(); setActiveNav("library"); setBack(false);
   const stories=STORIES.filter(s=>s.level===curLevel);
-  const tabs=LEVELS.map(l=>`<button data-level="${l}" class="${l===curLevel?'on':''}">${l}<span class="lab">${l==='A1'?'Start':l==='C1'?'Master':'Grow'}</span></button>`).join("");
+  const tabs=LEVELS.map(l=>`<button data-level="${l}" class="${l===curLevel?'on':''}">${l}<span class="lab">${l==='A1'?t('Start'):l==='C1'?t('Master'):t('Grow')}</span></button>`).join("");
   const CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
   let cards=stories.map((s,i)=>`
     <div class="card reveal" data-story="${s.id}" style="animation-delay:${i*50}ms">
       ${cover(s.motif,s.level,ACCENTS[s.level],s.cover)}
-      ${DONE.has(s.id)?`<div class="done-stamp">${CHECK}Read</div>`:''}
+      ${DONE.has(s.id)?`<div class="done-stamp">${CHECK}${t('Read')}</div>`:''}
       <div class="cap"><div class="tt">${esc(s.title)}</div><div class="au">by ${esc(s.author)}</div>
-      <div class="meta">${s.level} &middot; ${readMin(s)} min read</div></div>
+      <div class="meta">${s.level} &middot; ${readMin(s)} ${t('min read')}</div></div>
     </div>`).join("");
   const rem=10-stories.length;
   if(rem>0) cards+=`<div class="card forth reveal" style="animation-delay:${stories.length*50}ms">
       <div class="cover"><div class="ftxt">${rem} more tales<br>forthcoming<br>in this level</div></div>
-      <div class="cap"><div class="meta">${curLevel} &middot; In the press</div></div></div>`;
+      <div class="cap"><div class="meta">${curLevel} &middot; ${t('In the press')}</div></div></div>`;
   const hintDismissed=lsGet("nh-hint-dismissed")==="1";
   const hint=hintDismissed?'':
     `<div class="save-hint" id="saveHint">
       <div class="save-hint-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
       <div class="save-hint-body">
-        <div class="save-hint-title">Keep Your Progress Safe</div>
+        <div class="save-hint-title">${t('Keep Your Progress Safe')}</div>
         <div class="save-hint-text">Your reading progress is stored in this browser only. If you clear your browser data, <strong>you will lose everything</strong>. Back it up in two steps:</div>
         <div class="save-hint-steps">
-          <span class="save-hint-step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Folders</span>
+          <span class="save-hint-step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>${t('Folders')}</span>
           <span class="save-hint-arrow">→</span>
-          <span class="save-hint-step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export Progress</span>
+          <span class="save-hint-step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>${t('Export Progress')}</span>
         </div>
       </div>
       <button class="save-hint-close" id="dismissHint" title="Dismiss">&times;</button>
     </div>`;
   view.innerHTML=`<div class="wrap">
-      <div class="sec-head"><div class="sec-kicker">The Reading Library</div>
-        <h1 class="sec-title">Choose a Tale to Your Level</h1>
+      <div class="sec-head"><div class="sec-kicker">${t('The Reading Library')}</div>
+        <h1 class="sec-title">${t('Choose a Tale to Your Level')}</h1>
         <div class="sec-sub">${LEVEL_DESC[curLevel]}.</div></div>
       ${hint}
       <div class="levels">${tabs}</div>
@@ -1131,21 +1275,21 @@ function renderDetail(){
         ${cover(s.motif,s.level,ACCENTS[s.level],s.cover)}
         <div class="detail-head"><span class="lvl-tag">Level ${s.level}</span>
           <h1>${esc(s.title)}</h1><div class="by">by ${esc(s.author)}</div>
-          <div class="nar">Narrated by the NovaHubs reader</div></div>
+          <div class="nar">${t('Narrated by the NovaHubs reader')}</div></div>
       </div>
       <p class="blurb">${esc(s.blurb)}</p>
       <div class="specs">
-        <div><div class="k">Level</div><div class="v">${s.level}</div></div>
-        <div><div class="k">Reading time</div><div class="v">${readMin(s)} min</div></div>
-        <div><div class="k">Words</div><div class="v">${wordCount(s)}</div></div>
-        <div><div class="k">Format</div><div class="v">Read &amp; Listen</div></div>
+        <div><div class="k">${t('Level')}</div><div class="v">${s.level}</div></div>
+        <div><div class="k">${t('Reading time')}</div><div class="v">${readMin(s)} ${t('min read')}</div></div>
+        <div><div class="k">${t('Words')}</div><div class="v">${wordCount(s)}</div></div>
+        <div><div class="k">${t('Format')}</div><div class="v">${t('Read & Listen')}</div></div>
       </div>
       <div class="btn-row">
-        <button class="btn btn-primary" id="readBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16M4 12h16M4 19h11"/></svg>Read this story</button>
-        <button class="btn btn-ghost" id="sampleBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l13 7-13 7z"/></svg>Listen to a sample</button>
+        <button class="btn btn-primary" id="readBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16M4 12h16M4 19h11"/></svg>${t('Read this story')}</button>
+        <button class="btn btn-ghost" id="sampleBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l13 7-13 7z"/></svg>${t('Listen to a sample')}</button>
       </div></div>`;
   $("#readBtn").onclick=()=>renderReader(false);
-  $("#sampleBtn").onclick=()=>{ const first=s.body[0].split(/(?<=[.!?])\s+/)[0]; speak(first,1); toast("Playing a sample"); };
+  $("#sampleBtn").onclick=()=>{ const first=s.body[0].split(/(?<=[.!?])\s+/)[0]; speak(first,1); toast(t("Playing a sample")); };
   window.scrollTo(0,0);
 }
 
@@ -1179,7 +1323,7 @@ function renderReader(asArticle){
 
   const audioPanel=!isArticle?`<div class="reader-audio reveal" style="animation-delay:120ms">
     <div class="ra-main">
-      <button class="ra-play" id="abPlay"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l13 7-13 7z"/></svg>Listen to Story</button>
+      <button class="ra-play" id="abPlay"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l13 7-13 7z"/></svg>${t('Listen to Story')}</button>
       <div class="ra-nav">
         <button class="ra-nav-btn" id="abPrev" title="Previous sentence"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h2v14H7zM20 5L10 12l10 7z"/></svg></button>
         <span class="ra-pos" id="abPos">— / —</span>
@@ -1188,6 +1332,19 @@ function renderReader(asArticle){
     </div>
     <div class="speed-strip">
       ${[0.5,0.75,1,1.25,1.5,2].map(r=>`<button class="sp${r===1?' on':''}" data-r="${r}">${r===1?'1':r}&times;</button>`).join('')}
+    </div>
+    <div class="voice-strip">
+      <span class="vs-label">Accent</span>
+      <div class="vs-group">
+        <button class="vc${voicePref.accent==='US'?' on':''}" id="vcUS">US</button>
+        <button class="vc${voicePref.accent==='GB'?' on':''}" id="vcGB">GB</button>
+      </div>
+      <span class="vs-label">Voice</span>
+      <div class="vs-group">
+        <button class="vc${voicePref.gender==='M'?' on':''}" id="vcM">Male</button>
+        <button class="vc${voicePref.gender==='F'?' on':''}" id="vcF">Female</button>
+        <button class="vc${voicePref.gender===null?' on':''}" id="vcAny">Any</button>
+      </div>
     </div>
   </div>`:'';
 
@@ -1236,6 +1393,19 @@ function renderReader(asArticle){
       view.querySelectorAll(".sp").forEach(x=>x.classList.toggle("on",x===b));
       if(abPlaying){const i=abIndex;stopAudio();playFrom(i);}
     });
+    function setReaderVoice(key,val){
+      voicePref[key]=val;
+      localStorage.setItem('nh-voice-pref',JSON.stringify(voicePref));
+      pickVoice();
+      view.querySelectorAll("#vcUS,#vcGB").forEach(b=>b.classList.toggle('on',(b.id==='vcUS'&&voicePref.accent==='US')||(b.id==='vcGB'&&voicePref.accent==='GB')));
+      view.querySelectorAll("#vcM,#vcF,#vcAny").forEach(b=>b.classList.toggle('on',(b.id==='vcM'&&voicePref.gender==='M')||(b.id==='vcF'&&voicePref.gender==='F')||(b.id==='vcAny'&&voicePref.gender===null)));
+      if(abPlaying){const i=abIndex;stopAudio();playFrom(i);}
+    }
+    $("#vcUS").onclick=()=>setReaderVoice('accent','US');
+    $("#vcGB").onclick=()=>setReaderVoice('accent','GB');
+    $("#vcM").onclick=()=>setReaderVoice('gender','M');
+    $("#vcF").onclick=()=>setReaderVoice('gender','F');
+    $("#vcAny").onclick=()=>setReaderVoice('gender',null);
   }
   $("#dlPdf").onclick=()=>{
     const orig=document.title;
@@ -1275,9 +1445,9 @@ $("#actSlow").onclick=()=>speak(selText,0.6);
 $("#actTranslate").onclick=async()=>{
   const ar=$("#sheetAr");
   ar.className="sheet-ar show loading";
-  ar.textContent="translating to "+userLang.name+" …";
-  ar.style.direction=userLang.rtl?"rtl":"ltr";
-  ar.style.textAlign=userLang.rtl?"right":"left";
+  ar.textContent=t("translating to")+" "+nativeLang.name+" …";
+  ar.style.direction=nativeLang.rtl?"rtl":"ltr";
+  ar.style.textAlign=nativeLang.rtl?"right":"left";
   const out=await translate(selText);
   ar.className="sheet-ar show"; ar.textContent=out;
 };
@@ -1341,16 +1511,16 @@ function openArticle(id, listView){
 function renderSaved(){
   leaveReader(); setActiveNav("saved"); setBack(false);
   const counts=LEVELS.map(l=>`<div><div class="n">${SAVED[l].length}</div><div class="l">${l}</div></div>`).join("");
-  const tabs=LEVELS.map(l=>`<button data-level="${l}" class="${l===curLevel?'on':''}">${l}<span class="lab">${SAVED[l].length} saved</span></button>`).join("");
+  const tabs=LEVELS.map(l=>`<button data-level="${l}" class="${l===curLevel?'on':''}">${l}<span class="lab">${SAVED[l].length} ${t('saved')}</span></button>`).join("");
   const items=SAVED[curLevel];
   let list;
   if(!items.length){
-    list=`<div class="empty">This folder is empty.<br>Open a Level ${curLevel} story, tap a word or sentence, and choose <em>Save</em> to keep it here.</div>`;
+    list=`<div class="empty">${t("No items yet — read more stories and save words first!")}</div>`;
   }else{
     list=`<div class="clip-list">`+items.map((it,i)=>`
       <div class="clip reveal" style="animation-delay:${i*35}ms">
         <div class="clip-en" data-en="${esc(it.en)}">${esc(it.en)}</div>
-        ${it.ar?`<div class="clip-ar" style="direction:${userLang.rtl?'rtl':'ltr'};text-align:${userLang.rtl?'right':'left'}">${esc(it.ar)}</div>`:""}
+        ${it.ar?`<div class="clip-ar" style="direction:${nativeLang.rtl?'rtl':'ltr'};text-align:${nativeLang.rtl?'right':'left'}">${esc(it.ar)}</div>`:""}
         <div class="clip-src"><span class="from">From &ldquo;${esc(it.story)}&rdquo; &middot; ${curLevel}</span>
           <span class="clip-tools">
             <button class="ct play" data-en="${esc(it.en)}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l13 7-13 7z"/></svg>Hear</button>
@@ -1360,8 +1530,8 @@ function renderSaved(){
       </div>`).join("")+`</div>`;
   }
   view.innerHTML=`<div class="wrap">
-      <div class="sec-head"><div class="sec-kicker">Your Saved Sentences</div>
-        <h1 class="sec-title">The Memory Folders</h1>
+      <div class="sec-head"><div class="sec-kicker">${t("My Saved Sentences")}</div>
+        <h1 class="sec-title">${t("The Memory Folders")}</h1>
         <div class="sec-sub">Every sentence you keep is filed by its level, and remembers the tale it came from.</div></div>
       <div class="folder-stat">${counts}</div>
       <div class="levels">${tabs}</div>
@@ -1369,18 +1539,18 @@ function renderSaved(){
       ${SAVED[curLevel].length?`<div class="rev-row">
         <button class="rev-btn" id="revBtn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-          Start Review · ${curLevel}
+          ${t("Start Review")} · ${curLevel}
         </button>
       </div>`:''}
       <div class="backup-row">
-        <div class="backup-note">Your progress lives in this browser only — export it to keep a safe copy</div>
+        <div class="backup-note">${t("Keep Your Progress Safe")}</div>
         <button class="btn-backup" id="btnExport">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Export Progress
+          ${t("Export Progress")}
         </button>
         <label class="btn-backup" for="importFile">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          Import Progress
+          ${t("Import Progress")}
         </label>
         <input type="file" id="importFile" accept=".json">
       </div>
@@ -1388,7 +1558,7 @@ function renderSaved(){
   view.querySelectorAll(".levels button").forEach(b=>b.onclick=()=>{curLevel=b.dataset.level;renderSaved();});
   view.querySelectorAll(".clip-en").forEach(el=>el.onclick=()=>speak(el.dataset.en,1));
   view.querySelectorAll(".ct.play").forEach(b=>b.onclick=()=>speak(b.dataset.en,1));
-  view.querySelectorAll(".ct.del").forEach(b=>b.onclick=async()=>{ SAVED[curLevel].splice(+b.dataset.i,1); await saveJSON("nh-saved",SAVED); renderSaved(); toast("Removed"); });
+  view.querySelectorAll(".ct.del").forEach(b=>b.onclick=async()=>{ SAVED[curLevel].splice(+b.dataset.i,1); await saveJSON("nh-saved",SAVED); renderSaved(); toast(t("Removed")); });
   view.querySelectorAll(".ct.tr").forEach(b=>b.onclick=async()=>{ const i=+b.dataset.i; b.textContent="…";
     const out=await translate(SAVED[curLevel][i].en); SAVED[curLevel][i].ar=out; await saveJSON("nh-saved",SAVED); renderSaved(); });
   if($("#revBtn")) $("#revBtn").onclick=()=>startQuiz(qzGenReview(curLevel),"review",null);
@@ -1455,35 +1625,35 @@ function startQuiz(questions,src,story){
 }
 function qzShowQ(){
   const q=qzQ[qzIdx],total=qzQ.length,pct=Math.round((qzIdx/total)*100);
-  const typeLabel={fill:"Fill in the Blank",dictation:"Dictation — Listen & Write",write:"Write in English"}[q.type];
+  const typeLabel={fill:t("Fill in the Blank"),dictation:t("Dictation — Listen & Write"),write:t("Write in English")}[q.type];
   let inner="";
   if(q.type==="fill"){
     inner=`<div class="qz-type-tag">${typeLabel}</div>
       <div class="qz-q">${q.display}</div>
-      <input class="qz-input" id="qzIn" type="text" placeholder="Type the missing word…" autocomplete="off" autocorrect="off" spellcheck="false">
-      <div class="qz-btns"><button class="btn btn-primary" id="qzCheck">Check</button><button class="qz-skip" id="qzSkip">Skip</button></div>`;
+      <input class="qz-input" id="qzIn" type="text" placeholder="${t('Type the missing word…')}" autocomplete="off" autocorrect="off" spellcheck="false">
+      <div class="qz-btns"><button class="btn btn-primary" id="qzCheck">${t('Check')}</button><button class="qz-skip" id="qzSkip">${t('Skip')}</button></div>`;
   }else if(q.type==="write"){
     inner=`<div class="qz-type-tag">${typeLabel}</div>
       <div class="qz-ar">${esc(q.prompt)}</div>
-      <input class="qz-input" id="qzIn" type="text" placeholder="Type in English…" autocomplete="off" autocorrect="off" spellcheck="false">
-      <div class="qz-btns"><button class="btn btn-primary" id="qzCheck">Check</button><button class="qz-skip" id="qzSkip">Skip</button></div>`;
+      <input class="qz-input" id="qzIn" type="text" placeholder="${t('Type in English…')}" autocomplete="off" autocorrect="off" spellcheck="false">
+      <div class="qz-btns"><button class="btn btn-primary" id="qzCheck">${t('Check')}</button><button class="qz-skip" id="qzSkip">${t('Skip')}</button></div>`;
   }else{
     inner=`<div class="qz-type-tag">${typeLabel}</div>
-      <div class="qz-dict-hint">Press <strong>Play</strong> to hear the sentence, then type exactly what you heard.</div>
+      <div class="qz-dict-hint">${t('Press Play to hear the sentence, then type exactly what you heard.')}</div>
       <div class="qz-btns" id="qzPlayRow">
-        <button class="qz-mic" id="qzPlay"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l13 7-13 7z"/></svg>Play Sentence</button>
+        <button class="qz-mic" id="qzPlay"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l13 7-13 7z"/></svg>${t('Play Sentence')}</button>
       </div>
-      <input class="qz-input" id="qzIn" type="text" placeholder="Type what you heard…" autocomplete="off" autocorrect="off" spellcheck="false" disabled style="opacity:.45">
+      <input class="qz-input" id="qzIn" type="text" placeholder="${t('Type what you heard…')}" autocomplete="off" autocorrect="off" spellcheck="false" disabled style="opacity:.45">
       <div class="qz-btns" id="qzCheckRow" style="display:none">
-        <button class="btn btn-primary" id="qzCheck">Check</button>
-        <button class="qz-skip" id="qzSkip">Skip</button>
+        <button class="btn btn-primary" id="qzCheck">${t('Check')}</button>
+        <button class="qz-skip" id="qzSkip">${t('Skip')}</button>
       </div>`;
   }
   view.innerHTML=`<div class="quiz-wrap">
     <div class="quiz-head reveal">
-      <div class="quiz-kicker">${esc(qzSrc==="review"?"Vocabulary Review":"Story Quiz")}${qzStory?` · ${esc(qzStory.title)}`:""}</div>
+      <div class="quiz-kicker">${esc(qzSrc==="review"?t("Vocabulary Review"):t("Story Quiz"))}${qzStory?` · ${esc(qzStory.title)}`:""}</div>
       <div class="qz-bar-wrap"><div class="qz-bar-fill" style="width:${pct}%"></div></div>
-      <div class="quiz-count">Question ${qzIdx+1} of ${total}</div>
+      <div class="quiz-count">${t('Question')} ${qzIdx+1} ${t('of')} ${total}</div>
     </div>
     <div class="quiz-card reveal" style="animation-delay:80ms">
       ${inner}
@@ -1527,7 +1697,7 @@ function qzShowQ(){
       speak(q.text,.9);
       if(!played){
         played=true;
-        playBtn.innerHTML=`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l13 7-13 7z"/></svg>Play Again`;
+        playBtn.innerHTML=`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l13 7-13 7z"/></svg>${t('Play Again')}`;
         if(inp){inp.disabled=false;inp.style.opacity="1";inp.focus();}
         const cr=$("#qzCheckRow");if(cr)cr.style.display="";
       }
@@ -1567,11 +1737,11 @@ function qzResult(){
     <div class="qz-results reveal">
       <div class="qr-ring">${qzScore}/${total}</div>
       <div class="qr-label">${msg}</div>
-      <div class="qr-sub">${qzScore} correct of ${total} · ${pct}%</div>
+      <div class="qr-sub">${qzScore} ${t('of')} ${total} · ${pct}%</div>
       <div class="qr-list">${rows}</div>
       <div class="btn-row">
-        ${story?`<button class="btn btn-primary" id="qrBack">Back to Story</button>`:`<button class="btn btn-primary" id="qrFolders">Back to Folders</button>`}
-        <button class="btn btn-ghost" id="qrAgain">Try Again</button>
+        ${story?`<button class="btn btn-primary" id="qrBack">${t('Back to Story')}</button>`:`<button class="btn btn-primary" id="qrFolders">${t('Back to Folders')}</button>`}
+        <button class="btn btn-ghost" id="qrAgain">${t('Try Again')}</button>
       </div>
     </div></div>`;
   if($("#qrBack"))$("#qrBack").onclick=renderDetail;
@@ -1590,15 +1760,15 @@ function exportProgress(){
   a.download="novahubs-progress-"+new Date().toISOString().slice(0,10)+".json";
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(url);
-  toast("Progress exported!");
+  toast(t("Progress exported!"));
 }
 async function importProgress(file){
   if(!file) return;
   const text=await file.text().catch(()=>null);
-  if(!text){ toast("Could not read file"); return; }
+  if(!text){ toast(t("Could not read file")); return; }
   let data;
-  try{ data=JSON.parse(text); }catch(e){ toast("Invalid file"); return; }
-  if(!data.version||!data.saved){ toast("Invalid file"); return; }
+  try{ data=JSON.parse(text); }catch(e){ toast(t("Invalid file")); return; }
+  if(!data.version||!data.saved){ toast(t("Invalid file")); return; }
   if(Array.isArray(data.done)){ data.done.forEach(id=>DONE.add(id)); await saveJSON("nh-done",[...DONE]); }
   if(data.saved){
     LEVELS.forEach(l=>{
@@ -1610,7 +1780,7 @@ async function importProgress(file){
   }
   if(data.tr && typeof data.tr==="object"){ Object.assign(TR,data.tr); await saveJSON("nh-tr",TR); }
   renderSaved();
-  toast("Progress restored!");
+  toast(t("Progress restored!"));
 }
 
 /* ---------- settings ---------- */
@@ -1652,39 +1822,63 @@ function renderSettings(){
   const MOON='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
   view.innerHTML=`<div class="settings-wrap reveal">
     <div class="sec-head" style="margin-bottom:28px">
-      <div class="sec-kicker">Your Account</div>
-      <h1 class="sec-title">Settings</h1>
+      <div class="sec-kicker">${t("Your Account")}</div>
+      <h1 class="sec-title">${t("Settings")}</h1>
     </div>
     <div class="settings-section">
-      <div class="settings-head">Preferences</div>
+      <div class="settings-head">${t("Preferences")}</div>
       <div class="settings-row">
-        <div><div class="settings-label">Native Language</div><div class="settings-val">${esc(userLang.native)} &middot; ${esc(userLang.name)}</div></div>
-        <button class="settings-btn" id="setChangeLang">Change</button>
+        <div><div class="settings-label">${t("Native Language")}</div><div class="settings-val">${esc(nativeLang.native)} &middot; ${esc(nativeLang.name)}</div></div>
+        <button class="settings-btn" id="setChangeLang">${t("Change")}</button>
       </div>
       <div class="settings-row">
-        <div><div class="settings-label">Appearance</div><div class="settings-val" id="setThemeVal">${document.documentElement.dataset.theme==='dark'?'Dark mode':'Light mode'}</div></div>
-        <button class="settings-btn" id="setThemeToggle">Toggle</button>
+        <div><div class="settings-label">${t("Site Language")}</div><div class="settings-val">${esc(siteLang.native)} &middot; ${esc(siteLang.name)}</div></div>
+        <button class="settings-btn" id="setChangeSiteLang">${t("Change")}</button>
       </div>
       <div class="settings-row">
-        <div><div class="settings-label">Reading Level</div><div class="settings-val">Level ${esc(curLevel)} &mdash; ${esc(LEVEL_DESC[curLevel])}</div></div>
-        <button class="settings-btn" id="setChangeLevel">Change</button>
+        <div><div class="settings-label">${t("Appearance")}</div><div class="settings-val" id="setThemeVal">${document.documentElement.dataset.theme==='dark'?t('Dark mode'):t('Light mode')}</div></div>
+        <button class="settings-btn" id="setThemeToggle">${t("Toggle")}</button>
+      </div>
+      <div class="settings-row">
+        <div><div class="settings-label">${t("Reading Level")}</div><div class="settings-val">Level ${esc(curLevel)} &mdash; ${esc(LEVEL_DESC[curLevel])}</div></div>
+        <button class="settings-btn" id="setChangeLevel">${t("Change")}</button>
+      </div>
+      <div class="voice-section">
+        <div class="settings-label">${t("Voice")}</div>
+        <div class="voice-active" id="voiceLabel">${VOICE?VOICE.name:'—'}</div>
+        <div class="voice-row">
+          <span class="voice-row-label">${t("Accent")}</span>
+          <div class="voice-opts">
+            <button class="voice-chip${voicePref.accent==='US'?' on':''}" id="vpUS">${t("American")}</button>
+            <button class="voice-chip${voicePref.accent==='GB'?' on':''}" id="vpGB">${t("British")}</button>
+          </div>
+        </div>
+        <div class="voice-row">
+          <span class="voice-row-label">${t("Gender")}</span>
+          <div class="voice-opts">
+            <button class="voice-chip${voicePref.gender==='M'?' on':''}" id="vpM">${t("Male")}</button>
+            <button class="voice-chip${voicePref.gender==='F'?' on':''}" id="vpF">${t("Female")}</button>
+            <button class="voice-chip${voicePref.gender===null?' on':''}" id="vpAny">${t("Any")}</button>
+          </div>
+        </div>
+        <div><button class="settings-btn" id="vpTest">${t("Test Voice")}</button></div>
       </div>
     </div>
     <div class="settings-section">
-      <div class="settings-head">Your Progress</div>
+      <div class="settings-head">${t("Your Progress")}</div>
       <div class="stat-grid">
-        <div class="stat-card"><div class="stat-num">${DONE.size}</div><div class="stat-label">Stories Read</div></div>
-        <div class="stat-card"><div class="stat-num">${totalSaved}</div><div class="stat-label">Sentences Saved</div></div>
-        <div class="stat-card"><div class="stat-num">${activeDays}</div><div class="stat-label">Active Days</div></div>
-        <div class="stat-card"><div class="stat-num">${avgMins}<span style="font-size:14px"> m</span></div><div class="stat-label">Daily Average</div></div>
+        <div class="stat-card"><div class="stat-num">${DONE.size}</div><div class="stat-label">${t("Stories Read")}</div></div>
+        <div class="stat-card"><div class="stat-num">${totalSaved}</div><div class="stat-label">${t("Sentences Saved")}</div></div>
+        <div class="stat-card"><div class="stat-num">${activeDays}</div><div class="stat-label">${t("Active Days")}</div></div>
+        <div class="stat-card"><div class="stat-num">${avgMins}<span style="font-size:14px"> m</span></div><div class="stat-label">${t("Daily Average")}</div></div>
       </div>
       <div class="lp-wrap">
-        <div class="lp-labels"><span>Level ${esc(curLevel)} progress</span><span>${doneInLv} / ${lvStories.length} stories${nextLv?` &rarr; ${esc(nextLv)}`:""}</span></div>
+        <div class="lp-labels"><span>Level ${esc(curLevel)} ${t("progress complete")}</span><span>${doneInLv} / ${lvStories.length} stories${nextLv?` &rarr; ${esc(nextLv)}`:""}</span></div>
         <div class="lp-bar-bg"><div class="lp-bar-fill" style="width:${lvPct}%"></div></div>
-        <div class="lp-caption">${lvPct}% complete${nextLv?` — keep reading to reach Level ${esc(nextLv)}`:" — level mastered!"}</div>
+        <div class="lp-caption">${lvPct}%${nextLv?` — ${t("keep reading to reach Level")} ${esc(nextLv)}`:` — ${t("level mastered!")}`}</div>
       </div>
       <div class="chart-wrap">
-        <div class="chart-title">Reading Time This Week (minutes / day)</div>
+        <div class="chart-title">${t("Reading Time This Week (minutes / day)")}</div>
         <svg class="chart-svg" viewBox="0 0 ${W} ${H}" height="${H}">
           <defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stop-color="var(--accent)" stop-opacity=".3"/>
@@ -1698,26 +1892,47 @@ function renderSettings(){
       </div>
     </div>
     <div class="settings-section">
-      <div class="settings-head">Data</div>
+      <div class="settings-head">${t("Data")}</div>
       <div class="settings-row">
-        <div><div class="settings-label">Export Progress</div><div class="settings-val">Download your saved sentences and reading history</div></div>
-        <button class="settings-btn" id="setExport">Export</button>
+        <div><div class="settings-label">${t("Export Progress")}</div><div class="settings-val">${t("Download your saved sentences and reading history")}</div></div>
+        <button class="settings-btn" id="setExport">${t("Export")}</button>
       </div>
       <div class="settings-row">
-        <div><div class="settings-label">Import Progress</div><div class="settings-val">Restore from a previously exported file</div></div>
-        <button class="settings-btn" id="setImport">Import</button>
+        <div><div class="settings-label">${t("Import Progress")}</div><div class="settings-val">${t("Restore from a previously exported file")}</div></div>
+        <button class="settings-btn" id="setImport">${t("Import")}</button>
       </div>
     </div>
   </div>`;
   $("#setChangeLang").onclick=()=>showLangModal(true);
+  $("#setChangeSiteLang").onclick=()=>showSiteLangModal(true);
   $("#setChangeLevel").onclick=()=>showLevelModal(true);
+  function applyVoicePref(key,val){
+    voicePref[key]=val;
+    localStorage.setItem('nh-voice-pref',JSON.stringify(voicePref));
+    pickVoice();
+    if(key==='accent'){
+      $("#vpUS").classList.toggle('on',val==='US');
+      $("#vpGB").classList.toggle('on',val==='GB');
+    } else {
+      $("#vpM").classList.toggle('on',val==='M');
+      $("#vpF").classList.toggle('on',val==='F');
+      $("#vpAny").classList.toggle('on',val===null);
+    }
+    if($("#voiceLabel")) $("#voiceLabel").textContent=VOICE?VOICE.name:'—';
+  }
+  $("#vpUS").onclick=()=>applyVoicePref('accent','US');
+  $("#vpGB").onclick=()=>applyVoicePref('accent','GB');
+  $("#vpM").onclick=()=>applyVoicePref('gender','M');
+  $("#vpF").onclick=()=>applyVoicePref('gender','F');
+  $("#vpAny").onclick=()=>applyVoicePref('gender',null);
+  $("#vpTest").onclick=()=>speak("The story begins on a quiet morning, when everything changed.",1);
   $("#setThemeToggle").onclick=()=>{
     const html=document.documentElement;
     const dark=html.dataset.theme==='dark';
     html.dataset.theme=dark?'':'dark';
     localStorage.setItem('nh-theme',dark?'light':'dark');
     document.getElementById('themeBtn').innerHTML=html.dataset.theme==='dark'?SUN:MOON;
-    document.getElementById('setThemeVal').textContent=html.dataset.theme==='dark'?'Dark mode':'Light mode';
+    document.getElementById('setThemeVal').textContent=html.dataset.theme==='dark'?t('Dark mode'):t('Light mode');
   };
   $("#setExport").onclick=exportProgress;
   $("#setImport").onclick=()=>{
@@ -1777,6 +1992,8 @@ document.querySelectorAll(".tb-nav button[data-nav]").forEach(b=>b.onclick=()=>s
   DONE=new Set(Array.isArray(dn)?dn:[]);
   const ul=lsGet("nh-user-level");
   if(ul&&LEVELS.includes(ul)) curLevel=ul;
+  await translateUIStrings();
+  applyUITranslations();
   const tab=new URLSearchParams(window.location.search).get("tab");
   if(tab==="saved") renderSaved();
   else if(tab==="settings") renderSettings();
