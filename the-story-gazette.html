@@ -865,23 +865,39 @@ let VOICE=null;
 let voicePref=(()=>{ try{ return JSON.parse(localStorage.getItem('nh-voice-pref'))||{accent:'GB',gender:'F'}; }catch(e){ return {accent:'GB',gender:'F'}; } })();
 function genderOfVoice(v){
   const n=v.name.toLowerCase();
+  // explicit label in name — most reliable
   if(/female|woman/.test(n)) return 'F';
   if(/\bmale\b/.test(n)) return 'M';
-  if(/samantha|victoria|moira|fiona|karen|tessa|veena|zira|hazel|eva|emily|kate|susan|kathy|natasha|amelie|serena/i.test(n)) return 'F';
-  if(/\b(daniel|james|rishi|alex|david|george|fred|mark|oliver|tom|lee|junior|bruce)\b/i.test(n)) return 'M';
+  // "Google US English" has no label but sounds female
+  if(/google\s+us\s+english\s*$/.test(n)) return 'F';
+  // Known female: iOS · macOS · Android · Windows · Edge
+  if(/samantha|nicky|victoria|moira|fiona|karen|tessa|veena|zira|hazel|eva|emily|kate|susan|kathy|natasha|amelie|serena|ava|allison|joanna|salli|kendra|kimberly|ivy|aria|jenny|sonia|leah|grace|olivia|catherine/i.test(n)) return 'F';
+  // Known male: iOS · macOS · Android · Windows · Edge
+  if(/\b(daniel|james|rishi|alex|aaron|arthur|bruce|junior|fred|ralph|lee|tom|george|david|oliver|mark|ryan|liam|matthew|guy|christopher|eric|rohan|jamie|gordon|reed)\b/i.test(n)) return 'M';
   return null;
 }
+let _vpRetries=0;
 function pickVoice(){
   if(!("speechSynthesis" in window)) return;
   const vs=speechSynthesis.getVoices();
-  if(!vs.length) return;
+  if(!vs.length){
+    // mobile loads voices async — retry a few times
+    if(_vpRetries++<6) setTimeout(pickVoice,250);
+    return;
+  }
+  _vpRetries=0;
   const {accent,gender}=voicePref;
   const accentRe=accent==='US'?/en[-_]US/i:/en[-_]GB/i;
   const fallbackAccentRe=accent==='US'?/en[-_]GB/i:/en[-_]US/i;
   const match=(langRe,g)=>vs.find(v=>langRe.test(v.lang)&&(g===null||genderOfVoice(v)===g));
-  VOICE=match(accentRe,gender)||match(accentRe,null)||match(fallbackAccentRe,gender)||match(fallbackAccentRe,null)||vs.find(v=>/^en/i.test(v.lang))||vs[0]||null;
+  VOICE=match(accentRe,gender)
+     || match(fallbackAccentRe,gender)   // try same gender, other accent
+     || match(accentRe,null)             // any voice with right accent
+     || match(fallbackAccentRe,null)     // any voice, other accent
+     || vs.find(v=>/^en/i.test(v.lang)) // any English
+     || vs[0]||null;
 }
-if("speechSynthesis" in window){ pickVoice(); speechSynthesis.onvoiceschanged=pickVoice; }
+if("speechSynthesis" in window){ pickVoice(); speechSynthesis.onvoiceschanged=()=>{ _vpRetries=0; pickVoice(); }; }
 function speak(text, rate, onend){
   if(!("speechSynthesis" in window)) return;
   speechSynthesis.cancel();
