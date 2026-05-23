@@ -241,6 +241,12 @@
   .sp:last-child{border-right:none;}
   .sp:hover{background:var(--paper-2);color:var(--ink);}
   .sp.on{background:var(--ink);color:var(--paper);font-weight:700;}
+  .voice-row-r{display:flex;align-items:center;gap:0;margin-top:6px;flex-wrap:wrap;row-gap:6px;}
+  .voice-row-r .vl{font-family:var(--type);font-size:8px;letter-spacing:1.2px;text-transform:uppercase;color:var(--faint);padding:0 8px 0 12px;}
+  .voice-row-r .vl:first-child{padding-left:0;}
+  .voice-row-r .vs-g{display:flex;border:1px solid var(--line);}
+  .voice-row-r .vs-g .sp{border-right:1px solid var(--line);}
+  .voice-row-r .vs-g .sp:last-child{border-right:none;}
 
   /* saved */
   .empty{text-align:center;padding:44px 16px;font-style:italic;color:var(--faint);border:1px dashed var(--line);font-size:15px;line-height:1.6;}
@@ -848,30 +854,27 @@ LEVELS.forEach(l=>SAVED[l]=[]);
 /* ---------- text to speech ---------- */
 let VOICE=null;
 let _vpRetries=0;
+let voicePref=(()=>{ try{ return JSON.parse(localStorage.getItem('nh-voice-pref'))||{accent:'GB',gender:'F'}; }catch(e){ return {accent:'GB',gender:'F'}; } })();
 function pickVoice(){
   if(!("speechSynthesis" in window)) return;
   const vs=speechSynthesis.getVoices();
-  if(!vs.length){
-    if(_vpRetries++<8) setTimeout(pickVoice,300);
-    return;
-  }
+  if(!vs.length){ if(_vpRetries++<8) setTimeout(pickVoice,300); return; }
   _vpRetries=0;
-  VOICE= vs.find(v=>/en[-_]GB/i.test(v.lang))
-      || vs.find(v=>/en[-_]US/i.test(v.lang))
-      || vs.find(v=>/^en/i.test(v.lang))
-      || vs[0]||null;
+  const re=voicePref.accent==='US'?/en[-_]US/i:/en[-_]GB/i;
+  const fb=voicePref.accent==='US'?/en[-_]GB/i:/en[-_]US/i;
+  VOICE=vs.find(v=>re.test(v.lang))||vs.find(v=>fb.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||vs[0]||null;
 }
 if("speechSynthesis" in window){ pickVoice(); speechSynthesis.onvoiceschanged=()=>{ _vpRetries=0; pickVoice(); }; }
 function speak(text, rate, onend){
   if(!("speechSynthesis" in window)) return;
   speechSynthesis.cancel();
   const u=new SpeechSynthesisUtterance(text);
-  const freshVoice=VOICE
-    ? (speechSynthesis.getVoices().find(v=>v.name===VOICE.name)||VOICE)
-    : null;
-  if(freshVoice){ u.voice=freshVoice; u.lang=freshVoice.lang; }
-  else { u.lang='en-GB'; }
-  u.rate=rate; u.pitch=1; if(onend) u.onend=onend;
+  const fv=VOICE?(speechSynthesis.getVoices().find(v=>v.name===VOICE.name)||VOICE):null;
+  if(fv){ u.voice=fv; u.lang=fv.lang; }
+  else { u.lang=voicePref.accent==='US'?'en-US':'en-GB'; }
+  u.rate=rate;
+  u.pitch=voicePref.gender==='M'?0.75:1.2;
+  if(onend) u.onend=onend;
   speechSynthesis.speak(u);
 }
 
@@ -1149,7 +1152,8 @@ const UI_KEYS=[
   "Progress exported!","Progress restored!","Invalid file","Could not read file",
   "Keep Your Progress Safe","progress complete","level mastered!","keep reading to reach Level",
   "Import","Removed","The Memory Folders","Start Review","saved",
-  "Site Language","Native Language","translating to"
+  "Site Language","Native Language","translating to",
+  "Voice"
 ];
 let UI_TR={};
 function t(s){ return (siteLang&&siteLang.code!=='en'&&UI_TR[s]!==undefined)?UI_TR[s]:s; }
@@ -1316,6 +1320,18 @@ function renderReader(asArticle){
     <div class="speed-strip">
       ${[0.5,0.75,1,1.25,1.5,2].map(r=>`<button class="sp${r===1?' on':''}" data-r="${r}">${r===1?'1':r}&times;</button>`).join('')}
     </div>
+    <div class="voice-row-r">
+      <span class="vl">Accent</span>
+      <div class="vs-g">
+        <button class="sp${voicePref.accent==='US'?' on':''}" id="vcUS">US</button>
+        <button class="sp${voicePref.accent==='GB'?' on':''}" id="vcGB">GB</button>
+      </div>
+      <span class="vl">Voice</span>
+      <div class="vs-g">
+        <button class="sp${voicePref.gender==='M'?' on':''}" id="vcM">Male</button>
+        <button class="sp${voicePref.gender==='F'?' on':''}" id="vcF">Female</button>
+      </div>
+    </div>
   </div>`:'';
 
   view.innerHTML=`<div class="wrap-read">
@@ -1358,11 +1374,23 @@ function renderReader(asArticle){
     $("#abPlay").onclick=()=>{ abPlaying?stopAudio():playFrom(abIndex); };
     $("#abNext").onclick=()=>{ const w=abPlaying; stopAudio(); abIndex=Math.min(abIndex+1,Math.max(0,sentenceEls.length-1)); updatePos(); hl(abIndex); if(w) playFrom(abIndex); };
     $("#abPrev").onclick=()=>{ const w=abPlaying; stopAudio(); abIndex=Math.max(abIndex-1,0); updatePos(); hl(abIndex); if(w) playFrom(abIndex); };
-    view.querySelectorAll(".sp").forEach(b=>b.onclick=()=>{
+    view.querySelectorAll(".sp[data-r]").forEach(b=>b.onclick=()=>{
       abRate=+b.dataset.r;
-      view.querySelectorAll(".sp").forEach(x=>x.classList.toggle("on",x===b));
+      view.querySelectorAll(".sp[data-r]").forEach(x=>x.classList.toggle("on",x===b));
       if(abPlaying){const i=abIndex;stopAudio();playFrom(i);}
     });
+    function setVP(key,val){
+      voicePref[key]=val;
+      localStorage.setItem('nh-voice-pref',JSON.stringify(voicePref));
+      pickVoice();
+      view.querySelectorAll("#vcUS,#vcGB").forEach(b=>b.classList.toggle('on',(b.id==='vcUS'&&voicePref.accent==='US')||(b.id==='vcGB'&&voicePref.accent==='GB')));
+      view.querySelectorAll("#vcM,#vcF").forEach(b=>b.classList.toggle('on',(b.id==='vcM'&&voicePref.gender==='M')||(b.id==='vcF'&&voicePref.gender==='F')));
+      if(abPlaying){const i=abIndex;stopAudio();playFrom(i);}
+    }
+    $("#vcUS").onclick=()=>setVP('accent','US');
+    $("#vcGB").onclick=()=>setVP('accent','GB');
+    $("#vcM").onclick=()=>setVP('gender','M');
+    $("#vcF").onclick=()=>setVP('gender','F');
   }
   $("#dlPdf").onclick=()=>{
     const orig=document.title;
@@ -1800,6 +1828,21 @@ function renderSettings(){
         <div><div class="settings-label">${t("Reading Level")}</div><div class="settings-val">Level ${esc(curLevel)} &mdash; ${esc(LEVEL_DESC[curLevel])}</div></div>
         <button class="settings-btn" id="setChangeLevel">${t("Change")}</button>
       </div>
+      <div class="settings-row" style="flex-wrap:wrap;gap:10px">
+        <div class="settings-label" style="width:100%;margin-bottom:2px">${t("Voice")}</div>
+        <div class="voice-row-r" style="margin-top:0">
+          <span class="vl">Accent</span>
+          <div class="vs-g">
+            <button class="sp${voicePref.accent==='US'?' on':''}" id="vpUS">US</button>
+            <button class="sp${voicePref.accent==='GB'?' on':''}" id="vpGB">GB</button>
+          </div>
+          <span class="vl">Voice</span>
+          <div class="vs-g">
+            <button class="sp${voicePref.gender==='M'?' on':''}" id="vpM">Male</button>
+            <button class="sp${voicePref.gender==='F'?' on':''}" id="vpF">Female</button>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="settings-section">
       <div class="settings-head">${t("Your Progress")}</div>
@@ -1843,6 +1886,19 @@ function renderSettings(){
   $("#setChangeLang").onclick=()=>showLangModal(true);
   $("#setChangeSiteLang").onclick=()=>showSiteLangModal(true);
   $("#setChangeLevel").onclick=()=>showLevelModal(true);
+  function applyVP(key,val){
+    voicePref[key]=val;
+    localStorage.setItem('nh-voice-pref',JSON.stringify(voicePref));
+    pickVoice();
+    $("#vpUS").classList.toggle('on',voicePref.accent==='US');
+    $("#vpGB").classList.toggle('on',voicePref.accent==='GB');
+    $("#vpM").classList.toggle('on',voicePref.gender==='M');
+    $("#vpF").classList.toggle('on',voicePref.gender==='F');
+  }
+  $("#vpUS").onclick=()=>applyVP('accent','US');
+  $("#vpGB").onclick=()=>applyVP('accent','GB');
+  $("#vpM").onclick=()=>applyVP('gender','M');
+  $("#vpF").onclick=()=>applyVP('gender','F');
   $("#setThemeToggle").onclick=()=>{
     const html=document.documentElement;
     const dark=html.dataset.theme==='dark';
