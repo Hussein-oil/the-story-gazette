@@ -863,6 +863,7 @@ LEVELS.forEach(l=>SAVED[l]=[]);
 
 /* ---------- text to speech ---------- */
 let VOICE=null;
+let VOICE_NAME=null; // store name string — object refs go stale on mobile
 let voicePref=(()=>{ try{ return JSON.parse(localStorage.getItem('nh-voice-pref'))||{accent:'GB',gender:'F'}; }catch(e){ return {accent:'GB',gender:'F'}; } })();
 function genderOfVoice(v){
   const n=v.name.toLowerCase();
@@ -902,18 +903,24 @@ function pickVoice(){
       || match(fallbackAccentRe,null)
       || vs.find(v=>anyEnRe.test(v.lang))
       || vs[0]||null;
+  VOICE_NAME=VOICE?VOICE.name:null;
   // Keep voice label in sync wherever it's shown
   const lbl=document.getElementById('voiceLabel');
-  if(lbl) lbl.textContent=VOICE?VOICE.name:'—';
+  if(lbl) lbl.textContent=VOICE_NAME||'—';
   const slbl=document.getElementById('vsVoiceName');
-  if(slbl) slbl.textContent=VOICE?VOICE.name:'';
+  if(slbl) slbl.textContent=VOICE_NAME||'';
 }
 if("speechSynthesis" in window){ pickVoice(); speechSynthesis.onvoiceschanged=()=>{ _vpRetries=0; pickVoice(); }; }
 function speak(text, rate, onend){
   if(!("speechSynthesis" in window)) return;
   speechSynthesis.cancel();
   const u=new SpeechSynthesisUtterance(text);
-  u.lang=VOICE?VOICE.lang:"en-GB"; if(VOICE) u.voice=VOICE;
+  // Look up voice fresh each call — prevents stale object refs on mobile
+  const freshVoice=VOICE_NAME
+    ? (speechSynthesis.getVoices().find(v=>v.name===VOICE_NAME)||VOICE)
+    : VOICE;
+  if(freshVoice){ u.voice=freshVoice; u.lang=freshVoice.lang; }
+  else { u.lang='en-GB'; }
   u.rate=rate; u.pitch=1; if(onend) u.onend=onend;
   speechSynthesis.speak(u);
 }
