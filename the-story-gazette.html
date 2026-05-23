@@ -1342,7 +1342,7 @@ function renderReader(asArticle){
         <button data-mode="word" class="${mode==='word'?'on':''}">Tap a word</button>
         <button data-mode="sentence" class="${mode==='sentence'?'on':''}">Tap a sentence</button>
       </div>
-      <div class="hint reveal">Tap any <b>word</b> or switch to <b>sentence</b> mode, then choose: listen, slow down, translate to Arabic${isArticle?'':', or save it to your level folder'}.</div>
+      <div class="hint reveal">Tap any <b>word</b> or switch to <b>sentence</b> mode, then choose: listen, slow down, translate${isArticle?'':', or save it to your level folder'}.</div>
       <div class="story-body ${mode}-mode reveal" id="storyBody">${paras}</div>
       <div class="endcap">${isArticle?'END OF ARTICLE':'THE END'}</div>
       ${!isArticle?`<div class="done-row">
