@@ -241,15 +241,6 @@
   .sp:last-child{border-right:none;}
   .sp:hover{background:var(--paper-2);color:var(--ink);}
   .sp.on{background:var(--ink);color:var(--paper);font-weight:700;}
-  .voice-strip{display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap;}
-  .vs-label{font-family:var(--type);font-size:8px;letter-spacing:1.4px;text-transform:uppercase;color:var(--faint);}
-  .vs-group{display:flex;border:1px solid var(--line);width:fit-content;}
-  .vc{background:var(--paper);border:none;border-right:1px solid var(--line);cursor:pointer;font-family:var(--type);font-size:9px;letter-spacing:.8px;text-transform:uppercase;padding:4px 11px;color:var(--ink-soft);transition:.12s;}
-  .vc:last-child{border-right:none;}
-  .vc.on{background:var(--ink);color:var(--paper);font-weight:700;}
-  .vc:hover:not(.on){background:var(--paper-2);color:var(--ink);}
-  .vs-voice-name{font-family:var(--type);font-size:8px;letter-spacing:.6px;color:var(--faint);opacity:.75;align-self:center;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .vs-voices{display:flex;flex-wrap:wrap;gap:4px;align-items:center;}
 
   /* saved */
   .empty{text-align:center;padding:44px 16px;font-style:italic;color:var(--faint);border:1px dashed var(--line);font-size:15px;line-height:1.6;}
@@ -499,14 +490,6 @@
   .chart-labels{display:flex;justify-content:space-between;font-size:9px;color:var(--faint);margin-top:4px;}
   #settingsBtn{padding:0 14px;line-height:0;}
   #settingsBtn svg{display:block;}
-  .voice-section{padding:13px 0;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:10px;}
-  .voice-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
-  .voice-row-label{font-size:10px;color:var(--ink-soft);min-width:54px;font-family:var(--type);letter-spacing:.8px;text-transform:uppercase;}
-  .voice-opts{display:flex;gap:6px;flex-wrap:wrap;}
-  .voice-chip{font-family:var(--type);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;border:1.5px solid var(--app-border);padding:6px 16px;cursor:pointer;background:transparent;color:var(--ink-soft);transition:.15s;line-height:1;}
-  .voice-chip.on{border-color:var(--accent);color:var(--accent);background:var(--sel);}
-  .voice-chip:hover:not(.on){border-color:var(--ink);color:var(--ink);}
-  .voice-active{font-size:11px;color:var(--faint);font-style:italic;margin-top:2px;}
 </style>
 </head>
 <body>
@@ -864,21 +847,6 @@ LEVELS.forEach(l=>SAVED[l]=[]);
 
 /* ---------- text to speech ---------- */
 let VOICE=null;
-let VOICE_NAME=null; // store name string — object refs go stale on mobile
-let voicePref=(()=>{ try{ const p=JSON.parse(localStorage.getItem('nh-voice-pref')); return p||{accent:'GB',gender:'F',voiceName:null}; }catch(e){ return {accent:'GB',gender:'F',voiceName:null}; } })();
-function genderOfVoice(v){
-  const n=v.name.toLowerCase();
-  // Explicit gender label in name — most reliable (covers "Google UK English Male/Female", Edge, etc.)
-  if(/\bfemale\b|\bwoman\b|\bgirl\b/.test(n)) return 'F';
-  if(/\bmale\b|\bman\b|\bboy\b/.test(n)) return 'M';
-  // Google unlabelled voices that sound female
-  if(/^google\s+(us\s+english|hindi|français|deutsch|español|italiano)\s*$/i.test(n)) return 'F';
-  // Known female names — iOS · macOS · Windows · Android · Edge · Samsung
-  if(/\b(samantha|nicky|victoria|moira|fiona|karen|tessa|veena|zira|hazel|eva|emily|kate|martha|susan|kathy|natasha|amelie|serena|ava|allison|joanna|salli|kendra|kimberly|ivy|aria|jenny|sonia|leah|grace|olivia|catherine|zoe|zosia|helena|monica|sandy|shelley|flo|linda|betty|mary|patricia|barbara|margaret|lisa|dorothy|sandra|ashley|anna|julia|sara|emma|claire|alice|laura|marie|sophie|sarah|nicole|jessica|amanda|melissa|elizabeth|jennifer|angela|brenda|virginia|kelly|lauren|rachel|janet|beverly|diana|ruby|evelyn|helen|gloria|hannah|charlotte|cheryl|amber|denise|bonnie|madison|lily|chloe|paige|sydney|aurora|iris|sienna|yuna|jihye|meijia|lekha|damayanti|luciana|francisca|marisol|paulina)\b/i.test(n)) return 'F';
-  // Known male names — iOS · macOS · Windows · Android · Edge · Samsung
-  if(/\b(daniel|james|rishi|alex|aaron|arthur|bruce|junior|fred|ralph|lee|tom|george|david|oliver|mark|ryan|liam|matthew|guy|christopher|eric|rohan|jamie|gordon|reed|eddy|rocko|evan|michael|joseph|steven|anthony|william|john|robert|charles|richard|thomas|paul|kenneth|kevin|brian|edward|ronald|timothy|gary|larry|jeffrey|frank|scott|stephen|jason|raymond|gregory|joshua|jerry|dennis|walter|patrick|peter|harold|douglas|henry|carl|roger|albert|jonathan|justin|terry|gerald|keith|samuel|lawrence|nicholas|roy|benjamin|brandon|adam|harry|wayne|billy|steve|louis|jeremy|alan|juan|austin|randy|howard|eugene|carlos|russell|bobby|victor|martin|ernest|phillip|todd|jesse|craig|shawn|sean|philip|chris|johnny|earl|jimmy|antonio|danny|bryan|tony|luis|mike|logan|noah|ethan|mason|jacob|jackson|aiden|elijah|lucas|caleb|isaiah|nathan|jack|clay|wade|tanner|dillon|hayden|drew|brett|chad|blake|cole|brent|derek|jared|tyler|chase|dylan|hunter|zach|travis|clint|dusty|cody|nash|tucker|devin|garrett|tae-yang|hyun-su|tingting|loon|kangkang|yunyang)\b/i.test(n)) return 'M';
-  return null;
-}
 let _vpRetries=0;
 function pickVoice(){
   if(!("speechSynthesis" in window)) return;
@@ -888,60 +856,19 @@ function pickVoice(){
     return;
   }
   _vpRetries=0;
-  // Direct voice pick takes highest priority — bypasses all detection
-  if(voicePref.voiceName){
-    const direct=vs.find(v=>v.name===voicePref.voiceName);
-    if(direct){ VOICE=direct; VOICE_NAME=direct.name; _syncVoiceUI(); return; }
-  }
-  // Fall back to accent + gender matching
-  const {accent,gender}=voicePref;
-  const accentRe=accent==='US'?/en[-_]US/i:/en[-_]GB/i;
-  const fallbackAccentRe=accent==='US'?/en[-_]GB/i:/en[-_]US/i;
-  const anyEnRe=/^en/i;
-  const match=(langRe,g)=>vs.find(v=>langRe.test(v.lang)&&(g===null||genderOfVoice(v)===g));
-  const matchNotF=(langRe)=>vs.find(v=>langRe.test(v.lang)&&genderOfVoice(v)!=='F');
-  VOICE= match(accentRe,gender)
-      || match(fallbackAccentRe,gender)
-      || (gender==='M'? matchNotF(accentRe)        : null)
-      || (gender==='M'? matchNotF(fallbackAccentRe) : null)
-      || (gender==='M'? vs.find(v=>anyEnRe.test(v.lang)&&genderOfVoice(v)!=='F') : null)
-      || match(accentRe,null)
-      || match(fallbackAccentRe,null)
-      || vs.find(v=>anyEnRe.test(v.lang))
+  VOICE= vs.find(v=>/en[-_]GB/i.test(v.lang))
+      || vs.find(v=>/en[-_]US/i.test(v.lang))
+      || vs.find(v=>/^en/i.test(v.lang))
       || vs[0]||null;
-  VOICE_NAME=VOICE?VOICE.name:null;
-  _syncVoiceUI();
-}
-function _buildVoiceChips(){
-  const vs=("speechSynthesis" in window)?speechSynthesis.getVoices().filter(v=>/^en/i.test(v.lang)):[];
-  return vs.map(v=>{
-    const label=v.name.replace(/^google\s+/i,'').replace(/\s*english\s*/i,' ').replace(/\s+/g,' ').trim()||v.name;
-    return `<button class="vc${v.name===VOICE_NAME?' on':''}" data-vn="${v.name.replace(/"/g,'&quot;')}" title="${v.name.replace(/"/g,'&quot;')}">${label.replace(/</g,'&lt;')}</button>`;
-  }).join('');
-}
-function _syncVoiceUI(){
-  const lbl=document.getElementById('voiceLabel');
-  if(lbl) lbl.textContent=VOICE_NAME||'—';
-  // If voice list not yet built (voices were loading), build it now
-  const strip=document.querySelector('.voice-strip');
-  if(strip && !document.getElementById('vcVoiceList')){
-    const chips=_buildVoiceChips();
-    if(chips) strip.innerHTML=`<span class="vs-label">Voice</span><div class="vs-voices" id="vcVoiceList">${chips}</div>`;
-  }
-  // Highlight the active chip
-  document.querySelectorAll('#vcVoiceList [data-vn]').forEach(b=>
-    b.classList.toggle('on', b.dataset.vn===VOICE_NAME)
-  );
 }
 if("speechSynthesis" in window){ pickVoice(); speechSynthesis.onvoiceschanged=()=>{ _vpRetries=0; pickVoice(); }; }
 function speak(text, rate, onend){
   if(!("speechSynthesis" in window)) return;
   speechSynthesis.cancel();
   const u=new SpeechSynthesisUtterance(text);
-  // Look up voice fresh each call — prevents stale object refs on mobile
-  const freshVoice=VOICE_NAME
-    ? (speechSynthesis.getVoices().find(v=>v.name===VOICE_NAME)||VOICE)
-    : VOICE;
+  const freshVoice=VOICE
+    ? (speechSynthesis.getVoices().find(v=>v.name===VOICE.name)||VOICE)
+    : null;
   if(freshVoice){ u.voice=freshVoice; u.lang=freshVoice.lang; }
   else { u.lang='en-GB'; }
   u.rate=rate; u.pitch=1; if(onend) u.onend=onend;
@@ -1222,8 +1149,7 @@ const UI_KEYS=[
   "Progress exported!","Progress restored!","Invalid file","Could not read file",
   "Keep Your Progress Safe","progress complete","level mastered!","keep reading to reach Level",
   "Import","Removed","The Memory Folders","Start Review","saved",
-  "Site Language","Native Language","translating to",
-  "Voice","Accent","Gender","American","British","Male","Female","Any","Test Voice","Active voice"
+  "Site Language","Native Language","translating to"
 ];
 let UI_TR={};
 function t(s){ return (siteLang&&siteLang.code!=='en'&&UI_TR[s]!==undefined)?UI_TR[s]:s; }
@@ -1390,19 +1316,6 @@ function renderReader(asArticle){
     <div class="speed-strip">
       ${[0.5,0.75,1,1.25,1.5,2].map(r=>`<button class="sp${r===1?' on':''}" data-r="${r}">${r===1?'1':r}&times;</button>`).join('')}
     </div>
-    <div class="voice-strip">
-      <span class="vs-label">Accent</span>
-      <div class="vs-group">
-        <button class="vc${voicePref.accent==='US'?' on':''}" id="vcUS">US</button>
-        <button class="vc${voicePref.accent==='GB'?' on':''}" id="vcGB">GB</button>
-      </div>
-      <span class="vs-label">Voice</span>
-      <div class="vs-group">
-        <button class="vc${voicePref.gender==='M'?' on':''}" id="vcM">Male</button>
-        <button class="vc${voicePref.gender==='F'?' on':''}" id="vcF">Female</button>
-        <button class="vc${voicePref.gender===null?' on':''}" id="vcAny">Any</button>
-      </div>
-    </div>
   </div>`:'';
 
   view.innerHTML=`<div class="wrap-read">
@@ -1450,20 +1363,6 @@ function renderReader(asArticle){
       view.querySelectorAll(".sp").forEach(x=>x.classList.toggle("on",x===b));
       if(abPlaying){const i=abIndex;stopAudio();playFrom(i);}
     });
-    function setReaderVoice(key,val){
-      voicePref[key]=val;
-      voicePref.voiceName=null;
-      localStorage.setItem('nh-voice-pref',JSON.stringify(voicePref));
-      pickVoice();
-      view.querySelectorAll("#vcUS,#vcGB").forEach(b=>b.classList.toggle('on',(b.id==='vcUS'&&voicePref.accent==='US')||(b.id==='vcGB'&&voicePref.accent==='GB')));
-      view.querySelectorAll("#vcM,#vcF,#vcAny").forEach(b=>b.classList.toggle('on',(b.id==='vcM'&&voicePref.gender==='M')||(b.id==='vcF'&&voicePref.gender==='F')||(b.id==='vcAny'&&voicePref.gender===null)));
-      if(abPlaying){const i=abIndex;stopAudio();playFrom(i);}
-    }
-    $("#vcUS").onclick=()=>setReaderVoice('accent','US');
-    $("#vcGB").onclick=()=>setReaderVoice('accent','GB');
-    $("#vcM").onclick=()=>setReaderVoice('gender','M');
-    $("#vcF").onclick=()=>setReaderVoice('gender','F');
-    $("#vcAny").onclick=()=>setReaderVoice('gender',null);
   }
   $("#dlPdf").onclick=()=>{
     const orig=document.title;
@@ -1901,26 +1800,6 @@ function renderSettings(){
         <div><div class="settings-label">${t("Reading Level")}</div><div class="settings-val">Level ${esc(curLevel)} &mdash; ${esc(LEVEL_DESC[curLevel])}</div></div>
         <button class="settings-btn" id="setChangeLevel">${t("Change")}</button>
       </div>
-      <div class="voice-section">
-        <div class="settings-label">${t("Voice")}</div>
-        <div class="voice-active" id="voiceLabel">${VOICE?VOICE.name:'—'}</div>
-        <div class="voice-row">
-          <span class="voice-row-label">${t("Accent")}</span>
-          <div class="voice-opts">
-            <button class="voice-chip${voicePref.accent==='US'?' on':''}" id="vpUS">${t("American")}</button>
-            <button class="voice-chip${voicePref.accent==='GB'?' on':''}" id="vpGB">${t("British")}</button>
-          </div>
-        </div>
-        <div class="voice-row">
-          <span class="voice-row-label">${t("Gender")}</span>
-          <div class="voice-opts">
-            <button class="voice-chip${voicePref.gender==='M'?' on':''}" id="vpM">${t("Male")}</button>
-            <button class="voice-chip${voicePref.gender==='F'?' on':''}" id="vpF">${t("Female")}</button>
-            <button class="voice-chip${voicePref.gender===null?' on':''}" id="vpAny">${t("Any")}</button>
-          </div>
-        </div>
-        <div><button class="settings-btn" id="vpTest">${t("Test Voice")}</button></div>
-      </div>
     </div>
     <div class="settings-section">
       <div class="settings-head">${t("Your Progress")}</div>
@@ -1964,27 +1843,6 @@ function renderSettings(){
   $("#setChangeLang").onclick=()=>showLangModal(true);
   $("#setChangeSiteLang").onclick=()=>showSiteLangModal(true);
   $("#setChangeLevel").onclick=()=>showLevelModal(true);
-  function applyVoicePref(key,val){
-    voicePref[key]=val;
-    voicePref.voiceName=null; // clear direct pick when accent/gender changes from settings
-    localStorage.setItem('nh-voice-pref',JSON.stringify(voicePref));
-    pickVoice();
-    if(key==='accent'){
-      $("#vpUS").classList.toggle('on',val==='US');
-      $("#vpGB").classList.toggle('on',val==='GB');
-    } else {
-      $("#vpM").classList.toggle('on',val==='M');
-      $("#vpF").classList.toggle('on',val==='F');
-      $("#vpAny").classList.toggle('on',val===null);
-    }
-    if($("#voiceLabel")) $("#voiceLabel").textContent=VOICE?VOICE.name:'—';
-  }
-  $("#vpUS").onclick=()=>applyVoicePref('accent','US');
-  $("#vpGB").onclick=()=>applyVoicePref('accent','GB');
-  $("#vpM").onclick=()=>applyVoicePref('gender','M');
-  $("#vpF").onclick=()=>applyVoicePref('gender','F');
-  $("#vpAny").onclick=()=>applyVoicePref('gender',null);
-  $("#vpTest").onclick=()=>speak("The story begins on a quiet morning, when everything changed.",1);
   $("#setThemeToggle").onclick=()=>{
     const html=document.documentElement;
     const dark=html.dataset.theme==='dark';
