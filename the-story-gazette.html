@@ -25,6 +25,7 @@
 </script>
 <style>
   :root{
+    --bg-outer:#e3d6ba; --app-border:#c5b693;
     --paper:#efe6d2; --paper-2:#e7dcc4;
     --ink:#211d17; --ink-soft:#4a4339; --faint:#8a7f6c;
     --line:#2a251d;
@@ -34,19 +35,28 @@
     --display:"Playfair Display", Georgia, serif;
     --type:"Special Elite","Courier New",monospace;
   }
+  [data-theme="dark"]{
+    --bg-outer:#0a0806; --app-border:rgba(255,255,255,.07);
+    --paper:#1a1510; --paper-2:#221c12;
+    --ink:#ede8e0; --ink-soft:#9a9080; --faint:#55493a;
+    --line:#2e2518;
+    --accent:#c44232; --accent-2:#d46a30;
+    --sel:rgba(196,66,50,.22); --read:rgba(208,106,48,.28);
+  }
+  .theme-ready *{transition:background-color .25s,color .2s,border-color .2s,box-shadow .2s;}
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
   html,body{margin:0;padding:0;}
   html{scrollbar-gutter:stable;}
   body{
     font-family:var(--serif);color:var(--ink);min-height:100vh;
-    background:#e3d6ba;
+    background:var(--bg-outer);
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='0.05'/%3E%3C/svg%3E");
     -webkit-font-smoothing:antialiased;
   }
   #app{
     max-width:1180px;margin:0 auto;min-height:100vh;background:var(--paper);
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='q'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23q)' opacity='0.04'/%3E%3C/svg%3E");
-    border-left:1px solid #c5b693;border-right:1px solid #c5b693;
+    border-left:1px solid var(--app-border);border-right:1px solid var(--app-border);
     display:flex;flex-direction:column;
   }
 
@@ -103,7 +113,12 @@
 
   /* grid */
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:24px 18px;}
-  .card{cursor:pointer;}
+  .card{cursor:pointer;position:relative;}
+  .done-stamp{position:absolute;top:8px;right:-1px;background:var(--accent);color:#fff;
+    font-family:var(--type);font-size:7.5px;letter-spacing:1.5px;text-transform:uppercase;
+    padding:4px 8px;display:flex;align-items:center;gap:4px;pointer-events:none;z-index:2;
+    box-shadow:-2px 2px 0 rgba(0,0,0,.18);}
+  .done-stamp svg{width:9px;height:9px;flex-shrink:0;}
   .cover{width:100%;border:1px solid var(--line);display:block;background:var(--paper-2);
     box-shadow:4px 5px 0 rgba(33,29,23,.16);transition:.18s;}
   .card:hover .cover{transform:translate(-1px,-2px);box-shadow:6px 8px 0 rgba(33,29,23,.18);}
@@ -156,7 +171,7 @@
   .mode-toggle button:last-child{border-right:none;}
   .mode-toggle button.on{background:var(--ink);color:var(--paper);}
   .story-body{font-size:18px;line-height:1.85;}
-  .story-body p{margin:0 0 17px;text-align:justify;hyphens:auto;}
+  .story-body p{margin:0 0 17px;text-align:justify;hyphens:manual;}
   .story-body p:first-of-type::first-letter{font-family:var(--display);font-weight:900;font-size:62px;float:left;
     line-height:.72;margin:7px 10px 0 0;color:var(--ink);}
   .w{cursor:pointer;border-radius:2px;padding:0 .5px;transition:background .12s;}
@@ -184,7 +199,7 @@
   .sheet-pad .sclose svg{width:17px;height:17px;}
   .sheet-kicker{font-family:var(--type);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);}
   .sheet-en{font-family:var(--display);font-size:19px;line-height:1.3;margin:6px 0 2px;padding-right:22px;}
-  .sheet-ar{direction:rtl;text-align:right;font-size:19px;line-height:1.65;color:var(--ink);
+  .sheet-ar{font-size:19px;line-height:1.65;color:var(--ink);
     margin-top:10px;border-top:1px dashed var(--line);padding-top:10px;display:none;font-family:var(--serif);}
   .sheet-ar.show{display:block;}
   .sheet-ar.loading{color:var(--faint);font-style:italic;}
@@ -228,7 +243,7 @@
   .clip-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;}
   .clip{border:1px solid var(--line);background:var(--paper);}
   .clip .clip-en{font-family:var(--display);font-size:16px;line-height:1.4;padding:14px 15px 4px;cursor:pointer;}
-  .clip .clip-ar{direction:rtl;text-align:right;font-size:16px;line-height:1.6;color:var(--ink-soft);padding:0 15px 4px;}
+  .clip .clip-ar{font-size:16px;line-height:1.6;color:var(--ink-soft);padding:0 15px 4px;}
   .clip .clip-src{font-family:var(--type);font-size:9px;letter-spacing:.5px;text-transform:uppercase;color:var(--faint);
     border-top:1px dashed var(--line);margin-top:9px;padding:9px 15px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;}
   .clip .clip-src .from{flex:1;min-width:120px;}
@@ -250,6 +265,26 @@
   .art-card p{font-size:14px;color:var(--ink-soft);line-height:1.5;margin:0;}
   .art-card .ac-meta{font-family:var(--type);font-size:9px;color:var(--faint);letter-spacing:.5px;margin-top:10px;text-transform:uppercase;}
 
+  /* save-hint notice */
+  .save-hint{display:flex;align-items:flex-start;gap:12px;
+    border:1px solid var(--line);background:var(--paper-2);
+    padding:12px 14px;margin-bottom:22px;position:relative;}
+  .save-hint-icon{flex-shrink:0;width:32px;height:32px;background:var(--ink);color:var(--paper);
+    display:flex;align-items:center;justify-content:center;margin-top:1px;}
+  .save-hint-icon svg{width:16px;height:16px;}
+  .save-hint-body{flex:1;min-width:0;}
+  .save-hint-title{font-family:var(--display);font-weight:700;font-size:13px;margin-bottom:4px;}
+  .save-hint-text{font-family:var(--type);font-size:9.5px;letter-spacing:.4px;color:var(--ink-soft);line-height:1.7;}
+  .save-hint-text strong{color:var(--accent);font-style:normal;}
+  .save-hint-steps{display:flex;align-items:center;gap:6px;margin-top:8px;flex-wrap:wrap;}
+  .save-hint-step{font-family:var(--type);font-size:9px;letter-spacing:.8px;text-transform:uppercase;
+    background:var(--ink);color:var(--paper);padding:4px 9px;display:flex;align-items:center;gap:5px;}
+  .save-hint-step svg{width:11px;height:11px;}
+  .save-hint-arrow{color:var(--faint);font-size:12px;}
+  .save-hint-close{position:absolute;top:8px;right:10px;background:none;border:none;cursor:pointer;
+    color:var(--faint);font-size:16px;line-height:1;padding:2px 4px;}
+  .save-hint-close:hover{color:var(--ink);}
+
   .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(20px);
     background:var(--ink);color:var(--paper);font-family:var(--type);font-size:11px;letter-spacing:1px;
     text-transform:uppercase;padding:11px 20px;z-index:90;opacity:0;transition:.3s;pointer-events:none;border:1px solid var(--line);}
@@ -257,6 +292,18 @@
 
   footer{padding:22px 20px 26px;border-top:3px double var(--line);text-align:center;
     font-family:var(--type);font-size:9.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint);line-height:1.8;}
+  .blog-badge{color:var(--accent);text-decoration:none;border:1px solid var(--accent);padding:2px 10px;letter-spacing:1.5px;transition:background .18s,color .18s;}
+  .blog-badge:hover{background:var(--accent);color:#fff;}
+
+  /* backup / export-import */
+  .backup-row{margin-top:28px;padding:18px 20px;border:1px solid var(--line);background:var(--paper-2);display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+  .backup-note{font-family:var(--type);font-size:9px;letter-spacing:.8px;color:var(--faint);text-transform:uppercase;width:100%;margin-bottom:4px;}
+  .btn-backup{background:var(--paper);border:1px solid var(--line);cursor:pointer;font-family:var(--display);font-weight:700;
+    letter-spacing:1px;text-transform:uppercase;font-size:11px;padding:10px 18px;
+    display:inline-flex;align-items:center;gap:7px;color:var(--ink);transition:.15s;text-decoration:none;}
+  .btn-backup:hover{background:var(--ink);color:var(--paper);}
+  .btn-backup svg{width:13px;height:13px;flex-shrink:0;}
+  #importFile{display:none;}
 
   /* PDF download button */
   .dl-pdf-row{margin-top:32px;border-top:1px solid var(--line);padding-top:22px;text-align:center;}
@@ -269,6 +316,7 @@
   /* ===== print / PDF ===== */
   @media print{
     nav.topbar,footer,.mode-toggle,.hint,.reader-audio,#sheet,.toast,.dl-pdf-row{display:none!important;}
+    html,html[data-theme="dark"]{--bg-outer:#fff;--app-border:#c5b693;--paper:#fff;--paper-2:#f3ede0;--ink:#211d17;--ink-soft:#4a4339;--faint:#8a7f6c;--line:#2a251d;--accent:#a63422;--accent-2:#bf5a2a;}
     html,body{background:#fff!important;}
     body.reading-mode main{padding-bottom:0!important;}
     main{padding:0!important;}
@@ -279,7 +327,7 @@
     .reader-head{border-bottom:2px solid #2a251d;padding-bottom:16px;margin-bottom:20px;}
     .reader-head h1{font-size:26pt;margin:10px 0 4px;}
     .story-body{font-size:12pt;line-height:1.85;}
-    .story-body p{margin:0 0 14pt;text-align:justify;hyphens:auto;}
+    .story-body p{margin:0 0 14pt;text-align:justify;hyphens:manual;}
     .story-figure{break-inside:avoid;border:1px solid #2a251d!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
     .story-img{width:100%;height:auto;border-radius:0;}
     .endcap{display:block!important;}
@@ -347,6 +395,92 @@
   .qw-close{background:#fff3cd;border-radius:3px;padding:2px 5px;}
   .qw-miss{background:#f8d7da;border-radius:3px;padding:2px 5px;text-decoration:line-through;opacity:.8;}
   .qz-spoken-line{font-size:12px;color:var(--faint);margin-top:8px;font-style:italic;font-family:var(--type);}
+
+  /* ===== global polish ===== */
+  ::selection{background:var(--sel);}
+  ::-webkit-scrollbar{width:7px;height:7px;}
+  ::-webkit-scrollbar-track{background:transparent;}
+  ::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px;}
+  ::-webkit-scrollbar-thumb:hover{background:var(--faint);}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+  /* theme toggle button — inline icon, no text */
+  #themeBtn{padding:0 14px;line-height:0;}
+  #themeBtn svg{display:block;}
+  /* dark mode quiz answer fields */
+  [data-theme="dark"] .qz-input{background:var(--paper-2);color:var(--ink);border-color:var(--line);}
+  [data-theme="dark"] .qz-input.ok{border-color:#4a7a4a;background:#0d1f0d;}
+  [data-theme="dark"] .qz-input.err{border-color:#b03030;background:#1f0d0d;}
+  [data-theme="dark"] .qz-feedback.ok{background:#0d1f0d;color:#7ec47e;}
+  [data-theme="dark"] .qz-feedback.err{background:#1f0d0d;color:#d97070;}
+  [data-theme="dark"] .qw-ok{background:#1a3d1a;}
+  [data-theme="dark"] .qw-close{background:#3a3210;}
+  [data-theme="dark"] .qw-miss{background:#3a1010;}
+
+  /* ===== language picker modal ===== */
+  #langOverlay{position:fixed;inset:0;z-index:300;background:rgba(33,29,23,.75);display:flex;align-items:center;justify-content:center;padding:16px;}
+  #langModal{background:var(--paper);border:1px solid var(--line);max-width:480px;width:100%;max-height:88vh;display:flex;flex-direction:column;box-shadow:8px 10px 0 rgba(0,0,0,.22);}
+  .lm-head{padding:22px 20px 16px;border-bottom:3px double var(--line);}
+  .lm-kicker{font-family:var(--type);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
+  .lm-title{font-family:var(--display);font-weight:900;font-size:22px;line-height:1.1;margin:0 0 7px;}
+  .lm-sub{font-size:13px;color:var(--ink-soft);line-height:1.6;margin:0;font-style:italic;}
+  .lm-search-wrap{padding:10px 12px;border-bottom:1px solid var(--line);background:var(--paper-2);}
+  .lm-search{width:100%;border:1px solid var(--line);background:var(--paper);padding:9px 12px;font-family:var(--serif);font-size:14px;color:var(--ink);outline:none;box-sizing:border-box;}
+  .lm-search:focus{border-color:var(--ink);}
+  .lm-list{flex:1;overflow-y:auto;min-height:180px;}
+  .lm-item{display:flex;align-items:baseline;gap:10px;padding:10px 16px;cursor:pointer;border-bottom:1px solid var(--line);transition:.1s;}
+  .lm-item:hover{background:var(--paper-2);}
+  .lm-item.on{background:var(--ink);color:var(--paper);}
+  .lm-item.on .lm-eng{color:rgba(255,255,255,.55);}
+  .lm-native{font-family:var(--display);font-size:15px;font-weight:700;flex:1;}
+  .lm-eng{font-family:var(--type);font-size:8.5px;letter-spacing:.5px;text-transform:uppercase;color:var(--faint);}
+  .lm-empty{padding:24px;text-align:center;font-style:italic;color:var(--faint);font-size:14px;}
+  .lm-foot{padding:12px 14px;border-top:1px solid var(--line);}
+  .lm-confirm{width:100%;background:var(--accent);color:#fff;border:none;cursor:pointer;font-family:var(--display);font-weight:700;letter-spacing:1px;text-transform:uppercase;font-size:13px;padding:13px;transition:.15s;}
+  .lm-confirm:hover:not(:disabled){opacity:.85;}
+  .lm-confirm:disabled{opacity:.35;cursor:not-allowed;}
+
+  /* ===== level picker modal ===== */
+  .lv-overlay{position:fixed;inset:0;background:rgba(33,29,23,.75);z-index:400;display:flex;align-items:center;justify-content:center;padding:20px;}
+  .lv-box{background:var(--paper);border:1px solid var(--line);max-width:560px;width:100%;box-shadow:8px 10px 0 rgba(0,0,0,.22);padding:28px 24px;}
+  .lv-title{font-family:var(--display);font-weight:900;font-size:22px;color:var(--ink);margin:0 0 6px;}
+  .lv-sub{font-size:13px;color:var(--ink-soft);font-style:italic;margin:0 0 22px;line-height:1.6;}
+  .lv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:10px;margin-bottom:22px;}
+  .lv-card{border:2px solid var(--app-border);padding:14px 12px;cursor:pointer;transition:border-color .15s,background .15s;}
+  .lv-card:hover{border-color:var(--accent);}
+  .lv-card.on{border-color:var(--accent);background:var(--sel);}
+  .lv-badge{font-family:var(--type);font-size:24px;color:var(--accent);font-weight:700;margin-bottom:5px;}
+  .lv-name{font-family:var(--display);font-size:13px;font-weight:700;color:var(--ink);margin-bottom:3px;}
+  .lv-desc{font-size:11px;color:var(--ink-soft);line-height:1.45;}
+  .lv-confirm{font-family:var(--display);font-weight:700;letter-spacing:1px;text-transform:uppercase;font-size:13px;padding:13px;background:var(--accent);color:#fff;border:none;cursor:pointer;width:100%;transition:opacity .15s;}
+  .lv-confirm:hover:not(:disabled){opacity:.85;}
+  .lv-confirm:disabled{opacity:.35;cursor:not-allowed;}
+
+  /* ===== settings view ===== */
+  .settings-wrap{max-width:660px;margin:0 auto;padding:32px 20px 80px;}
+  .settings-section{margin-bottom:36px;}
+  .settings-head{font-family:var(--display);font-size:18px;font-weight:900;color:var(--ink);padding-bottom:8px;border-bottom:3px double var(--line);margin-bottom:4px;}
+  .settings-row{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--line);gap:12px;}
+  .settings-row:last-child{border-bottom:none;}
+  .settings-label{font-family:var(--display);font-size:14px;font-weight:700;color:var(--ink);}
+  .settings-val{font-size:12px;color:var(--ink-soft);margin-top:2px;line-height:1.5;}
+  .settings-btn{font-family:var(--type);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:7px 14px;border:1.5px solid var(--accent);color:var(--accent);background:none;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+  .settings-btn:hover{background:var(--sel);}
+  .stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:24px;}
+  @media(min-width:500px){.stat-grid{grid-template-columns:repeat(4,1fr);}}
+  .stat-card{background:var(--paper-2);border:1px solid var(--app-border);padding:14px 12px;}
+  .stat-num{font-family:var(--display);font-size:28px;color:var(--accent);line-height:1;}
+  .stat-label{font-size:9px;font-family:var(--type);letter-spacing:1px;color:var(--ink-soft);text-transform:uppercase;margin-top:4px;}
+  .lp-wrap{margin-bottom:24px;}
+  .lp-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--ink-soft);margin-bottom:5px;}
+  .lp-bar-bg{height:8px;background:var(--paper-2);border:1px solid var(--app-border);}
+  .lp-bar-fill{height:100%;background:var(--accent);transition:width .6s;}
+  .lp-caption{font-size:11px;color:var(--ink-soft);margin-top:5px;font-style:italic;}
+  .chart-wrap{background:var(--paper-2);border:1px solid var(--app-border);padding:18px;}
+  .chart-title{font-family:var(--type);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--ink-soft);margin-bottom:14px;}
+  .chart-svg{width:100%;overflow:visible;}
+  .chart-labels{display:flex;justify-content:space-between;font-size:9px;color:var(--faint);margin-top:4px;}
+  #settingsBtn{padding:0 14px;line-height:0;}
+  #settingsBtn svg{display:block;}
 </style>
 </head>
 <body>
@@ -365,8 +499,9 @@
     </div>
     <div class="tb-nav">
       <button data-nav="library" class="on">Library</button>
-      <a href="articles.html">Journal</a>
       <button data-nav="saved">Folders</button>
+      <button data-nav="settings" id="settingsBtn" title="Settings" aria-label="Settings"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+      <button id="themeBtn" title="Toggle theme" aria-label="Toggle dark mode"></button>
     </div>
   </nav>
 
@@ -374,7 +509,7 @@
 
   <footer>
     NovaHubs &middot; A free graded reader for learners of English<br>
-    Read &middot; Listen &middot; Remember &middot; <a href="articles.html" style="color:inherit;text-decoration:none;">Journal</a>
+    Read &middot; Listen &middot; Remember &middot; <a href="articles.html" class="blog-badge">Blog</a>
   </footer>
 </div>
 
@@ -473,8 +608,7 @@ function bannerCover(motif, accent){
 const STORIES = [
   { id:"a1-1", level:"A1", motif:"door", title:"The Red Door", author:"E. Hartwell",
     blurb:"A quiet man, a small bird, and a door the colour of morning. Sometimes a friend is the smallest thing in the garden.",
-    cover:"images/A1/cover.webp",
-    images:["images/A1/1.webp",["images/A1/2.webp","images/A1/3.webp"],"images/A1/4.webp"],
+    images:["images/A1/The red dor/1.webp",["images/A1/The red dor/2.webp","images/A1/The red dor/3.webp"],"images/A1/The red dor/4.webp"],
     body:[
       "Tom lives in a small town. His house is white. The door is red. Every morning, he opens the red door. He looks at the sky. The sky is blue. A small bird sits on the wall. The bird is brown.",
       "\"Good morning, bird,\" says Tom. The bird looks at him. Then it flies away. Tom walks to the shop. He buys bread and milk. The shop is near the park. In the park, children play. A dog runs after a ball. Tom smiles. He likes the park.",
@@ -482,6 +616,7 @@ const STORIES = [
     ]},
   { id:"a1-2", level:"A1", motif:"cat", title:"Anna and the Cat", author:"M. Foley",
     blurb:"Pip the cat likes milk and sleep. But one afternoon Pip is gone, and a small search begins in the garden.",
+    images:["images/A1/Anna and the Cat/1.webp","images/A1/Anna and the Cat/2.webp","images/A1/Anna and the Cat/3.webp"],
     body:[
       "Anna has a cat. The cat is black and white. Its name is Pip. Pip is small. Pip likes milk. Every day, Anna gives Pip some milk. Pip drinks the milk. Then Pip sleeps on the bed.",
       "One day, Pip is not in the house. Anna looks in the kitchen. No cat. She looks under the bed. No cat. She looks in the garden. There is Pip! Pip is in a tree. \"Come down, Pip,\" says Anna. But Pip does not come down.",
@@ -489,6 +624,7 @@ const STORIES = [
     ]},
   { id:"a1-3", level:"A1", motif:"market", title:"A Day at the Market", author:"R. Okonkwo",
     blurb:"On Saturday the market is full of colour and noise. Mrs. Lee has a basket, a few coins, and a soft spot for one pink flower.",
+    images:["images/A1/A Day at the Market/1.webp","images/A1/A Day at the Market/2.webp","images/A1/A Day at the Market/3.webp","images/A1/A Day at the Market/4.webp"],
     body:[
       "It is Saturday. Mrs. Lee goes to the market. The market is big. There are many people. There are red apples and green pears. There is yellow cheese and fresh fish. Mrs. Lee has a basket.",
       "\"How much is the bread?\" she asks. \"Two coins,\" says the man. Mrs. Lee buys the bread. She buys apples too. The apples are sweet. She buys some fish for dinner.",
@@ -688,7 +824,7 @@ async function saveJSON(key, obj){
   if(hasArtifactStore){ try{ await window.storage.set(key,s,false); }catch(e){} }
   lsSet(key,s);
 }
-let SAVED={}; let TR={};
+let SAVED={}; let TR={}; let DONE=new Set();
 LEVELS.forEach(l=>SAVED[l]=[]);
 
 /* ---------- text to speech ---------- */
@@ -710,21 +846,201 @@ function speak(text, rate, onend){
 
 /* ---------- translation (free public APIs, works in any browser) ---------- */
 async function translate(text){
-  const key=text.trim();
+  const tl=userLang.code;
+  const key=text.trim()+"||"+tl;
   if(TR[key]) return TR[key];
   // 1) Google public endpoint
   try{
-    const r=await fetch("https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=ar&dt=t&q="+encodeURIComponent(key));
+    const r=await fetch("https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl="+encodeURIComponent(tl)+"&dt=t&q="+encodeURIComponent(text.trim()));
     if(r.ok){ const d=await r.json(); const out=(d[0]||[]).map(s=>s[0]).join("").trim();
       if(out){ TR[key]=out; saveJSON("nh-tr",TR); return out; } }
   }catch(e){}
   // 2) MyMemory fallback
   try{
-    const r=await fetch("https://api.mymemory.translated.net/get?q="+encodeURIComponent(key)+"&langpair=en|ar");
+    const r=await fetch("https://api.mymemory.translated.net/get?q="+encodeURIComponent(text.trim())+"&langpair=en|"+encodeURIComponent(tl));
     if(r.ok){ const d=await r.json(); const out=(d.responseData&&d.responseData.translatedText||"").trim();
       if(out){ TR[key]=out; saveJSON("nh-tr",TR); return out; } }
   }catch(e){}
   return "Translation unavailable — please check your internet connection.";
+}
+
+/* ---------- language picker ---------- */
+const LANGS=[
+  {code:"af",name:"Afrikaans",native:"Afrikaans",rtl:false},
+  {code:"sq",name:"Albanian",native:"Shqip",rtl:false},
+  {code:"am",name:"Amharic",native:"አማርኛ",rtl:false},
+  {code:"ar",name:"Arabic",native:"العربية",rtl:true},
+  {code:"hy",name:"Armenian",native:"Հայերեն",rtl:false},
+  {code:"az",name:"Azerbaijani",native:"Azərbaycanca",rtl:false},
+  {code:"eu",name:"Basque",native:"Euskera",rtl:false},
+  {code:"be",name:"Belarusian",native:"Беларуская",rtl:false},
+  {code:"bn",name:"Bengali",native:"বাংলা",rtl:false},
+  {code:"bs",name:"Bosnian",native:"Bosanski",rtl:false},
+  {code:"bg",name:"Bulgarian",native:"Български",rtl:false},
+  {code:"ca",name:"Catalan",native:"Català",rtl:false},
+  {code:"zh-CN",name:"Chinese (Simplified)",native:"中文 (简体)",rtl:false},
+  {code:"zh-TW",name:"Chinese (Traditional)",native:"中文 (繁體)",rtl:false},
+  {code:"hr",name:"Croatian",native:"Hrvatski",rtl:false},
+  {code:"cs",name:"Czech",native:"Čeština",rtl:false},
+  {code:"da",name:"Danish",native:"Dansk",rtl:false},
+  {code:"nl",name:"Dutch",native:"Nederlands",rtl:false},
+  {code:"et",name:"Estonian",native:"Eesti",rtl:false},
+  {code:"tl",name:"Filipino",native:"Filipino",rtl:false},
+  {code:"fi",name:"Finnish",native:"Suomi",rtl:false},
+  {code:"fr",name:"French",native:"Français",rtl:false},
+  {code:"gl",name:"Galician",native:"Galego",rtl:false},
+  {code:"ka",name:"Georgian",native:"ქართული",rtl:false},
+  {code:"de",name:"German",native:"Deutsch",rtl:false},
+  {code:"el",name:"Greek",native:"Ελληνικά",rtl:false},
+  {code:"gu",name:"Gujarati",native:"ગુજરાતી",rtl:false},
+  {code:"ht",name:"Haitian Creole",native:"Kreyòl ayisyen",rtl:false},
+  {code:"ha",name:"Hausa",native:"Hausa",rtl:false},
+  {code:"he",name:"Hebrew",native:"עברית",rtl:true},
+  {code:"hi",name:"Hindi",native:"हिन्दी",rtl:false},
+  {code:"hu",name:"Hungarian",native:"Magyar",rtl:false},
+  {code:"is",name:"Icelandic",native:"Íslenska",rtl:false},
+  {code:"ig",name:"Igbo",native:"Igbo",rtl:false},
+  {code:"id",name:"Indonesian",native:"Bahasa Indonesia",rtl:false},
+  {code:"ga",name:"Irish",native:"Gaeilge",rtl:false},
+  {code:"it",name:"Italian",native:"Italiano",rtl:false},
+  {code:"ja",name:"Japanese",native:"日本語",rtl:false},
+  {code:"kn",name:"Kannada",native:"ಕನ್ನಡ",rtl:false},
+  {code:"kk",name:"Kazakh",native:"Қазақша",rtl:false},
+  {code:"km",name:"Khmer",native:"ភាសាខ្មែរ",rtl:false},
+  {code:"ko",name:"Korean",native:"한국어",rtl:false},
+  {code:"ky",name:"Kyrgyz",native:"Кыргызча",rtl:false},
+  {code:"lo",name:"Lao",native:"ພາສາລາວ",rtl:false},
+  {code:"lv",name:"Latvian",native:"Latviešu",rtl:false},
+  {code:"lt",name:"Lithuanian",native:"Lietuvių",rtl:false},
+  {code:"lb",name:"Luxembourgish",native:"Lëtzebuergesch",rtl:false},
+  {code:"mk",name:"Macedonian",native:"Македонски",rtl:false},
+  {code:"mg",name:"Malagasy",native:"Malagasy",rtl:false},
+  {code:"ms",name:"Malay",native:"Bahasa Melayu",rtl:false},
+  {code:"ml",name:"Malayalam",native:"മലയാളം",rtl:false},
+  {code:"mt",name:"Maltese",native:"Malti",rtl:false},
+  {code:"mr",name:"Marathi",native:"मराठी",rtl:false},
+  {code:"mn",name:"Mongolian",native:"Монгол",rtl:false},
+  {code:"my",name:"Burmese",native:"မြန်မာ",rtl:false},
+  {code:"ne",name:"Nepali",native:"नेपाली",rtl:false},
+  {code:"no",name:"Norwegian",native:"Norsk",rtl:false},
+  {code:"fa",name:"Persian",native:"فارسی",rtl:true},
+  {code:"pl",name:"Polish",native:"Polski",rtl:false},
+  {code:"pt",name:"Portuguese",native:"Português",rtl:false},
+  {code:"pa",name:"Punjabi",native:"ਪੰਜਾਬੀ",rtl:false},
+  {code:"ro",name:"Romanian",native:"Română",rtl:false},
+  {code:"ru",name:"Russian",native:"Русский",rtl:false},
+  {code:"sr",name:"Serbian",native:"Српски",rtl:false},
+  {code:"si",name:"Sinhala",native:"සිංහල",rtl:false},
+  {code:"sk",name:"Slovak",native:"Slovenčina",rtl:false},
+  {code:"sl",name:"Slovenian",native:"Slovenščina",rtl:false},
+  {code:"so",name:"Somali",native:"Soomaali",rtl:false},
+  {code:"es",name:"Spanish",native:"Español",rtl:false},
+  {code:"sw",name:"Swahili",native:"Kiswahili",rtl:false},
+  {code:"sv",name:"Swedish",native:"Svenska",rtl:false},
+  {code:"tg",name:"Tajik",native:"Тоҷикӣ",rtl:false},
+  {code:"ta",name:"Tamil",native:"தமிழ்",rtl:false},
+  {code:"te",name:"Telugu",native:"తెలుగు",rtl:false},
+  {code:"th",name:"Thai",native:"ภาษาไทย",rtl:false},
+  {code:"tr",name:"Turkish",native:"Türkçe",rtl:false},
+  {code:"tk",name:"Turkmen",native:"Türkmen",rtl:false},
+  {code:"uk",name:"Ukrainian",native:"Українська",rtl:false},
+  {code:"ur",name:"Urdu",native:"اردو",rtl:true},
+  {code:"uz",name:"Uzbek",native:"Oʻzbek",rtl:false},
+  {code:"vi",name:"Vietnamese",native:"Tiếng Việt",rtl:false},
+  {code:"cy",name:"Welsh",native:"Cymraeg",rtl:false},
+  {code:"xh",name:"Xhosa",native:"isiXhosa",rtl:false},
+  {code:"yi",name:"Yiddish",native:"ייִדיש",rtl:true},
+  {code:"yo",name:"Yoruba",native:"Yorùbá",rtl:false},
+  {code:"zu",name:"Zulu",native:"isiZulu",rtl:false}
+];
+let userLang=LANGS[3]; // Arabic default until loaded
+
+function initLang(){
+  const saved=lsGet("nh-lang");
+  if(saved){ userLang=LANGS.find(l=>l.code===saved)||LANGS[3]; }
+  else { showLangModal(); }
+}
+
+function showLangModal(fromSettings){
+  const ov=document.createElement("div"); ov.id="langOverlay";
+  ov.innerHTML=`<div id="langModal">
+    <div class="lm-head">
+      <div class="lm-kicker">Welcome to NovaHubs</div>
+      <h2 class="lm-title">What is your native language?</h2>
+      <p class="lm-sub">We'll translate English words and sentences into your language as you read.</p>
+    </div>
+    <div class="lm-search-wrap">
+      <input id="langSearch" class="lm-search" type="text" placeholder="Search your language…" autocomplete="off" spellcheck="false">
+    </div>
+    <div class="lm-list" id="langList"></div>
+    <div class="lm-foot">
+      <button class="lm-confirm" id="langConfirm" disabled>Confirm &rarr;</button>
+    </div>
+  </div>`;
+  document.body.appendChild(ov);
+  let sel=null;
+  const list=ov.querySelector("#langList");
+  const search=ov.querySelector("#langSearch");
+  const confirm=ov.querySelector("#langConfirm");
+  function render(q){
+    const f=q.toLowerCase().trim();
+    const filtered=f?LANGS.filter(l=>l.name.toLowerCase().includes(f)||l.native.toLowerCase().includes(f)):LANGS;
+    if(!filtered.length){ list.innerHTML=`<div class="lm-empty">No language found</div>`; return; }
+    list.innerHTML=filtered.map(l=>`<div class="lm-item${sel&&sel.code===l.code?" on":""}" data-code="${l.code}"><span class="lm-native">${l.native}</span><span class="lm-eng">${l.name}</span></div>`).join("");
+    list.querySelectorAll(".lm-item").forEach(el=>el.onclick=()=>{ sel=LANGS.find(l=>l.code===el.dataset.code); confirm.disabled=false; render(search.value); });
+  }
+  render("");
+  search.oninput=()=>render(search.value);
+  search.addEventListener("keydown",e=>{ if(e.key==="Enter"){ const first=list.querySelector(".lm-item"); if(first&&!sel){ first.click(); } } });
+  confirm.onclick=()=>{
+    userLang=sel; lsSet("nh-lang",sel.code);
+    TR={}; saveJSON("nh-tr",TR);
+    ov.remove();
+    if(fromSettings) renderSettings();
+    else if(!lsGet("nh-user-level")) showLevelModal(false);
+  };
+  setTimeout(()=>search.focus(),120);
+}
+
+function showLevelModal(fromSettings){
+  const CARDS=[
+    {code:"A1",name:"Beginner",desc:"Short sentences, present tense. Perfect for very early learners."},
+    {code:"A2",name:"Elementary",desc:"Everyday past and future. Building basic communication."},
+    {code:"B1",name:"Intermediate",desc:"Longer narrative with feelings and descriptions."},
+    {code:"B2",name:"Upper-Intermediate",desc:"Complex structures and idiomatic expressions."},
+    {code:"C1",name:"Advanced",desc:"Near-native fluency and academic language."},
+  ];
+  const ov=document.createElement("div"); ov.className="lv-overlay";
+  let sel=fromSettings?curLevel:null;
+  ov.innerHTML=`<div class="lv-box">
+    <div class="lv-title">What is your English level?</div>
+    <p class="lv-sub">Choose the level that best matches your current reading ability.</p>
+    <div class="lv-grid" id="lvGrid">
+      ${CARDS.map(c=>`<div class="lv-card${sel===c.code?" on":""}" data-code="${c.code}">
+        <div class="lv-badge">${c.code}</div>
+        <div class="lv-name">${c.name}</div>
+        <div class="lv-desc">${c.desc}</div>
+      </div>`).join("")}
+    </div>
+    <button class="lv-confirm" id="lvConfirm"${sel?"":" disabled"}>Continue &rarr;</button>
+  </div>`;
+  document.body.appendChild(ov);
+  const grid=ov.querySelector("#lvGrid");
+  const btn=ov.querySelector("#lvConfirm");
+  grid.querySelectorAll(".lv-card").forEach(el=>{
+    el.onclick=()=>{
+      sel=el.dataset.code;
+      grid.querySelectorAll(".lv-card").forEach(c=>c.classList.toggle("on",c.dataset.code===sel));
+      btn.disabled=false;
+    };
+  });
+  btn.onclick=()=>{
+    if(!sel) return;
+    curLevel=sel; lsSet("nh-user-level",sel);
+    ov.remove();
+    if(fromSettings) renderSettings();
+    else renderLibrary();
+  };
 }
 
 /* ---------- state ---------- */
@@ -748,6 +1064,7 @@ function leaveReader(){ document.body.classList.remove("reading-mode","article-m
 function setNav(section){
   if(section==="library") renderLibrary();
   else if(section==="articles") renderArticles();
+  else if(section==="settings") renderSettings();
   else renderSaved();
 }
 
@@ -755,9 +1072,11 @@ function renderLibrary(){
   leaveReader(); setActiveNav("library"); setBack(false);
   const stories=STORIES.filter(s=>s.level===curLevel);
   const tabs=LEVELS.map(l=>`<button data-level="${l}" class="${l===curLevel?'on':''}">${l}<span class="lab">${l==='A1'?'Start':l==='C1'?'Master':'Grow'}</span></button>`).join("");
+  const CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
   let cards=stories.map((s,i)=>`
     <div class="card reveal" data-story="${s.id}" style="animation-delay:${i*50}ms">
       ${cover(s.motif,s.level,ACCENTS[s.level],s.cover)}
+      ${DONE.has(s.id)?`<div class="done-stamp">${CHECK}Read</div>`:''}
       <div class="cap"><div class="tt">${esc(s.title)}</div><div class="au">by ${esc(s.author)}</div>
       <div class="meta">${s.level} &middot; ${readMin(s)} min read</div></div>
     </div>`).join("");
@@ -765,14 +1084,31 @@ function renderLibrary(){
   if(rem>0) cards+=`<div class="card forth reveal" style="animation-delay:${stories.length*50}ms">
       <div class="cover"><div class="ftxt">${rem} more tales<br>forthcoming<br>in this level</div></div>
       <div class="cap"><div class="meta">${curLevel} &middot; In the press</div></div></div>`;
+  const hintDismissed=lsGet("nh-hint-dismissed")==="1";
+  const hint=hintDismissed?'':
+    `<div class="save-hint" id="saveHint">
+      <div class="save-hint-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
+      <div class="save-hint-body">
+        <div class="save-hint-title">Keep Your Progress Safe</div>
+        <div class="save-hint-text">Your reading progress is stored in this browser only. If you clear your browser data, <strong>you will lose everything</strong>. Back it up in two steps:</div>
+        <div class="save-hint-steps">
+          <span class="save-hint-step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Folders</span>
+          <span class="save-hint-arrow">→</span>
+          <span class="save-hint-step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export Progress</span>
+        </div>
+      </div>
+      <button class="save-hint-close" id="dismissHint" title="Dismiss">&times;</button>
+    </div>`;
   view.innerHTML=`<div class="wrap">
       <div class="sec-head"><div class="sec-kicker">The Reading Library</div>
         <h1 class="sec-title">Choose a Tale to Your Level</h1>
         <div class="sec-sub">${LEVEL_DESC[curLevel]}.</div></div>
+      ${hint}
       <div class="levels">${tabs}</div>
       <div class="grid">${cards}</div></div>`;
   view.querySelectorAll(".levels button").forEach(b=>b.onclick=()=>{curLevel=b.dataset.level;renderLibrary();});
   view.querySelectorAll(".card[data-story]").forEach(c=>c.onclick=()=>openStory(c.dataset.story));
+  if($("#dismissHint")) $("#dismissHint").onclick=()=>{ lsSet("nh-hint-dismissed","1"); $("#saveHint").remove(); };
   window.scrollTo(0,0);
 }
 
@@ -928,7 +1264,11 @@ $("#sheetClose").onclick=()=>{hideSheet();clearSel();};
 $("#actListen").onclick=()=>speak(selText,1);
 $("#actSlow").onclick=()=>speak(selText,0.6);
 $("#actTranslate").onclick=async()=>{
-  const ar=$("#sheetAr"); ar.className="sheet-ar show loading"; ar.textContent="translating to Arabic …";
+  const ar=$("#sheetAr");
+  ar.className="sheet-ar show loading";
+  ar.textContent="translating to "+userLang.name+" …";
+  ar.style.direction=userLang.rtl?"rtl":"ltr";
+  ar.style.textAlign=userLang.rtl?"right":"left";
   const out=await translate(selText);
   ar.className="sheet-ar show"; ar.textContent=out;
 };
@@ -1001,7 +1341,7 @@ function renderSaved(){
     list=`<div class="clip-list">`+items.map((it,i)=>`
       <div class="clip reveal" style="animation-delay:${i*35}ms">
         <div class="clip-en" data-en="${esc(it.en)}">${esc(it.en)}</div>
-        ${it.ar?`<div class="clip-ar">${esc(it.ar)}</div>`:""}
+        ${it.ar?`<div class="clip-ar" style="direction:${userLang.rtl?'rtl':'ltr'};text-align:${userLang.rtl?'right':'left'}">${esc(it.ar)}</div>`:""}
         <div class="clip-src"><span class="from">From &ldquo;${esc(it.story)}&rdquo; &middot; ${curLevel}</span>
           <span class="clip-tools">
             <button class="ct play" data-en="${esc(it.en)}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l13 7-13 7z"/></svg>Hear</button>
@@ -1023,6 +1363,18 @@ function renderSaved(){
           Start Review · ${curLevel}
         </button>
       </div>`:''}
+      <div class="backup-row">
+        <div class="backup-note">Your progress lives in this browser only — export it to keep a safe copy</div>
+        <button class="btn-backup" id="btnExport">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Export Progress
+        </button>
+        <label class="btn-backup" for="importFile">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Import Progress
+        </label>
+        <input type="file" id="importFile" accept=".json">
+      </div>
       </div>`;
   view.querySelectorAll(".levels button").forEach(b=>b.onclick=()=>{curLevel=b.dataset.level;renderSaved();});
   view.querySelectorAll(".clip-en").forEach(el=>el.onclick=()=>speak(el.dataset.en,1));
@@ -1031,6 +1383,8 @@ function renderSaved(){
   view.querySelectorAll(".ct.tr").forEach(b=>b.onclick=async()=>{ const i=+b.dataset.i; b.textContent="…";
     const out=await translate(SAVED[curLevel][i].en); SAVED[curLevel][i].ar=out; await saveJSON("nh-saved",SAVED); renderSaved(); });
   if($("#revBtn")) $("#revBtn").onclick=()=>startQuiz(qzGenReview(curLevel),"review",null);
+  $("#btnExport").onclick=exportProgress;
+  $("#importFile").onchange=function(){importProgress(this.files[0]);this.value='';};
   window.scrollTo(0,0);
 }
 
@@ -1199,6 +1553,7 @@ function qzResult(){
   const msg=pct>=80?"Excellent!":pct>=60?"Well done!":pct>=40?"Good effort!":"Keep practising!";
   const rows=qzLog.map((a,i)=>`<div class="qr-row"><span>${i+1}. ${esc((a.q.answer||a.q.text||"").slice(0,48))}</span><span class="${a.ok?"qr-ok":"qr-no"}">${a.ok?"✓":"✗"}</span></div>`).join("");
   const story=qzStory;
+  if(story && qzSrc!=="review"){ DONE.add(story.id); saveJSON("nh-done",[...DONE]); }
   view.innerHTML=`<div class="quiz-wrap">
     <div class="qz-results reveal">
       <div class="qr-ring">${qzScore}/${total}</div>
@@ -1216,19 +1571,206 @@ function qzResult(){
   window.scrollTo(0,0);
 }
 
+/* ---------- export / import ---------- */
+function exportProgress(){
+  const data={version:1,exported:new Date().toISOString(),saved:SAVED,done:[...DONE],tr:TR};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download="novahubs-progress-"+new Date().toISOString().slice(0,10)+".json";
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast("Progress exported!");
+}
+async function importProgress(file){
+  if(!file) return;
+  const text=await file.text().catch(()=>null);
+  if(!text){ toast("Could not read file"); return; }
+  let data;
+  try{ data=JSON.parse(text); }catch(e){ toast("Invalid file"); return; }
+  if(!data.version||!data.saved){ toast("Invalid file"); return; }
+  if(Array.isArray(data.done)){ data.done.forEach(id=>DONE.add(id)); await saveJSON("nh-done",[...DONE]); }
+  if(data.saved){
+    LEVELS.forEach(l=>{
+      if(!Array.isArray(data.saved[l])) return;
+      const seen=new Set(SAVED[l].map(x=>x.en+"||"+x.storyId));
+      data.saved[l].forEach(it=>{ if(!seen.has(it.en+"||"+it.storyId)){ SAVED[l].push(it); seen.add(it.en+"||"+it.storyId); } });
+    });
+    await saveJSON("nh-saved",SAVED);
+  }
+  if(data.tr && typeof data.tr==="object"){ Object.assign(TR,data.tr); await saveJSON("nh-tr",TR); }
+  renderSaved();
+  toast("Progress restored!");
+}
+
+/* ---------- settings ---------- */
+function renderSettings(){
+  leaveReader(); setActiveNav("settings"); setBack(false);
+  const today=new Date();
+  const rawStats=JSON.parse(localStorage.getItem("nh-stats")||"{}");
+  const dayMap=rawStats.days||{};
+  const chartDays=[];
+  let activeDays=0, totalSecs=0;
+  for(let i=6;i>=0;i--){
+    const d=new Date(today); d.setDate(d.getDate()-i);
+    const key=d.toISOString().slice(0,10);
+    const secs=dayMap[key]||0;
+    chartDays.push({mins:Math.round(secs/60), label:d.toLocaleDateString("en",{weekday:"short"})});
+    if(secs>0) activeDays++;
+    totalSecs+=secs;
+  }
+  const totalMins=Math.round(totalSecs/60);
+  const avgMins=activeDays>0?Math.round(totalMins/activeDays):0;
+  const totalSaved=LEVELS.reduce((n,l)=>n+SAVED[l].length,0);
+  const lvStories=STORIES.filter(s=>s.level===curLevel);
+  const doneInLv=lvStories.filter(s=>DONE.has(s.id)).length;
+  const lvPct=lvStories.length>0?Math.round(doneInLv/lvStories.length*100):0;
+  const nextLv=LEVELS[LEVELS.indexOf(curLevel)+1]||null;
+  // bezier SVG chart
+  const maxM=Math.max(...chartDays.map(d=>d.mins),1);
+  const W=300,H=80,PX=8,PY=8;
+  const pts=chartDays.map((d,i)=>[PX+i*(W-2*PX)/6, PY+(H-2*PY)*(1-d.mins/maxM)]);
+  function bez(p){
+    let s=`M${p[0][0].toFixed(1)},${p[0][1].toFixed(1)}`;
+    for(let i=1;i<p.length;i++){const[x0,y0]=p[i-1],[x1,y1]=p[i],cx=(x0+x1)/2;s+=` C${cx.toFixed(1)},${y0.toFixed(1)} ${cx.toFixed(1)},${y1.toFixed(1)} ${x1.toFixed(1)},${y1.toFixed(1)}`;}
+    return s;
+  }
+  const cp=bez(pts);
+  const fp=cp+` L${pts[pts.length-1][0].toFixed(1)},${H-PY} L${pts[0][0].toFixed(1)},${H-PY} Z`;
+  const dots=pts.map(([x,y],i)=>`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3" fill="var(--accent)" opacity=".9"><title>${chartDays[i].mins} min</title></circle>`).join("");
+  const SUN='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.05" y2="7.05"/><line x1="16.95" y1="16.95" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.05" y2="16.95"/><line x1="16.95" y1="7.05" x2="19.07" y2="4.93"/></svg>';
+  const MOON='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+  view.innerHTML=`<div class="settings-wrap reveal">
+    <div class="sec-head" style="margin-bottom:28px">
+      <div class="sec-kicker">Your Account</div>
+      <h1 class="sec-title">Settings</h1>
+    </div>
+    <div class="settings-section">
+      <div class="settings-head">Preferences</div>
+      <div class="settings-row">
+        <div><div class="settings-label">Native Language</div><div class="settings-val">${esc(userLang.native)} &middot; ${esc(userLang.name)}</div></div>
+        <button class="settings-btn" id="setChangeLang">Change</button>
+      </div>
+      <div class="settings-row">
+        <div><div class="settings-label">Appearance</div><div class="settings-val" id="setThemeVal">${document.documentElement.dataset.theme==='dark'?'Dark mode':'Light mode'}</div></div>
+        <button class="settings-btn" id="setThemeToggle">Toggle</button>
+      </div>
+      <div class="settings-row">
+        <div><div class="settings-label">Reading Level</div><div class="settings-val">Level ${esc(curLevel)} &mdash; ${esc(LEVEL_DESC[curLevel])}</div></div>
+        <button class="settings-btn" id="setChangeLevel">Change</button>
+      </div>
+    </div>
+    <div class="settings-section">
+      <div class="settings-head">Your Progress</div>
+      <div class="stat-grid">
+        <div class="stat-card"><div class="stat-num">${DONE.size}</div><div class="stat-label">Stories Read</div></div>
+        <div class="stat-card"><div class="stat-num">${totalSaved}</div><div class="stat-label">Sentences Saved</div></div>
+        <div class="stat-card"><div class="stat-num">${activeDays}</div><div class="stat-label">Active Days</div></div>
+        <div class="stat-card"><div class="stat-num">${avgMins}<span style="font-size:14px"> m</span></div><div class="stat-label">Daily Average</div></div>
+      </div>
+      <div class="lp-wrap">
+        <div class="lp-labels"><span>Level ${esc(curLevel)} progress</span><span>${doneInLv} / ${lvStories.length} stories${nextLv?` &rarr; ${esc(nextLv)}`:""}</span></div>
+        <div class="lp-bar-bg"><div class="lp-bar-fill" style="width:${lvPct}%"></div></div>
+        <div class="lp-caption">${lvPct}% complete${nextLv?` — keep reading to reach Level ${esc(nextLv)}`:" — level mastered!"}</div>
+      </div>
+      <div class="chart-wrap">
+        <div class="chart-title">Reading Time This Week (minutes / day)</div>
+        <svg class="chart-svg" viewBox="0 0 ${W} ${H}" height="${H}">
+          <defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="var(--accent)" stop-opacity=".3"/>
+            <stop offset="100%" stop-color="var(--accent)" stop-opacity="0"/>
+          </linearGradient></defs>
+          <path d="${fp}" fill="url(#cg)"/>
+          <path d="${cp}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          ${dots}
+        </svg>
+        <div class="chart-labels">${chartDays.map(d=>`<span>${d.label}</span>`).join("")}</div>
+      </div>
+    </div>
+    <div class="settings-section">
+      <div class="settings-head">Data</div>
+      <div class="settings-row">
+        <div><div class="settings-label">Export Progress</div><div class="settings-val">Download your saved sentences and reading history</div></div>
+        <button class="settings-btn" id="setExport">Export</button>
+      </div>
+      <div class="settings-row">
+        <div><div class="settings-label">Import Progress</div><div class="settings-val">Restore from a previously exported file</div></div>
+        <button class="settings-btn" id="setImport">Import</button>
+      </div>
+    </div>
+  </div>`;
+  $("#setChangeLang").onclick=()=>showLangModal(true);
+  $("#setChangeLevel").onclick=()=>showLevelModal(true);
+  $("#setThemeToggle").onclick=()=>{
+    const html=document.documentElement;
+    const dark=html.dataset.theme==='dark';
+    html.dataset.theme=dark?'':'dark';
+    localStorage.setItem('nh-theme',dark?'light':'dark');
+    document.getElementById('themeBtn').innerHTML=html.dataset.theme==='dark'?SUN:MOON;
+    document.getElementById('setThemeVal').textContent=html.dataset.theme==='dark'?'Dark mode':'Light mode';
+  };
+  $("#setExport").onclick=exportProgress;
+  $("#setImport").onclick=()=>{
+    const inp=document.createElement("input"); inp.type="file"; inp.accept=".json";
+    inp.onchange=()=>importProgress(inp.files[0]); inp.click();
+  };
+  window.scrollTo(0,0);
+}
+
 /* ---------- toast ---------- */
 let toastT;
 function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("show"),1700); }
 
+/* ---------- time tracking ---------- */
+let sessionStart=Date.now();
+function saveSessionTime(){
+  const now=Date.now();
+  const secs=Math.round((now-sessionStart)/1000);
+  sessionStart=now;
+  if(secs<5) return;
+  const key=new Date().toISOString().slice(0,10);
+  const st=JSON.parse(localStorage.getItem("nh-stats")||"{}");
+  if(!st.days) st.days={};
+  st.days[key]=(st.days[key]||0)+secs;
+  localStorage.setItem("nh-stats",JSON.stringify(st));
+}
+setInterval(saveSessionTime,60000);
+document.addEventListener("visibilitychange",()=>{ if(document.hidden) saveSessionTime(); });
+window.addEventListener("beforeunload",saveSessionTime);
+
+/* ---------- theme ---------- */
+(function(){
+  const html=document.documentElement;
+  if(localStorage.getItem('nh-theme')==='dark') html.dataset.theme='dark';
+  setTimeout(()=>html.classList.add('theme-ready'),40);
+  const SUN='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.05" y2="7.05"/><line x1="16.95" y1="16.95" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.05" y2="16.95"/><line x1="16.95" y1="7.05" x2="19.07" y2="4.93"/></svg>';
+  const MOON='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+  function syncIcon(){ document.getElementById('themeBtn').innerHTML=html.dataset.theme==='dark'?SUN:MOON; }
+  syncIcon();
+  document.getElementById('themeBtn').onclick=function(){
+    const dark=html.dataset.theme==='dark';
+    html.dataset.theme=dark?'':'dark';
+    localStorage.setItem('nh-theme',dark?'light':'dark');
+    syncIcon();
+  };
+})();
+
 /* ---------- boot ---------- */
-document.querySelectorAll(".tb-nav button").forEach(b=>b.onclick=()=>setNav(b.dataset.nav));
+initLang();
+document.querySelectorAll(".tb-nav button[data-nav]").forEach(b=>b.onclick=()=>setNav(b.dataset.nav));
 (function(){ try{ $("#dateline").textContent=new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"}); }catch(e){} })();
 (async function init(){
   const sv=await loadJSON("nh-saved",null);
   if(sv){ LEVELS.forEach(l=>SAVED[l]=Array.isArray(sv[l])?sv[l]:[]); }
   TR=await loadJSON("nh-tr",{})||{};
+  const dn=await loadJSON("nh-done",[])||[];
+  DONE=new Set(Array.isArray(dn)?dn:[]);
+  const ul=lsGet("nh-user-level");
+  if(ul&&LEVELS.includes(ul)) curLevel=ul;
   const tab=new URLSearchParams(window.location.search).get("tab");
   if(tab==="saved") renderSaved();
+  else if(tab==="settings") renderSettings();
   else renderLibrary();
 })();
 </script>
