@@ -52,6 +52,7 @@ function openTechStory(id){
 
 function renderTechReader(){
   const s=curTechStory;
+  curStory=null; /* so the selection sheet saves into the tech folder, not a previously open story */
   const accent=TECH_ACCENTS[s.cat][s.level];
   leaveReader();
   setActiveNav("tech");
@@ -60,7 +61,7 @@ function renderTechReader(){
 
   const paras=s.body.map((p,i)=>{
     const words=p.split(/(\s+)/).map(tok=>/^\s+$/.test(tok)?tok:`<span class="w">${esc(tok)}</span>`).join("");
-    return `<p><span class="s" data-si="${i}" data-text="${esc(p)}">${words}</span></p>`;
+    return `<p><span class="s" data-si="${i}" data-text="${esc(p)}" tabindex="0">${words}</span></p>`;
   }).join("");
 
   const glossary=`<div class="tech-glossary">
@@ -90,10 +91,10 @@ function renderTechReader(){
         <div class="voice-row-r"><span class="vl">Accent</span><div class="vs-g"><button class="sp${voicePref.accent==='US'?' on':''}" id="tcUS">US</button><button class="sp${voicePref.accent==='GB'?' on':''}" id="tcGB">GB</button></div><span class="vl">Voice</span><div class="vs-g"><button class="sp${voicePref.gender==='M'?' on':''}" id="tcM">Male</button><button class="sp${voicePref.gender==='F'?' on':''}" id="tcF">Female</button></div></div>
       </div>
       <div class="mode-toggle reveal">
-        <button data-mode="word" class="on">${t('Tap a word')}</button>
-        <button data-mode="sentence">${t('Tap a sentence')}</button>
+        <button data-mode="word" class="${mode==='word'?'on':''}" aria-pressed="${mode==='word'}">${t('Tap a word')}</button>
+        <button data-mode="sentence" class="${mode==='sentence'?'on':''}" aria-pressed="${mode==='sentence'}">${t('Tap a sentence')}</button>
       </div>
-      <div class="story-body word-mode reveal" id="storyBody">${paras}</div>
+      <div class="story-body ${mode}-mode reveal" id="storyBody">${paras}</div>
       ${glossary}
     </article>
   </div>`;
@@ -102,10 +103,14 @@ function renderTechReader(){
   const body=view.querySelector('#storyBody');
   view.querySelectorAll('.mode-toggle button').forEach(b=>b.onclick=()=>{
     mode=b.dataset.mode; clearSel(); hideSheet();
-    view.querySelectorAll('.mode-toggle button').forEach(x=>x.classList.remove('on')); b.classList.add('on');
+    view.querySelectorAll('.mode-toggle button').forEach(x=>{
+      const on=x.dataset.mode===mode;
+      x.classList.toggle('on',on); x.setAttribute('aria-pressed',on);
+    });
     body.className='story-body '+(b.dataset.mode)+'-mode reveal';
   });
   body.onclick=onBodyClick;
+  body.onkeydown=onBodyKeydown;
   sentenceEls=Array.from(body.querySelectorAll('.s'));
   abRate=1; abIndex=0; abPlaying=false; setPlayIcon(false); updatePos();
   // audio

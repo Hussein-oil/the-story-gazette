@@ -481,3 +481,14 @@
   .tg-term{font-family:var(--display);font-weight:700;font-size:14px;color:var(--ink);}
   .tg-def{font-size:13px;color:var(--ink-soft);line-height:1.6;}
   @media(max-width:520px){.tg-item{grid-template-columns:1fr;gap:4px;}.tech-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));}}
+
+/* ===== Phase 4 UX polish ===== */
+/* gentle cross-fade when a view is swapped in */
+.wrap,.wrap-read,.quiz-wrap,.settings-wrap{animation:viewfade .28s ease;}
+@keyframes viewfade{from{opacity:.45;}to{opacity:1;}}
+/* story illustrations: paper-toned placeholder while loading */
+.story-img{background:var(--paper-2);}
+/* richer empty state */
+.empty svg{width:36px;height:36px;display:block;margin:0 auto 12px;opacity:.45;}
+.empty p{margin:0 0 4px;}
+.empty .rev-btn{margin-top:16px;}

@@ -1,4 +1,12 @@
 /** @file Memory Folders: saved sentences grouped by level/story, plus progress export/import. */
+/* friendly empty state with a route back to the stories */
+function emptyState(msg){
+  return `<div class="empty">
+    <svg viewBox="0 0 56 44" stroke="currentColor" fill="none" stroke-width="1.5" aria-hidden="true"><path d="M2 10Q2 7 5 7L20 7 24 11 51 11Q54 11 54 14L54 39Q54 42 51 42L5 42Q2 42 2 39Z"/><path d="M2 15L54 15" opacity=".35"/></svg>
+    <p>${msg}</p>
+    <button class="rev-btn" id="emptyGo">${t("English Stories")} &rarr;</button>
+  </div>`;
+}
 /* ---------- folders ---------- */
 const _FC={A1:'#5b7d4f',A2:'#3f6b8a',B1:'#a63422',B2:'#8a5a1f',C1:'#5a3a6b',tech:'#2e7a8a'};
 const _FD={A1:'Beginner',A2:'Elementary',B1:'Intermediate',B2:'Upper Intermediate',C1:'Advanced',tech:'Technology'};
@@ -92,7 +100,7 @@ function renderSavedFolder(lvl){
     }).join('');
     content=items.length
       ? `<div class="fds-grid">${subs}</div>`
-      : `<div class="empty">${t("No items yet — read more stories and save words first!")}</div>`;
+      : emptyState(t("No items yet — read more stories and save words first!"));
   } else {
     const groupMap={};
     items.forEach(it=>{ if(!groupMap[it.storyId]) groupMap[it.storyId]={title:it.story,storyId:it.storyId,cnt:0}; groupMap[it.storyId].cnt++; });
@@ -103,7 +111,7 @@ function renderSavedFolder(lvl){
           <div class="fds-file-title">${esc(g.title)}</div>
           <div class="fds-file-cnt" style="color:${c}">${g.cnt} saved</div>
         </div>`).join('')}</div>`
-      : `<div class="empty">${t("No items yet — read more stories and save words first!")}</div>`;
+      : emptyState(t("No items yet — read more stories and save words first!"));
     const fileCount=groups.length;
     view.innerHTML=`<div class="wrap">
       <div class="sec-head">
@@ -114,6 +122,7 @@ function renderSavedFolder(lvl){
       ${items.length?`<div class="rev-row"><button class="rev-btn" id="revBtn">${REV_SVG}${t("Start Review")} &middot; ${_FL[lvl]}</button></div>`:''}
     </div>`;
     view.querySelectorAll('.fds-file').forEach(el=>el.onclick=()=>renderSavedFile(lvl,el.dataset.sid));
+  if($('#emptyGo'))$('#emptyGo').onclick=renderLibrary;
     if($('#revBtn')) $('#revBtn').onclick=()=>{ qzReviewLevel=lvl; startQuiz(qzGenReview(lvl),'review',null); };
     window.scrollTo(0,0); return;
   }
@@ -126,6 +135,7 @@ function renderSavedFolder(lvl){
     ${content}
   </div>`;
   view.querySelectorAll('[data-sub]').forEach(el=>el.onclick=()=>renderSavedTechSub(el.dataset.sub));
+  if($('#emptyGo'))$('#emptyGo').onclick=renderLibrary;
   window.scrollTo(0,0);
 }
 
@@ -144,7 +154,7 @@ function renderSavedTechSub(subcat){
         <div class="fds-file-title">${esc(g.title)}</div>
         <div class="fds-file-cnt" style="color:${c}">${g.cnt} saved</div>
       </div>`).join('')}</div>`
-    : `<div class="empty">${t("No items yet — read more stories and save words first!")}</div>`;
+    : emptyState(t("No items yet — read more stories and save words first!"));
   view.innerHTML=`<div class="wrap">
     <div class="sec-head">
       <div class="sec-kicker" style="color:${c}">${sub.label}</div>
@@ -153,6 +163,7 @@ function renderSavedTechSub(subcat){
     ${content}
   </div>`;
   view.querySelectorAll('.fds-file').forEach(el=>el.onclick=()=>renderSavedFile('tech',el.dataset.sid));
+  if($('#emptyGo'))$('#emptyGo').onclick=renderLibrary;
   window.scrollTo(0,0);
 }
 

@@ -20,6 +20,16 @@ setInterval(saveSessionTime,60000);
 document.addEventListener("visibilitychange",()=>{ if(document.hidden) saveSessionTime(); });
 window.addEventListener("beforeunload",saveSessionTime);
 
+/* ---------- reader keyboard shortcuts ---------- */
+/* ArrowLeft / ArrowRight move between sentences while a story is open */
+document.addEventListener("keydown",e=>{
+  if(!document.body.classList.contains("reading-mode")) return;
+  const tag=(e.target.tagName||"").toLowerCase();
+  if(tag==="input"||tag==="textarea"||e.target.isContentEditable) return;
+  if(e.key==="ArrowRight"){ const b=document.getElementById("abNext"); if(b){ e.preventDefault(); b.click(); } }
+  else if(e.key==="ArrowLeft"){ const b=document.getElementById("abPrev"); if(b){ e.preventDefault(); b.click(); } }
+});
+
 /* ---------- theme ---------- */
 (function(){
   const html=document.documentElement;

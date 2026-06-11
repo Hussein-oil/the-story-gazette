@@ -2,7 +2,7 @@
 function renderLibrary(){
   leaveReader(); setActiveNav("library"); setBack(false);
   const stories=STORIES.filter(s=>s.level===curLevel);
-  const tabs=LEVELS.map(l=>`<button data-level="${l}" class="${l===curLevel?'on':''}">${l}<span class="lab">${l==='A1'?t('Start'):l==='C1'?t('Master'):t('Grow')}</span></button>`).join("");
+  const tabs=LEVELS.map(l=>`<button data-level="${l}" class="${l===curLevel?'on':''}" aria-pressed="${l===curLevel}">${l}<span class="lab">${l==='A1'?t('Start'):l==='C1'?t('Master'):t('Grow')}</span></button>`).join("");
   const CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
   let cards=stories.map((s,i)=>`
     <div class="card reveal" data-story="${s.id}" style="animation-delay:${i*50}ms" role="button" tabindex="0" aria-label="${esc(s.title)} — ${s.level}, ${readMin(s)} min read">
@@ -75,6 +75,7 @@ function splitSentences(p){ return (p.match(/[^.!?]+[.!?]*["']?/g)||[p]).map(x=>
 
 function renderReader(){
   const s = curStory;
+  curTechStory=null; /* so the selection sheet saves into this story, not a previously open tech story */
   document.body.classList.add("reading-mode");
   hideSheet();
   setActiveNav("library");
@@ -128,8 +129,8 @@ function renderReader(){
       <div class="reader-head reveal">${head}</div>
       ${audioPanel}
       <div class="mode-toggle reveal">
-        <button data-mode="word" class="${mode==='word'?'on':''}">${t('Tap a word')}</button>
-        <button data-mode="sentence" class="${mode==='sentence'?'on':''}">${t('Tap a sentence')}</button>
+        <button data-mode="word" class="${mode==='word'?'on':''}" aria-pressed="${mode==='word'}">${t('Tap a word')}</button>
+        <button data-mode="sentence" class="${mode==='sentence'?'on':''}" aria-pressed="${mode==='sentence'}">${t('Tap a sentence')}</button>
       </div>
       <div class="hint reveal">${siteLang.code==='en'?'Tap any <b>word</b> or switch to <b>sentence</b> mode, then choose: listen, slow down, translate, or save it to your level folder.':esc(t('Tap any word or switch to sentence mode, then choose: listen, slow down, translate, or save it to your level folder.'))}</div>
       <div class="story-body ${mode}-mode reveal" id="storyBody">${paras}</div>
@@ -153,7 +154,16 @@ function renderReader(){
     mode=b.dataset.mode; clearSel(); hideSheet();
     body.classList.toggle("word-mode",mode==="word");
     body.classList.toggle("sentence-mode",mode==="sentence");
-    view.querySelectorAll(".mode-toggle button").forEach(x=>x.classList.toggle("on",x.dataset.mode===mode));
+    view.querySelectorAll(".mode-toggle button").forEach(x=>{
+      const on=x.dataset.mode===mode;
+      x.classList.toggle("on",on); x.setAttribute("aria-pressed",on);
+    });
+  });
+  /* fade illustrations in as they finish loading */
+  view.querySelectorAll(".story-img").forEach(img=>{
+    if(img.complete) return;
+    img.style.opacity="0";
+    img.addEventListener("load",()=>{ img.style.transition="opacity .45s ease"; img.style.opacity="1"; },{once:true});
   });
   body.onclick=onBodyClick;
   body.onkeydown=onBodyKeydown;
@@ -273,7 +283,9 @@ function setPlayIcon(p){
 }
 function updatePos(){ const el=$("#abPos");if(el)el.textContent=(sentenceEls.length?(abIndex+1):0)+" / "+sentenceEls.length; }
 function hl(i){ document.querySelectorAll(".reading").forEach(e=>e.classList.remove("reading"));
-  const el=sentenceEls[i]; if(el){ el.classList.add("reading"); el.scrollIntoView({behavior:"smooth",block:"center"}); } }
+  const el=sentenceEls[i]; if(el){ el.classList.add("reading");
+    const smooth=!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches);
+    el.scrollIntoView({behavior:smooth?"smooth":"auto",block:"center"}); } }
 function playFrom(i){
   if(i>=sentenceEls.length){ stopAudio(); abIndex=0; updatePos(); return; }
   abIndex=i; abPlaying=true; setPlayIcon(true); updatePos(); hl(i);
