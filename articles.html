@@ -120,6 +120,10 @@ footer{background:var(--paper);}
 header.mast{padding:18px 20px 12px;border-bottom:1px solid var(--line);}
 .mast-top{display:flex;justify-content:space-between;align-items:center;
   font-family:var(--type);font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--ink-soft);}
+.mast-home{display:inline-flex;align-items:center;gap:5px;text-decoration:none;
+  color:var(--ink-soft);font-family:var(--type);font-size:10px;letter-spacing:1px;text-transform:uppercase;
+  border:1px solid var(--line);padding:4px 10px;transition:.15s;}
+.mast-home:hover{background:var(--ink);color:var(--paper);border-color:var(--ink);}
 .nameplate{font-family:var(--display);font-weight:900;text-align:center;line-height:.92;
   font-size:clamp(40px,9vw,76px);margin:8px 0 4px;letter-spacing:-1px;}
 .nameplate em{color:var(--accent);font-style:normal;}
@@ -143,6 +147,11 @@ nav.topbar{position:sticky;top:0;z-index:45;background:var(--paper);
 .tb-nav a.on{background:var(--ink);color:var(--paper);}
 .tb-nav a:hover:not(.on){background:var(--paper-2);}
 @media(max-width:480px){.tb-nav a,.tb-nav button{padding:14px 11px;font-size:11px;}.tb-home{font-size:16px;}}
+.tb-home-btn{display:flex;align-items:center;gap:7px;background:none;border:none;border-left:1px solid var(--line);
+  padding:14px 20px;font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:1px;
+  text-transform:uppercase;color:var(--ink-soft);text-decoration:none;cursor:pointer;transition:.15s;}
+.tb-home-btn:hover{background:var(--ink);color:var(--paper);}
+@media(max-width:480px){.tb-home-btn{padding:14px 12px;font-size:11px;}}
 
 /* theme toggle */
 .theme-toggle{padding:0 14px;line-height:0;}
@@ -285,7 +294,7 @@ footer a:hover{color:var(--accent);}
 <div id="app">
 
   <header class="mast">
-    <div class="mast-top"><span>The NovaHubs Journal</span><span>Free English Learning Guides</span></div>
+    <div class="mast-top"><a href="the-story-gazette.html" class="mast-home"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Home</a><span>The NovaHubs Journal</span></div>
     <div class="nameplate"><a href="the-story-gazette.html">Nova<em>Hubs</em></a></div>
     <div class="mast-kicker">The Reading Press</div>
     <div class="mast-rule"><span>Read &middot; Listen &middot; Remember</span></div>
@@ -296,13 +305,10 @@ footer a:hover{color:var(--accent);}
       <a href="the-story-gazette.html" class="tb-home">Nova<em>Hubs</em></a>
     </div>
     <div class="tb-nav">
-      <a href="the-story-gazette.html">Library</a>
-      <a href="the-story-gazette.html?tab=saved">Folders</a>
-      <a href="the-story-gazette.html?tab=settings" class="theme-toggle" aria-label="Settings" title="Settings"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></a>
-      <button id="themeToggle" class="theme-toggle" aria-label="Toggle light/dark theme">
-        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      </button>
+      <a href="the-story-gazette.html" class="tb-home-btn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Home
+      </a>
     </div>
   </nav>
 
