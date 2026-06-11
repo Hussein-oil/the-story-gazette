@@ -179,9 +179,7 @@ function renderReader(){
     if(abPlaying){const i=abIndex;stopAudio();playFrom(i);}
   });
   function setVP(key,val){
-    voicePref[key]=val;
-    localStorage.setItem('nh-voice-pref',JSON.stringify(voicePref));
-    pickVoice();
+    setVoicePref(key,val);
     view.querySelectorAll("#vcUS,#vcGB").forEach(b=>b.classList.toggle('on',(b.id==='vcUS'&&voicePref.accent==='US')||(b.id==='vcGB'&&voicePref.accent==='GB')));
     view.querySelectorAll("#vcM,#vcF").forEach(b=>b.classList.toggle('on',(b.id==='vcM'&&voicePref.gender==='M')||(b.id==='vcF'&&voicePref.gender==='F')));
     if(abPlaying){const i=abIndex;stopAudio();playFrom(i);}
@@ -291,5 +289,5 @@ function playFrom(i){
   abIndex=i; abPlaying=true; setPlayIcon(true); updatePos(); hl(i);
   speak(sentenceEls[i].dataset.text, abRate, ()=>{ if(abPlaying) playFrom(i+1); });
 }
-function stopAudio(){ abPlaying=false; if("speechSynthesis" in window) speechSynthesis.cancel(); setPlayIcon(false);
+function stopAudio(){ abPlaying=false; cancelSpeech(); setPlayIcon(false);
   document.querySelectorAll(".reading").forEach(e=>e.classList.remove("reading")); }

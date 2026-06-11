@@ -118,9 +118,7 @@ function renderSettings(){
   $("#setChangeSiteLang").onclick=()=>showSiteLangModal(true);
   $("#setChangeLevel").onclick=()=>showLevelModal(true);
   function applyVP(key,val){
-    voicePref[key]=val;
-    localStorage.setItem('nh-voice-pref',JSON.stringify(voicePref));
-    pickVoice();
+    setVoicePref(key,val);
     $("#vpUS").classList.toggle('on',voicePref.accent==='US');
     $("#vpGB").classList.toggle('on',voicePref.accent==='GB');
     $("#vpM").classList.toggle('on',voicePref.gender==='M');

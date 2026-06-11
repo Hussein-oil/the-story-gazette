@@ -118,7 +118,7 @@ function renderTechReader(){
   $('#abNext').onclick=()=>{ const w=abPlaying;stopAudio();abIndex=Math.min(abIndex+1,sentenceEls.length-1);updatePos();hl(abIndex);if(w)playFrom(abIndex); };
   $('#abPrev').onclick=()=>{ const w=abPlaying;stopAudio();abIndex=Math.max(abIndex-1,0);updatePos();hl(abIndex);if(w)playFrom(abIndex); };
   view.querySelectorAll('.sp[data-r]').forEach(b=>b.onclick=()=>{ abRate=+b.dataset.r; view.querySelectorAll('.sp[data-r]').forEach(x=>x.classList.toggle('on',x===b)); if(abPlaying){const i=abIndex;stopAudio();playFrom(i);} });
-  function setTVP(key,val){ voicePref[key]=val; localStorage.setItem('nh-voice-pref',JSON.stringify(voicePref)); pickVoice(); view.querySelectorAll('#tcUS,#tcGB').forEach(b=>b.classList.toggle('on',(b.id==='tcUS'&&voicePref.accent==='US')||(b.id==='tcGB'&&voicePref.accent==='GB'))); view.querySelectorAll('#tcM,#tcF').forEach(b=>b.classList.toggle('on',(b.id==='tcM'&&voicePref.gender==='M')||(b.id==='tcF'&&voicePref.gender==='F'))); if(abPlaying){const i=abIndex;stopAudio();playFrom(i);} }
+  function setTVP(key,val){ setVoicePref(key,val); view.querySelectorAll('#tcUS,#tcGB').forEach(b=>b.classList.toggle('on',(b.id==='tcUS'&&voicePref.accent==='US')||(b.id==='tcGB'&&voicePref.accent==='GB'))); view.querySelectorAll('#tcM,#tcF').forEach(b=>b.classList.toggle('on',(b.id==='tcM'&&voicePref.gender==='M')||(b.id==='tcF'&&voicePref.gender==='F'))); if(abPlaying){const i=abIndex;stopAudio();playFrom(i);} }
   $('#tcUS').onclick=()=>setTVP('accent','US'); $('#tcGB').onclick=()=>setTVP('accent','GB');
   $('#tcM').onclick=()=>setTVP('gender','M');  $('#tcF').onclick=()=>setTVP('gender','F');
   window.scrollTo(0,0);
