@@ -483,8 +483,10 @@
   @media(max-width:520px){.tg-item{grid-template-columns:1fr;gap:4px;}.tech-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));}}
 
 /* ===== Phase 4 UX polish ===== */
-/* gentle cross-fade when a view is swapped in */
-.wrap,.wrap-read,.quiz-wrap,.settings-wrap{animation:viewfade .28s ease;}
+/* gentle cross-fade when a view is swapped in.
+   Must NOT touch elements that also carry .reveal: replacing their `rise`
+   animation would strip its `forwards` fill and leave them at opacity:0. */
+.wrap:not(.reveal),.wrap-read:not(.reveal),.quiz-wrap:not(.reveal),.settings-wrap:not(.reveal){animation:viewfade .28s ease;}
 @keyframes viewfade{from{opacity:.45;}to{opacity:1;}}
 /* story illustrations: paper-toned placeholder while loading */
 .story-img{background:var(--paper-2);}
