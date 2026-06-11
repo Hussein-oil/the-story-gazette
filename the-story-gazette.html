@@ -10,7 +10,8 @@
 <meta property="og:type" content="website" />
 <meta property="og:title" content="NovaHubs — Learn English by Reading" />
 <meta property="og:description" content="Read, listen and remember. Graded English stories A1 to C1 with audio and instant Arabic translation." />
-<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:card" content="summary" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23ddd0b0'/%3E%3Ctext x='32' y='47' font-family='Georgia,serif' font-weight='900' font-size='46' text-anchor='middle' fill='%23a63422'%3EN%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=Special+Elite&display=swap" rel="stylesheet">
@@ -39,7 +40,7 @@
   [data-theme="dark"]{
     --bg-outer:#0a0806; --app-border:rgba(255,255,255,.07);
     --paper:#1a1510; --paper-2:#221c12;
-    --ink:#ede8e0; --ink-soft:#9a9080; --faint:#55493a;
+    --ink:#ede8e0; --ink-soft:#9a9080; --faint:#8a7d6a;
     --line:#2e2518;
     --accent:#c44232; --accent-2:#d46a30;
     --sel:rgba(196,66,50,.22); --read:rgba(208,106,48,.28);
@@ -137,7 +138,6 @@
   .cap .au{font-style:italic;color:var(--ink-soft);font-size:12px;margin-top:2px;}
   .cap .meta{font-family:var(--type);font-size:8.5px;letter-spacing:.6px;color:var(--faint);text-transform:uppercase;
     margin-top:5px;border-top:1px solid var(--line);padding-top:5px;}
-  .cover-photo{aspect-ratio:300/420;object-fit:cover;}
   .forth .cover{display:flex;align-items:center;justify-content:center;text-align:center;aspect-ratio:300/420;
     border-style:dashed;box-shadow:none;background:repeating-linear-gradient(45deg,var(--paper),var(--paper) 8px,var(--paper-2) 8px,var(--paper-2) 16px);}
   .forth .ftxt{font-family:var(--display);font-style:italic;color:var(--faint);font-size:14px;padding:10px;}
@@ -182,6 +182,7 @@
   .mode-toggle button.on{background:var(--ink);color:var(--paper);}
   .story-body{font-size:18px;line-height:1.85;}
   .story-body p{margin:0 0 17px;text-align:justify;hyphens:manual;}
+  @media(max-width:600px){.story-body p{text-align:left;}}
   .story-body p:first-of-type::first-letter{font-family:var(--display);font-weight:900;font-size:62px;float:left;
     line-height:.72;margin:7px 10px 0 0;color:var(--ink);}
   .w{cursor:pointer;border-radius:2px;padding:0 .5px;transition:background .12s;}
@@ -197,7 +198,7 @@
   .endcap{text-align:center;font-family:var(--type);font-size:11px;letter-spacing:3px;color:var(--faint);margin:26px 0 8px;}
   .endcap::before,.endcap::after{content:"———— ";color:var(--line);}
 
-  /* ===== bottom dock (sheet stacked above audio bar — no overlap) ===== */
+  /* ===== bottom dock (selection sheet) ===== */
   #dock{position:fixed;left:0;right:0;bottom:0;z-index:60;display:none;justify-content:center;pointer-events:none;}
   body.reading-mode #dock{display:flex;}
   .dock-inner{width:100%;max-width:760px;display:flex;flex-direction:column;pointer-events:auto;
@@ -205,8 +206,8 @@
   #sheet{background:var(--paper);border-top:3px double var(--line);max-height:0;overflow:hidden;transition:max-height .3s ease;}
   #sheet.up{max-height:62vh;overflow:auto;}
   .sheet-pad{padding:14px 18px 16px;position:relative;}
-  .sheet-pad .sclose{position:absolute;right:14px;top:12px;background:none;border:none;cursor:pointer;color:var(--ink-soft);}
-  .sheet-pad .sclose svg{width:17px;height:17px;}
+  .sheet-pad .sclose{position:absolute;right:8px;top:6px;background:none;border:none;cursor:pointer;color:var(--ink-soft);padding:8px;}
+  .sheet-pad .sclose svg{width:17px;height:17px;display:block;}
   .sheet-kicker{font-family:var(--type);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);}
   .sheet-en{font-family:var(--display);font-size:19px;line-height:1.3;margin:6px 0 2px;padding-right:22px;}
   .sheet-ar{font-size:19px;line-height:1.65;color:var(--ink);
@@ -220,7 +221,6 @@
   .act svg{width:19px;height:19px;}
   .act.saved{background:var(--ink);color:var(--paper);}
   .act:active{transform:translateY(1px);}
-  body.article-mode #actSave{display:none;}
 
   /* ===== inline story audio player ===== */
   .reader-audio{margin-top:18px;border:1px solid var(--line);background:var(--paper-2);padding:14px 16px;}
@@ -231,13 +231,13 @@
   .ra-play:hover{opacity:.82;}
   .ra-play svg{width:14px;height:14px;flex-shrink:0;}
   .ra-nav{display:flex;align-items:center;gap:5px;}
-  .ra-nav-btn{background:var(--paper);border:1px solid var(--line);cursor:pointer;width:30px;height:30px;
+  .ra-nav-btn{background:var(--paper);border:1px solid var(--line);cursor:pointer;width:38px;height:38px;
     display:flex;align-items:center;justify-content:center;color:var(--ink);transition:.15s;}
   .ra-nav-btn:hover{background:var(--ink);color:var(--paper);}
   .ra-nav-btn svg{width:12px;height:12px;}
   .ra-pos{font-family:var(--type);font-size:10px;letter-spacing:.5px;color:var(--faint);min-width:44px;text-align:center;}
   .speed-strip{display:flex;margin-top:12px;border:1px solid var(--line);width:fit-content;}
-  .sp{background:var(--paper);border:none;border-right:1px solid var(--line);cursor:pointer;font-family:var(--type);font-size:10px;letter-spacing:.3px;padding:6px 11px;color:var(--faint);transition:.15s;}
+  .sp{background:var(--paper);border:none;border-right:1px solid var(--line);cursor:pointer;font-family:var(--type);font-size:10px;letter-spacing:.3px;padding:10px 13px;color:var(--faint);transition:.15s;}
   .sp:last-child{border-right:none;}
   .sp:hover{background:var(--paper-2);color:var(--ink);}
   .sp.on{background:var(--ink);color:var(--paper);font-weight:700;}
@@ -263,22 +263,10 @@
     border-top:1px dashed var(--line);margin-top:9px;padding:9px 15px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;}
   .clip .clip-src .from{flex:1;min-width:120px;}
   .clip .clip-tools{display:flex;gap:6px;}
-  .clip .ct{background:none;border:1px solid var(--line);cursor:pointer;padding:5px 8px;color:var(--ink);
+  .clip .ct{background:none;border:1px solid var(--line);cursor:pointer;padding:8px 10px;color:var(--ink);
     display:flex;align-items:center;gap:4px;font-family:var(--type);font-size:8px;letter-spacing:.5px;text-transform:uppercase;}
   .clip .ct svg{width:12px;height:12px;}
   .clip .ct.del{color:var(--accent);border-color:var(--accent);}
-
-  /* articles list */
-  .art-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:22px;}
-  .art-card{border:1px solid var(--line);background:var(--paper);cursor:pointer;display:flex;flex-direction:column;transition:.18s;}
-  .art-card:hover{transform:translateY(-2px);box-shadow:5px 7px 0 rgba(33,29,23,.14);}
-  .art-card .ac-cov{height:120px;border-bottom:1px solid var(--line);}
-  .art-card .ac-cov svg{width:100%;height:100%;display:block;}
-  .art-card .ac-body{padding:14px 15px 16px;}
-  .art-card .ac-kicker{font-family:var(--type);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent);}
-  .art-card h3{font-family:var(--display);font-weight:900;font-size:19px;line-height:1.1;margin:6px 0 6px;}
-  .art-card p{font-size:14px;color:var(--ink-soft);line-height:1.5;margin:0;}
-  .art-card .ac-meta{font-family:var(--type);font-size:9px;color:var(--faint);letter-spacing:.5px;margin-top:10px;text-transform:uppercase;}
 
   /* save-hint notice */
   .save-hint{display:flex;align-items:flex-start;gap:12px;
@@ -296,8 +284,8 @@
     background:var(--ink);color:var(--paper);padding:4px 9px;display:flex;align-items:center;gap:5px;}
   .save-hint-step svg{width:11px;height:11px;}
   .save-hint-arrow{color:var(--faint);font-size:12px;}
-  .save-hint-close{position:absolute;top:8px;right:10px;background:none;border:none;cursor:pointer;
-    color:var(--faint);font-size:16px;line-height:1;padding:2px 4px;}
+  .save-hint-close{position:absolute;top:4px;right:4px;background:none;border:none;cursor:pointer;
+    color:var(--faint);font-size:16px;line-height:1;padding:8px 10px;}
   .save-hint-close:hover{color:var(--ink);}
 
   .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(20px);
@@ -453,6 +441,9 @@
   .lm-confirm{width:100%;background:var(--accent);color:#fff;border:none;cursor:pointer;font-family:var(--display);font-weight:700;letter-spacing:1px;text-transform:uppercase;font-size:13px;padding:13px;transition:.15s;}
   .lm-confirm:hover:not(:disabled){opacity:.85;}
   .lm-confirm:disabled{opacity:.35;cursor:not-allowed;}
+  .lm-cancel{width:100%;margin-top:8px;background:none;border:1px solid var(--line);color:var(--ink-soft);cursor:pointer;
+    font-family:var(--type);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:10px;transition:.15s;}
+  .lm-cancel:hover{background:var(--paper-2);color:var(--ink);}
 
   /* ===== level picker modal ===== */
   .lv-overlay{position:fixed;inset:0;background:rgba(33,29,23,.75);z-index:400;display:flex;align-items:center;justify-content:center;padding:20px;}
@@ -528,14 +519,14 @@
   .tech-card-cov svg{width:100%;height:100%;}
   .tech-card-body{padding:10px 12px 12px;}
   .tech-card-level{font-family:var(--type);font-size:7.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--faint);margin-bottom:4px;}
-  .tech-card-title{font-family:var(--head);font-size:13px;line-height:1.3;color:var(--ink);margin-bottom:4px;}
+  .tech-card-title{font-family:var(--display);font-weight:700;font-size:13px;line-height:1.3;color:var(--ink);margin-bottom:4px;}
   .tech-card-blurb{font-size:11px;color:var(--ink-soft);line-height:1.5;}
   /* Glossary at end of tech story */
   .tech-glossary{margin-top:48px;border-top:2px solid var(--line);padding-top:28px;}
   .tg-head{font-family:var(--type);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--faint);margin-bottom:18px;}
   .tg-list{display:flex;flex-direction:column;gap:0;}
   .tg-item{padding:12px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:160px 1fr;gap:16px;align-items:baseline;}
-  .tg-term{font-family:var(--head);font-weight:700;font-size:14px;color:var(--ink);}
+  .tg-term{font-family:var(--display);font-weight:700;font-size:14px;color:var(--ink);}
   .tg-def{font-size:13px;color:var(--ink-soft);line-height:1.6;}
   @media(max-width:520px){.tg-item{grid-template-columns:1fr;gap:4px;}.tech-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));}}
 </style>
@@ -557,7 +548,7 @@
     <div class="tb-nav">
       <button data-nav="library" data-i18n="English Stories" class="on">English Stories</button>
       <button data-nav="saved" data-i18n="Folders">Folders</button>
-      <button data-nav="tech">Tech</button>
+      <button data-nav="tech" data-i18n="Tech">Tech</button>
       <button data-nav="settings" id="settingsBtn" title="Settings" aria-label="Settings"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
       <button id="themeBtn" title="Toggle theme" aria-label="Toggle dark mode"></button>
     </div>
@@ -571,7 +562,7 @@
   </footer>
 </div>
 
-<!-- bottom dock: selection sheet stacked ABOVE the audio bar -->
+<!-- bottom dock: selection sheet -->
 <div id="dock">
   <div class="dock-inner">
     <div id="sheet">
@@ -583,17 +574,17 @@
         <div class="sheet-en" id="sheetEn"></div>
         <div class="sheet-ar" id="sheetAr"></div>
         <div class="sheet-actions">
-          <button class="act" id="actListen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5a4 4 0 010 7"/></svg>Listen</button>
-          <button class="act" id="actSlow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9.5a3 3 0 010 5"/></svg>Slow</button>
-          <button class="act" id="actTranslate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h7M7.5 5c0 4-2 7-4 8M5 9c0 2 2 4 5 5"/><path d="M13 19l4-9 4 9M14.5 16h5"/></svg>Translate</button>
-          <button class="act" id="actSave"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg>Save</button>
+          <button class="act" id="actListen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5a4 4 0 010 7"/></svg><span data-i18n="Listen">Listen</span></button>
+          <button class="act" id="actSlow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9.5a3 3 0 010 5"/></svg><span data-i18n="Slow">Slow</span></button>
+          <button class="act" id="actTranslate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h7M7.5 5c0 4-2 7-4 8M5 9c0 2 2 4 5 5"/><path d="M13 19l4-9 4 9M14.5 16h5"/></svg><span data-i18n="Translate">Translate</span></button>
+          <button class="act" id="actSave"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h12v16l-6-4-6 4V4z"/></svg><span data-i18n="Save">Save</span></button>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <noscript>
   <div style="padding:30px;font-family:Georgia,serif;">
@@ -631,13 +622,11 @@ const M = {
 };
 
 let coverUID=0;
-function cover(motif, label, accent, coverImg){
-  if(coverImg) return `<img src="${esc(coverImg)}" class="cover cover-photo" alt="">`;
+function cover(motif, label, accent){
   const uid="ht"+(++coverUID);
   return `<svg class="cover" viewBox="0 0 300 420" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
     <defs>
       <pattern id="${uid}" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="${accent}" opacity="0.55"/></pattern>
-      <filter id="${uid}g"><feGaussianBlur stdDeviation="18" result="b"/><feComposite in="SourceGraphic" in2="b" operator="over"/></filter>
     </defs>
     <rect width="300" height="420" fill="#e9dcc1"/>
     <rect x="10" y="10" width="280" height="400" fill="none" stroke="#2a251d" stroke-width="2"/>
@@ -655,22 +644,13 @@ function cover(motif, label, accent, coverImg){
     <text x="150" y="386" text-anchor="middle" font-family="Special Elite, monospace" font-size="9" letter-spacing="2" fill="#8a7f6c">FROM LIFE &amp; IMAGINATION</text>
   </svg>`;
 }
-function bannerCover(motif, accent){
-  const uid="hb"+(++coverUID);
-  return `<svg viewBox="0 0 300 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-    <defs><pattern id="${uid}" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="${accent}" opacity="0.45"/></pattern></defs>
-    <rect width="300" height="120" fill="#e9dcc1"/>
-    <rect width="300" height="120" fill="url(#${uid})" opacity="0.25"/>
-    <rect x="124" y="14" width="52" height="92" fill="${accent}" opacity="0.1"/>
-    <g transform="translate(94,4) scale(0.93)" fill="none" stroke="${accent}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">${M[motif]||M.book}</g>
-  </svg>`;
-}
 
 /* ---------- stories ---------- */
 const STORIES = [
   { id:"a1-1", level:"A1", motif:"door", title:"The Red Door", author:"E. Hartwell",
     blurb:"A quiet man, a small bird, and a door the colour of morning. Sometimes a friend is the smallest thing in the garden.",
-    images:["images/A1/The red dor/1.webp",["images/A1/The red dor/2.webp","images/A1/The red dor/3.webp"],"images/A1/The red dor/4.webp"],
+    images:["images/A1/The red door/1.webp",["images/A1/The red door/2.webp","images/A1/The red door/3.webp"],"images/A1/The red door/4.webp"],
+    imgSize:[2816,1536],
     body:[
       "Tom lives in a small town. His house is white. The door is red. Every morning, he opens the red door. He looks at the sky. The sky is blue. A small bird sits on the wall. The bird is brown.",
       "\"Good morning, bird,\" says Tom. The bird looks at him. Then it flies away. Tom walks to the shop. He buys bread and milk. The shop is near the park. In the park, children play. A dog runs after a ball. Tom smiles. He likes the park.",
@@ -679,6 +659,7 @@ const STORIES = [
   { id:"a1-2", level:"A1", motif:"cat", title:"Anna and the Cat", author:"M. Foley",
     blurb:"Pip the cat likes milk and sleep. But one afternoon Pip is gone, and a small search begins in the garden.",
     images:["images/A1/Anna and the Cat/1.webp","images/A1/Anna and the Cat/2.webp","images/A1/Anna and the Cat/3.webp"],
+    imgSize:[1672,941],
     body:[
       "Anna has a cat. The cat is black and white. Its name is Pip. Pip is small. Pip likes milk. Every day, Anna gives Pip some milk. Pip drinks the milk. Then Pip sleeps on the bed.",
       "One day, Pip is not in the house. Anna looks in the kitchen. No cat. She looks under the bed. No cat. She looks in the garden. There is Pip! Pip is in a tree. \"Come down, Pip,\" says Anna. But Pip does not come down.",
@@ -687,6 +668,7 @@ const STORIES = [
   { id:"a1-3", level:"A1", motif:"market", title:"A Day at the Market", author:"R. Okonkwo",
     blurb:"On Saturday the market is full of colour and noise. Mrs. Lee has a basket, a few coins, and a soft spot for one pink flower.",
     images:["images/A1/A Day at the Market/1.webp","images/A1/A Day at the Market/2.webp","images/A1/A Day at the Market/3.webp","images/A1/A Day at the Market/4.webp"],
+    imgSize:[2816,1536],
     body:[
       "It is Saturday. Mrs. Lee goes to the market. The market is big. There are many people. There are red apples and green pears. There is yellow cheese and fresh fish. Mrs. Lee has a basket.",
       "\"How much is the bread?\" she asks. \"Two coins,\" says the man. Mrs. Lee buys the bread. She buys apples too. The apples are sweet. She buys some fish for dinner.",
@@ -816,50 +798,6 @@ const STORIES = [
       "But something in the lines stayed with her. The character, like Vivienne herself, was a person whom the world had decided to overlook, and the few minutes she was given were her only chance to insist that she had existed, that she had mattered. Vivienne understood the part completely, because she was living it.",
       "On opening night, she walked onto the stage for the first time in fifteen years. The audience, who did not recognise her, grew quiet not out of respect but out of attention, for there was something in the way this old woman held the silence that made them lean forward in their seats. When she finished, there was a pause, the rarest and most honest of all theatrical sounds, before the applause began.",
       "Vivienne stood very still in the light. She had not come back to be remembered, she realised. She had come back to remind herself of what she had always known: that the work, and not the fame, had been the point all along."
-    ]}
-];
-
-/* ---------- journal / SEO articles ---------- */
-const ARTICLES = [
-  { id:"art-1", motif:"book", kicker:"Method", title:"How to Learn English by Reading Short Stories", author:"The NovaHubs Editors", date:"Reading Guide",
-    excerpt:"Short stories give you complete, meaningful language in a small package. Here is how to turn them into real progress.",
-    body:[
-      "Reading short stories is one of the most effective and pleasant ways to learn a language. Unlike isolated word lists, a story gives you whole sentences in a real context. You see how words behave, which other words they keep company with, and what they actually mean when people use them.",
-      "Begin with a level that feels slightly easy. If you understand almost every word, you can pay attention to rhythm and meaning rather than struggling. As your confidence grows, move up one level at a time. The jump from A1 to A2, or B1 to B2, should feel like a gentle step, not a cliff.",
-      "Read each story twice. The first time, read for the story itself: enjoy it, follow the characters, and do not stop for every unknown word. The second time, read more slowly. Now you can tap the words you did not know, listen to them, and save the sentences that taught you something.",
-      "Finally, return to your saved sentences a few days later. The act of meeting a sentence again, in your own collection, is what moves it from short-term memory into lasting knowledge. Reading builds the input; reviewing turns it into ability."
-    ]},
-  { id:"art-2", motif:"ear", kicker:"Listening", title:"The Power of Slow Listening: Training Your Ear", author:"The NovaHubs Editors", date:"Listening Guide",
-    excerpt:"Native speech is fast. Slowing it down, on purpose, is one of the fastest ways to understand it at full speed.",
-    body:[
-      "Many learners can read a sentence perfectly but freeze when they hear it spoken. The reason is simple: the eye can pause, but the ear cannot. Spoken English connects words, drops sounds, and moves quickly. Your ear needs training, and slow listening is the gym.",
-      "When you slow a sentence down, you can hear each individual sound and where one word ends and the next begins. This is the moment your brain builds a clear picture of the sentence. Listen slowly two or three times until the shape of the sentence is familiar.",
-      "Then switch back to normal speed. Suddenly, the same sentence that sounded like noise becomes a row of words you recognise. This contrast, between slow and normal, is the lesson. It teaches your ear what the fast version is really made of.",
-      "Use slow listening for difficult sentences only. For everything else, listen at normal speed, because that is the speed you will meet in conversation. Slow is the practice room; normal is the performance."
-    ]},
-  { id:"art-3", motif:"quill", kicker:"Memory", title:"Build a Sentence Bank: Why Saving Sentences Works", author:"The NovaHubs Editors", date:"Vocabulary Guide",
-    excerpt:"Single words are slippery. Whole sentences stick. A personal sentence bank is the quiet engine of real fluency.",
-    body:[
-      "When you save a single word, you save only half of what you need. You may remember the word but forget how to use it, which preposition follows it, or which tense it lives in. When you save a full sentence, you keep all of that information together, exactly as a native speaker would use it.",
-      "A sentence bank is simply a personal collection of the sentences that taught you something. The best sentences to save are not the hardest ones, but the most useful ones: sentences you can imagine saying yourself one day.",
-      "Organise your bank by level, and keep a note of where each sentence came from. The story behind a sentence is a powerful memory hook. Months later, you will recall not just the words, but the lighthouse, the night train, or the quiet aunt who kept the family's letters.",
-      "Review your bank in short, frequent sessions rather than long, rare ones. Five minutes a day will teach you more than one hour a week. Fluency is built from many small returns to the same material."
-    ]},
-  { id:"art-4", motif:"map", kicker:"Roadmap", title:"From A1 to C1: A Practical Reading Roadmap", author:"The NovaHubs Editors", date:"Level Guide",
-    excerpt:"The CEFR levels are not mysterious. Here is what each one means for a reader, and how to know when you are ready to climb.",
-    body:[
-      "The Common European Framework, or CEFR, describes language ability in six levels, from A1 to C2. For a reader, these levels are a helpful map. They tell you what kind of text to expect and how much effort it will demand.",
-      "At A1 and A2, sentences are short and direct. You read about everyday life: homes, food, family, simple journeys. The goal is to feel comfortable and to build a base of the most common words, which carry most of the meaning in any language.",
-      "At B1 and B2, the text grows. Sentences join together, characters have feelings and reasons, and the writer expects you to follow ideas across paragraphs. This is where reading becomes truly interesting, because the stories begin to reward attention.",
-      "At C1, the language becomes literary. Writers use nuance, irony, and long sentences that hold several ideas at once. You are no longer just understanding the words; you are appreciating the choices behind them. Move up only when your current level feels genuinely comfortable, and the climb will feel natural."
-    ]},
-  { id:"art-5", motif:"lamp", kicker:"Practice", title:"Reading Aloud: How Your Voice Helps You Remember", author:"The NovaHubs Editors", date:"Speaking Guide",
-    excerpt:"Reading silently uses one channel. Reading aloud uses three at once, and that is exactly why it works so well.",
-    body:[
-      "When you read silently, you use your eyes. When you read aloud, you add two more channels: your voice, which shapes the sounds, and your ears, which hear them. Three channels working together build a much stronger memory than one channel alone.",
-      "Reading aloud also reveals the music of English. You feel where the stress falls, where a sentence rises, and where it pauses. These patterns are part of meaning, and you cannot truly own a sentence until you can say it with the right rhythm.",
-      "A good method is to listen first, then imitate. Play a sentence, listen to how it moves, and then say it yourself in the same way. Compare. Adjust. Repeat until your version sounds close to the original. This is gentle, private practice with no audience and no pressure.",
-      "Do this for just a few sentences from each story you read. Over weeks, your mouth learns the shapes that your eyes already know, and the gap between reading and speaking quietly closes."
     ]}
 ];
 
@@ -1096,7 +1034,7 @@ const TECH_STORIES=[
      {term:'Cooling System',def:'Fans or liquid coolers that remove heat generated by computer components during operation.'},
      {term:'Expansion Slot',def:'A slot on the motherboard where additional components such as a GPU or network card can be installed.'}
    ]},
-  {id:'tc-b2',cat:'comp',level:'Beginner',motif:'mountain',title:'The Memory Tower',author:'NovaHubs Tech',
+  {id:'tc-b2',cat:'comp',level:'Beginner',motif:'mountains',title:'The Memory Tower',author:'NovaHubs Tech',
    blurb:'Hard drives, SSDs, cloud storage — how computers remember everything even when turned off.',
    body:[
      "Computers need to store data permanently: programs, photos, videos, and documents must all survive when the machine is turned off. The traditional solution is the hard drive — a device that uses spinning magnetic disks to read and write data. Hard drives can store enormous amounts of data at a low cost per gigabyte.",
@@ -1237,8 +1175,12 @@ LEVELS.forEach(l=>SAVED[l]=[]); SAVED['tech']=[];
 
 /* ---------- text to speech ---------- */
 let VOICE=null;
+let VOICE_GENDER_MATCHED=false;
 let _vpRetries=0;
 let voicePref=(()=>{ try{ return JSON.parse(localStorage.getItem('nh-voice-pref'))||{accent:'GB',gender:'F'}; }catch(e){ return {accent:'GB',gender:'F'}; } })();
+/* common voice-name hints per gender across Windows/macOS/Android/iOS voice packs */
+const _VOICE_F=/female|zira|hazel|susan|libby|sonia|aria|jenny|jessa|samantha|victoria|karen|serena|moira|tessa|fiona|kate|emma|ava|allison|stephanie|catherine/i;
+const _VOICE_M=/male|david|mark|george|ryan|guy|daniel|james|alex\b|fred|oliver|thomas|arthur|brian|christopher|eric/i;
 function pickVoice(){
   if(!("speechSynthesis" in window)) return;
   const vs=speechSynthesis.getVoices();
@@ -1246,7 +1188,12 @@ function pickVoice(){
   _vpRetries=0;
   const re=voicePref.accent==='US'?/en[-_]US/i:/en[-_]GB/i;
   const fb=voicePref.accent==='US'?/en[-_]GB/i:/en[-_]US/i;
-  VOICE=vs.find(v=>re.test(v.lang))||vs.find(v=>fb.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||vs[0]||null;
+  const isF=v=>_VOICE_F.test(v.name);
+  const matchGender=voicePref.gender==='M'?(v=>!isF(v)&&_VOICE_M.test(v.name)):isF;
+  const pools=[vs.filter(v=>re.test(v.lang)),vs.filter(v=>fb.test(v.lang)),vs.filter(v=>/^en/i.test(v.lang)),vs];
+  VOICE=null; VOICE_GENDER_MATCHED=false;
+  for(const p of pools){ const g=p.find(matchGender); if(g){ VOICE=g; VOICE_GENDER_MATCHED=true; break; } }
+  if(!VOICE) for(const p of pools){ if(p.length){ VOICE=p[0]; break; } }
 }
 if("speechSynthesis" in window){ pickVoice(); speechSynthesis.onvoiceschanged=()=>{ _vpRetries=0; pickVoice(); }; }
 function speak(text, rate, onend){
@@ -1257,12 +1204,21 @@ function speak(text, rate, onend){
   if(fv){ u.voice=fv; u.lang=fv.lang; }
   else { u.lang=voicePref.accent==='US'?'en-US':'en-GB'; }
   u.rate=rate;
-  u.pitch=voicePref.gender==='M'?0.75:1.2;
+  /* pitch shift only as a fallback when no genuinely gendered voice was found */
+  u.pitch=VOICE_GENDER_MATCHED?1:(voicePref.gender==='M'?0.75:1.2);
   if(onend) u.onend=onend;
   speechSynthesis.speak(u);
 }
 
 /* ---------- translation (free public APIs, works in any browser) ---------- */
+/* cap the cache so localStorage never fills up; oldest entries are evicted first */
+const TR_MAX=800;
+function rememberTR(key,out){
+  TR[key]=out;
+  const keys=Object.keys(TR);
+  if(keys.length>TR_MAX) keys.slice(0,keys.length-TR_MAX).forEach(k=>delete TR[k]);
+  saveJSON("nh-tr",TR);
+}
 async function translate(text){
   const tl=nativeLang.code;
   const key=text.trim()+"||"+tl;
@@ -1271,15 +1227,15 @@ async function translate(text){
   try{
     const r=await fetch("https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl="+encodeURIComponent(tl)+"&dt=t&q="+encodeURIComponent(text.trim()));
     if(r.ok){ const d=await r.json(); const out=(d[0]||[]).map(s=>s[0]).join("").trim();
-      if(out){ TR[key]=out; saveJSON("nh-tr",TR); return out; } }
+      if(out){ rememberTR(key,out); return out; } }
   }catch(e){}
   // 2) MyMemory fallback
   try{
     const r=await fetch("https://api.mymemory.translated.net/get?q="+encodeURIComponent(text.trim())+"&langpair=en|"+encodeURIComponent(tl));
     if(r.ok){ const d=await r.json(); const out=(d.responseData&&d.responseData.translatedText||"").trim();
-      if(out){ TR[key]=out; saveJSON("nh-tr",TR); return out; } }
+      if(out){ rememberTR(key,out); return out; } }
   }catch(e){}
-  return "Translation unavailable — please check your internet connection.";
+  return null;
 }
 
 /* ---------- language picker ---------- */
@@ -1384,20 +1340,34 @@ function initLang(){
   if(savedSite){ siteLang=savedSite==='en'?{code:'en',name:'English',native:'English',rtl:false}:LANGS.find(l=>l.code===savedSite)||siteLang; }
 }
 
+/* shared modal a11y helpers: focus trap + optional Escape-to-close */
+function trapModal(ov, onEscape){
+  ov.addEventListener("keydown",e=>{
+    if(e.key==="Escape"&&onEscape){ e.preventDefault(); onEscape(); return; }
+    if(e.key!=="Tab") return;
+    const focusables=ov.querySelectorAll('button:not(:disabled),[href],input,select,textarea,[tabindex]:not([tabindex="-1"])');
+    if(!focusables.length) return;
+    const first=focusables[0], last=focusables[focusables.length-1];
+    if(e.shiftKey&&document.activeElement===first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey&&document.activeElement===last){ e.preventDefault(); first.focus(); }
+  });
+}
+
 function showLangModal(fromSettings){
   const ov=document.createElement("div"); ov.id="langOverlay";
-  ov.innerHTML=`<div id="langModal">
+  ov.innerHTML=`<div id="langModal" role="dialog" aria-modal="true" aria-labelledby="langModalTitle">
     <div class="lm-head">
       <div class="lm-kicker">Welcome to NovaHubs</div>
-      <h2 class="lm-title">What is your native language?</h2>
+      <h2 class="lm-title" id="langModalTitle">What is your native language?</h2>
       <p class="lm-sub">Words and sentences will be translated into this language as you read. You can set the site interface language separately in Settings.</p>
     </div>
     <div class="lm-search-wrap">
-      <input id="langSearch" class="lm-search" type="text" placeholder="Search your language…" autocomplete="off" spellcheck="false">
+      <input id="langSearch" class="lm-search" type="text" placeholder="Search your language…" autocomplete="off" spellcheck="false" aria-label="Search your language">
     </div>
     <div class="lm-list" id="langList"></div>
     <div class="lm-foot">
       <button class="lm-confirm" id="langConfirm" disabled>Confirm &rarr;</button>
+      ${fromSettings?`<button class="lm-cancel" id="langCancel">Cancel</button>`:""}
     </div>
   </div>`;
   document.body.appendChild(ov);
@@ -1409,7 +1379,7 @@ function showLangModal(fromSettings){
     const f=q.toLowerCase().trim();
     const filtered=f?LANGS.filter(l=>l.name.toLowerCase().includes(f)||l.native.toLowerCase().includes(f)):LANGS;
     if(!filtered.length){ list.innerHTML=`<div class="lm-empty">No language found</div>`; return; }
-    list.innerHTML=filtered.map(l=>`<div class="lm-item${sel&&sel.code===l.code?" on":""}" data-code="${l.code}"><span class="lm-native">${l.native}</span><span class="lm-eng">${l.name}</span></div>`).join("");
+    list.innerHTML=filtered.map(l=>`<div class="lm-item${sel&&sel.code===l.code?" on":""}" data-code="${l.code}" role="button" tabindex="0"><span class="lm-native">${l.native}</span><span class="lm-eng">${l.name}</span></div>`).join("");
     list.querySelectorAll(".lm-item").forEach(el=>el.onclick=()=>{ sel=LANGS.find(l=>l.code===el.dataset.code); confirm.disabled=false; render(search.value); });
   }
   render("");
@@ -1422,6 +1392,8 @@ function showLangModal(fromSettings){
     if(fromSettings) renderSettings();
     else if(!lsGet("nh-user-level")) showLevelModal(false);
   };
+  if(fromSettings){ ov.querySelector("#langCancel").onclick=()=>ov.remove(); }
+  trapModal(ov, fromSettings?()=>ov.remove():null);
   setTimeout(()=>search.focus(),120);
 }
 
@@ -1429,18 +1401,19 @@ function showSiteLangModal(fromSettings){
   const EN={code:'en',name:'English',native:'English',rtl:false};
   const SITE_LANGS=[EN,...LANGS];
   const ov=document.createElement("div"); ov.id="siteLangOverlay";
-  ov.innerHTML=`<div id="langModal">
+  ov.innerHTML=`<div id="langModal" role="dialog" aria-modal="true" aria-labelledby="siteLangModalTitle">
     <div class="lm-head">
       <div class="lm-kicker">Interface Language</div>
-      <h2 class="lm-title">Choose Site Language</h2>
+      <h2 class="lm-title" id="siteLangModalTitle">Choose Site Language</h2>
       <p class="lm-sub">The site interface will appear in this language. Educational content (stories, quizzes, articles) always stays in English.</p>
     </div>
     <div class="lm-search-wrap">
-      <input id="siteLangSearch" class="lm-search" type="text" placeholder="Search language…" autocomplete="off" spellcheck="false">
+      <input id="siteLangSearch" class="lm-search" type="text" placeholder="Search language…" autocomplete="off" spellcheck="false" aria-label="Search language">
     </div>
     <div class="lm-list" id="siteLangList"></div>
     <div class="lm-foot">
       <button class="lm-confirm" id="siteLangConfirm">Confirm &rarr;</button>
+      <button class="lm-cancel" id="siteLangCancel">Cancel</button>
     </div>
   </div>`;
   document.body.appendChild(ov);
@@ -1452,11 +1425,13 @@ function showSiteLangModal(fromSettings){
     const f=q.toLowerCase().trim();
     const filtered=f?SITE_LANGS.filter(l=>l.name.toLowerCase().includes(f)||l.native.toLowerCase().includes(f)):SITE_LANGS;
     if(!filtered.length){ list.innerHTML=`<div class="lm-empty">No language found</div>`; return; }
-    list.innerHTML=filtered.map(l=>`<div class="lm-item${sel&&sel.code===l.code?" on":""}" data-code="${l.code}"><span class="lm-native">${l.native}</span><span class="lm-eng">${l.name}</span></div>`).join("");
+    list.innerHTML=filtered.map(l=>`<div class="lm-item${sel&&sel.code===l.code?" on":""}" data-code="${l.code}" role="button" tabindex="0"><span class="lm-native">${l.native}</span><span class="lm-eng">${l.name}</span></div>`).join("");
     list.querySelectorAll(".lm-item").forEach(el=>el.onclick=()=>{ sel=SITE_LANGS.find(l=>l.code===el.dataset.code); render(search.value); });
   }
   render("");
   search.oninput=()=>render(search.value);
+  ov.querySelector("#siteLangCancel").onclick=()=>ov.remove();
+  trapModal(ov,()=>ov.remove());
   confirm.onclick=async()=>{
     siteLang=sel; lsSet("nh-site-lang",sel.code);
     UI_TR={}; localStorage.removeItem('nh-ui-tr-'+sel.code);
@@ -1478,17 +1453,18 @@ function showLevelModal(fromSettings){
   ];
   const ov=document.createElement("div"); ov.className="lv-overlay";
   let sel=fromSettings?curLevel:null;
-  ov.innerHTML=`<div class="lv-box">
-    <div class="lv-title">What is your English level?</div>
+  ov.innerHTML=`<div class="lv-box" role="dialog" aria-modal="true" aria-labelledby="lvModalTitle">
+    <div class="lv-title" id="lvModalTitle">What is your English level?</div>
     <p class="lv-sub">Choose the level that best matches your current reading ability.</p>
     <div class="lv-grid" id="lvGrid">
-      ${CARDS.map(c=>`<div class="lv-card${sel===c.code?" on":""}" data-code="${c.code}">
+      ${CARDS.map(c=>`<div class="lv-card${sel===c.code?" on":""}" data-code="${c.code}" role="button" tabindex="0" aria-label="${c.code} — ${c.name}">
         <div class="lv-badge">${c.code}</div>
         <div class="lv-name">${c.name}</div>
         <div class="lv-desc">${c.desc}</div>
       </div>`).join("")}
     </div>
     <button class="lv-confirm" id="lvConfirm"${sel?"":" disabled"}>Continue &rarr;</button>
+    ${fromSettings?`<button class="lm-cancel" id="lvCancel">Cancel</button>`:""}
   </div>`;
   document.body.appendChild(ov);
   const grid=ov.querySelector("#lvGrid");
@@ -1507,21 +1483,29 @@ function showLevelModal(fromSettings){
     if(fromSettings) renderSettings();
     else renderLibrary();
   };
+  if(fromSettings){ ov.querySelector("#lvCancel").onclick=()=>ov.remove(); }
+  trapModal(ov, fromSettings?()=>ov.remove():null);
+  setTimeout(()=>{ const first=grid.querySelector(".lv-card"); if(first) first.focus(); },120);
 }
 
 /* ---------- UI i18n ---------- */
 const UI_KEYS=[
-  "English Stories","Folders","Settings","Back","Details","Story","Journal",
+  "English Stories","Folders","Settings","Back","Details","Story","Tech",
   "English Stories — Reading Press","Choose a Tale to Your Level",
   "Start","Master","Grow","min read","Read","In the press",
   "Level","Reading time","Words","Format","Read & Listen",
   "Read this story","Listen to a sample","Playing a sample",
   "Narrated by the NovaHubs reader","Chapter One",
-  "Listen to Story",
+  "Listen to Story","Stop",
+  "Tap a word","Tap a sentence",
+  "Tap any word or switch to sentence mode, then choose: listen, slow down, translate, or save it to your level folder.",
+  "Done Reading · Take the Quiz","Download PDF","THE END",
+  "Selected Word","Selected Sentence","Listen","Slow","Translate","Save","Saved","Hear",
   "Fill in the Blank","Dictation — Listen & Write","Write in English",
   "Type the missing word…","Type in English…","Type what you heard…",
   "Press Play to hear the sentence, then type exactly what you heard.",
   "Play Sentence","Play Again","Check","Skip","Question","of",
+  "Next →","See Results","Excellent!","Well done!","Good effort!","Keep practising!",
   "Story Quiz","Vocabulary Review","Back to Story","Back to Folders","Try Again",
   "My Saved Sentences","Quiz","Export","Start Practice",
   "No items yet — read more stories and save words first!",
@@ -1536,7 +1520,10 @@ const UI_KEYS=[
   "Progress exported!","Progress restored!","Invalid file","Could not read file",
   "Keep Your Progress Safe","progress complete","level mastered!","keep reading to reach Level",
   "Import","Removed","The Memory Folders","Start Review","saved",
-  "Site Language","Native Language","translating to",
+  "Site Language","translating to",
+  "Translation unavailable — check your connection and tap Translate to retry.",
+  "Beginner","Elementary","Intermediate","Upper Intermediate","Advanced","Technology",
+  "Learn with Stories","Programming","Computer","English Levels",
   "Voice"
 ];
 let UI_TR={};
@@ -1559,16 +1546,27 @@ async function translateUIStrings(){
   try{ const c=localStorage.getItem('nh-ui-tr-'+code); if(c) UI_TR=JSON.parse(c)||{}; }catch(e){ UI_TR={}; }
   const missing=UI_KEYS.filter(k=>!(k in UI_TR));
   if(!missing.length) return;
-  const results=await Promise.all(missing.map(k=>translateUIRaw(k,code)));
-  missing.forEach((k,i)=>{ UI_TR[k]=results[i]; });
-  localStorage.setItem('nh-ui-tr-'+code,JSON.stringify(UI_TR));
+  /* batch keys newline-joined into a handful of requests instead of one request per key;
+     fall back to per-key requests for a chunk whose line count comes back mangled */
+  const CHUNK=25;
+  for(let i=0;i<missing.length;i+=CHUNK){
+    const chunk=missing.slice(i,i+CHUNK);
+    const res=await translateUIRaw(chunk.join("\n"),code);
+    const lines=res.split("\n");
+    if(lines.length===chunk.length){ chunk.forEach((k,j)=>{ UI_TR[k]=lines[j].trim()||k; }); }
+    else {
+      const seq=await Promise.all(chunk.map(k=>translateUIRaw(k,code)));
+      chunk.forEach((k,j)=>{ UI_TR[k]=seq[j]; });
+    }
+  }
+  try{ localStorage.setItem('nh-ui-tr-'+code,JSON.stringify(UI_TR)); }catch(e){}
 }
 function applyUITranslations(){
   document.querySelectorAll('[data-i18n]').forEach(el=>{ el.textContent=t(el.dataset.i18n); });
 }
 
 /* ---------- state ---------- */
-let curLevel="A1", curStory=null, curArticle=null, isArticle=false;
+let curLevel="A1", curStory=null;
 let curTechCat='prog', curTechLevel='Zero', curTechStory=null;
 let curSavedFolder=null, curSavedSubFolder=null, curSavedFile=null;
 const _TECH_SUB={prog:{color:'#2e6da4',label:'Programming',desc:'Web & Software'},comp:{color:'#6b4a9e',label:'Computer',desc:'Hardware & Systems'}};
@@ -1587,11 +1585,10 @@ function setBack(show, label, handler){
 }
 
 /* ---------- views ---------- */
-function leaveReader(){ document.body.classList.remove("reading-mode","article-mode"); hideSheet(); stopAudio(); }
+function leaveReader(){ document.body.classList.remove("reading-mode"); hideSheet(); stopAudio(); }
 
 function setNav(section){
   if(section==="library") renderLibrary();
-  else if(section==="articles") renderArticles();
   else if(section==="settings") renderSettings();
   else if(section==="tech") renderTech();
   else renderSaved();
@@ -1614,11 +1611,11 @@ function renderTech(){
   leaveReader(); setActiveNav("tech"); setBack(false);
   const accent=TECH_ACCENTS[curTechCat][curTechLevel];
   const stories=TECH_STORIES.filter(s=>s.cat===curTechCat&&s.level===curTechLevel);
-  const catTabs=['prog','comp'].map(c=>`<button class="${c===curTechCat?'on':''}" data-tcat="${c}">${c==='prog'?'Programming':'Computer'}</button>`).join('');
+  const catTabs=['prog','comp'].map(c=>`<button class="${c===curTechCat?'on':''}" data-tcat="${c}">${c==='prog'?t('Programming'):t('Computer')}</button>`).join('');
   const lvlTabs=TECH_LEVELS.map(l=>`<button class="${l===curTechLevel?'on':''}" data-tlvl="${l}" style="${l===curTechLevel?'border-color:'+accent+';color:'+accent:''}"><span>${l}</span><span class="tl-sub">${TECH_LEVEL_DESC[curTechCat][l]}</span></button>`).join('');
   const _LVL_BADGE={Zero:'Z0',Beginner:'Bg',Intermediate:'Im',Advanced:'Av',Pro:'Pr'};
   const cards=stories.map((s,i)=>`
-    <div class="card reveal" data-tid="${s.id}" style="animation-delay:${i*60}ms">
+    <div class="card reveal" data-tid="${s.id}" style="animation-delay:${i*60}ms" role="button" tabindex="0" aria-label="${esc(s.title)} — ${s.level}">
       ${cover(s.motif, _LVL_BADGE[s.level], accent)}
       <div class="cap">
         <div class="tt">${esc(s.title)}</div>
@@ -1628,8 +1625,8 @@ function renderTech(){
     </div>`).join('');
   view.innerHTML=`<div class="wrap">
     <div class="sec-head" style="margin-bottom:28px">
-      <div class="sec-kicker">Technology</div>
-      <h1 class="sec-title">Learn with Stories</h1>
+      <div class="sec-kicker">${t('Technology')}</div>
+      <h1 class="sec-title">${t('Learn with Stories')}</h1>
       <div class="sec-sub">Programming and computer terminology told through simple, clear narratives. Each story ends with a full glossary of the terms it teaches.</div>
     </div>
     <div class="tech-cats">${catTabs}</div>
@@ -1664,7 +1661,7 @@ function renderTechReader(){
   const glossary=`<div class="tech-glossary">
     <div class="tg-head">Terms in This Story</div>
     <div class="tg-list">
-      ${s.terms.map(t=>`<div class="tg-item"><span class="tg-term" style="color:${accent}">${esc(t.term)}</span><span class="tg-def">${esc(t.def)}</span></div>`).join('')}
+      ${s.terms.map(term=>`<div class="tg-item"><span class="tg-term" style="color:${accent}">${esc(term.term)}</span><span class="tg-def">${esc(term.def)}</span></div>`).join('')}
     </div>
   </div>`;
 
@@ -1677,7 +1674,7 @@ function renderTechReader(){
       </div>
       <div class="reader-audio reveal" style="animation-delay:120ms">
         <div class="ra-main">
-          <button class="ra-play" id="abPlay" style="background:${accent};border-color:${accent}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l13 7-13 7z"/></svg>Listen</button>
+          <button class="ra-play" id="abPlay" style="background:${accent};border-color:${accent}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l13 7-13 7z"/></svg>${t('Listen to Story')}</button>
           <div class="ra-nav">
             <button class="ra-nav-btn" id="abPrev"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h2v14H7zM20 5L10 12l10 7z"/></svg></button>
             <span class="ra-pos" id="abPos">— / —</span>
@@ -1688,8 +1685,8 @@ function renderTechReader(){
         <div class="voice-row-r"><span class="vl">Accent</span><div class="vs-g"><button class="sp${voicePref.accent==='US'?' on':''}" id="tcUS">US</button><button class="sp${voicePref.accent==='GB'?' on':''}" id="tcGB">GB</button></div><span class="vl">Voice</span><div class="vs-g"><button class="sp${voicePref.gender==='M'?' on':''}" id="tcM">Male</button><button class="sp${voicePref.gender==='F'?' on':''}" id="tcF">Female</button></div></div>
       </div>
       <div class="mode-toggle reveal">
-        <button data-mode="word" class="on">Tap a word</button>
-        <button data-mode="sentence">Tap a sentence</button>
+        <button data-mode="word" class="on">${t('Tap a word')}</button>
+        <button data-mode="sentence">${t('Tap a sentence')}</button>
       </div>
       <div class="story-body word-mode reveal" id="storyBody">${paras}</div>
       ${glossary}
@@ -1723,8 +1720,8 @@ function renderLibrary(){
   const tabs=LEVELS.map(l=>`<button data-level="${l}" class="${l===curLevel?'on':''}">${l}<span class="lab">${l==='A1'?t('Start'):l==='C1'?t('Master'):t('Grow')}</span></button>`).join("");
   const CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
   let cards=stories.map((s,i)=>`
-    <div class="card reveal" data-story="${s.id}" style="animation-delay:${i*50}ms">
-      ${cover(s.motif,s.level,ACCENTS[s.level],s.cover)}
+    <div class="card reveal" data-story="${s.id}" style="animation-delay:${i*50}ms" role="button" tabindex="0" aria-label="${esc(s.title)} — ${s.level}, ${readMin(s)} min read">
+      ${cover(s.motif,s.level,ACCENTS[s.level])}
       ${DONE.has(s.id)?`<div class="done-stamp">${CHECK}${t('Read')}</div>`:''}
       <div class="cap"><div class="tt">${esc(s.title)}</div><div class="au">by ${esc(s.author)}</div>
       <div class="meta">${s.level} &middot; ${readMin(s)} ${t('min read')}</div></div>
@@ -1768,7 +1765,7 @@ function renderDetail(){
   const s=curStory;
   view.innerHTML=`<div class="wrap-read reveal">
       <div class="detail-cover">
-        ${cover(s.motif,s.level,ACCENTS[s.level],s.cover)}
+        ${cover(s.motif,s.level,ACCENTS[s.level])}
         <div class="detail-head"><span class="lvl-tag">Level ${s.level}</span>
           <h1>${esc(s.title)}</h1><div class="by">by ${esc(s.author)}</div>
           <div class="nar">${t('Narrated by the NovaHubs reader')}</div></div>
@@ -1784,40 +1781,38 @@ function renderDetail(){
         <button class="btn btn-primary" id="readBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16M4 12h16M4 19h11"/></svg>${t('Read this story')}</button>
         <button class="btn btn-ghost" id="sampleBtn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l13 7-13 7z"/></svg>${t('Listen to a sample')}</button>
       </div></div>`;
-  $("#readBtn").onclick=()=>renderReader(false);
-  $("#sampleBtn").onclick=()=>{ const first=s.body[0].split(/(?<=[.!?])\s+/)[0]; speak(first,1); toast(t("Playing a sample")); };
+  $("#readBtn").onclick=()=>renderReader();
+  $("#sampleBtn").onclick=()=>{ const first=splitSentences(s.body[0])[0]; speak(first,1); toast(t("Playing a sample")); };
   window.scrollTo(0,0);
 }
 
 function splitSentences(p){ return (p.match(/[^.!?]+[.!?]*["']?/g)||[p]).map(x=>x.trim()).filter(Boolean); }
 
-function renderReader(asArticle){
-  const s = asArticle?curArticle:curStory;
-  isArticle=!!asArticle;
+function renderReader(){
+  const s = curStory;
   document.body.classList.add("reading-mode");
-  document.body.classList.toggle("article-mode", isArticle);
   hideSheet();
-  setActiveNav(isArticle?"articles":"library");
-  setBack(true, isArticle?"Journal":"Details", isArticle?()=>{openArticle(curArticle.id,true);}:renderDetail);
+  setActiveNav("library");
+  setBack(true, "Details", renderDetail);
 
   let si=0;
+  const dim=s.imgSize?` width="${s.imgSize[0]}" height="${s.imgSize[1]}"`:"";
+  const fig=src=>`<figure class="story-figure"><img src="${esc(src)}" alt="${esc("Illustration from "+s.title)}" class="story-img" loading="lazy" decoding="async"${dim}></figure>`;
   const paras=s.body.map((p,i)=>{
     const inner=splitSentences(p).map(sent=>{
       const words=sent.split(/(\s+)/).map(tok=> /^\s+$/.test(tok)?tok:`<span class="w">${esc(tok)}</span>`).join("");
-      return `<span class="s" data-si="${si++}" data-text="${esc(sent)}">${words}</span>`;
+      return `<span class="s" data-si="${si++}" data-text="${esc(sent)}" tabindex="0">${words}</span>`;
     }).join(" ");
     const slot=s.images&&s.images[i];
     const img=!slot?"":Array.isArray(slot)
-      ?`<div class="story-fig-row">${slot.map(src=>`<figure class="story-figure story-figure-half"><img src="${esc(src)}" alt="" class="story-img"></figure>`).join("")}</div>`
-      :`<figure class="story-figure"><img src="${esc(slot)}" alt="" class="story-img"></figure>`;
+      ?`<div class="story-fig-row">${slot.map(fig).join("")}</div>`
+      :fig(slot);
     return `<p>${inner}</p>${img}`;
-  }).join("")+(s.images&&s.images[s.body.length]&&!Array.isArray(s.images[s.body.length])?`<figure class="story-figure"><img src="${esc(s.images[s.body.length])}" alt="" class="story-img"></figure>`:"");
+  }).join("")+(s.images&&s.images[s.body.length]&&!Array.isArray(s.images[s.body.length])?fig(s.images[s.body.length]):"");
 
-  const head = isArticle
-    ? `<span class="lvl-tag">${esc(s.kicker)} &middot; Journal</span><h1>${esc(s.title)}</h1><div class="by">by ${esc(s.author)}</div>`
-    : `<span class="lvl-tag">Chapter One &middot; Level ${s.level}</span><h1>${esc(s.title)}</h1><div class="by">by ${esc(s.author)}</div>`;
+  const head = `<span class="lvl-tag">Chapter One &middot; Level ${s.level}</span><h1>${esc(s.title)}</h1><div class="by">by ${esc(s.author)}</div>`;
 
-  const audioPanel=!isArticle?`<div class="reader-audio reveal" style="animation-delay:120ms">
+  const audioPanel=`<div class="reader-audio reveal" style="animation-delay:120ms">
     <div class="ra-main">
       <button class="ra-play" id="abPlay"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l13 7-13 7z"/></svg>${t('Listen to Story')}</button>
       <div class="ra-nav">
@@ -1841,25 +1836,25 @@ function renderReader(asArticle){
         <button class="sp${voicePref.gender==='F'?' on':''}" id="vcF">Female</button>
       </div>
     </div>
-  </div>`:'';
+  </div>`;
 
   view.innerHTML=`<div class="wrap-read">
       <article>
       <div class="reader-head reveal">${head}</div>
       ${audioPanel}
       <div class="mode-toggle reveal">
-        <button data-mode="word" class="${mode==='word'?'on':''}">Tap a word</button>
-        <button data-mode="sentence" class="${mode==='sentence'?'on':''}">Tap a sentence</button>
+        <button data-mode="word" class="${mode==='word'?'on':''}">${t('Tap a word')}</button>
+        <button data-mode="sentence" class="${mode==='sentence'?'on':''}">${t('Tap a sentence')}</button>
       </div>
-      <div class="hint reveal">Tap any <b>word</b> or switch to <b>sentence</b> mode, then choose: listen, slow down, translate${isArticle?'':', or save it to your level folder'}.</div>
+      <div class="hint reveal">${siteLang.code==='en'?'Tap any <b>word</b> or switch to <b>sentence</b> mode, then choose: listen, slow down, translate, or save it to your level folder.':esc(t('Tap any word or switch to sentence mode, then choose: listen, slow down, translate, or save it to your level folder.'))}</div>
       <div class="story-body ${mode}-mode reveal" id="storyBody">${paras}</div>
-      <div class="endcap">${isArticle?'END OF ARTICLE':'THE END'}</div>
-      ${!isArticle?`<div class="done-row">
+      <div class="endcap">${esc(t('THE END'))}</div>
+      <div class="done-row">
         <button class="done-btn" id="doneBtn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          Done Reading · Take the Quiz
+          ${t('Done Reading · Take the Quiz')}
         </button>
-      </div>`:''}
+      </div>
       <div class="dl-pdf-row">
         <button class="dl-pdf" id="dlPdf">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -1876,34 +1871,33 @@ function renderReader(asArticle){
     view.querySelectorAll(".mode-toggle button").forEach(x=>x.classList.toggle("on",x.dataset.mode===mode));
   });
   body.onclick=onBodyClick;
+  body.onkeydown=onBodyKeydown;
   sentenceEls=Array.from(body.querySelectorAll(".s"));
   abRate=1; abIndex=0; abPlaying=false; setPlayIcon(false); updatePos();
-  if(!isArticle){
-    $("#doneBtn").onclick=()=>startQuiz(qzGenStory(s),"story",s);
-    $("#abPlay").onclick=()=>{ abPlaying?stopAudio():playFrom(abIndex); };
-    $("#abNext").onclick=()=>{ const w=abPlaying; stopAudio(); abIndex=Math.min(abIndex+1,Math.max(0,sentenceEls.length-1)); updatePos(); hl(abIndex); if(w) playFrom(abIndex); };
-    $("#abPrev").onclick=()=>{ const w=abPlaying; stopAudio(); abIndex=Math.max(abIndex-1,0); updatePos(); hl(abIndex); if(w) playFrom(abIndex); };
-    view.querySelectorAll(".sp[data-r]").forEach(b=>b.onclick=()=>{
-      abRate=+b.dataset.r;
-      view.querySelectorAll(".sp[data-r]").forEach(x=>x.classList.toggle("on",x===b));
-      if(abPlaying){const i=abIndex;stopAudio();playFrom(i);}
-    });
-    function setVP(key,val){
-      voicePref[key]=val;
-      localStorage.setItem('nh-voice-pref',JSON.stringify(voicePref));
-      pickVoice();
-      view.querySelectorAll("#vcUS,#vcGB").forEach(b=>b.classList.toggle('on',(b.id==='vcUS'&&voicePref.accent==='US')||(b.id==='vcGB'&&voicePref.accent==='GB')));
-      view.querySelectorAll("#vcM,#vcF").forEach(b=>b.classList.toggle('on',(b.id==='vcM'&&voicePref.gender==='M')||(b.id==='vcF'&&voicePref.gender==='F')));
-      if(abPlaying){const i=abIndex;stopAudio();playFrom(i);}
-    }
-    $("#vcUS").onclick=()=>setVP('accent','US');
-    $("#vcGB").onclick=()=>setVP('accent','GB');
-    $("#vcM").onclick=()=>setVP('gender','M');
-    $("#vcF").onclick=()=>setVP('gender','F');
+  $("#doneBtn").onclick=()=>startQuiz(qzGenStory(s),"story",s);
+  $("#abPlay").onclick=()=>{ abPlaying?stopAudio():playFrom(abIndex); };
+  $("#abNext").onclick=()=>{ const w=abPlaying; stopAudio(); abIndex=Math.min(abIndex+1,Math.max(0,sentenceEls.length-1)); updatePos(); hl(abIndex); if(w) playFrom(abIndex); };
+  $("#abPrev").onclick=()=>{ const w=abPlaying; stopAudio(); abIndex=Math.max(abIndex-1,0); updatePos(); hl(abIndex); if(w) playFrom(abIndex); };
+  view.querySelectorAll(".sp[data-r]").forEach(b=>b.onclick=()=>{
+    abRate=+b.dataset.r;
+    view.querySelectorAll(".sp[data-r]").forEach(x=>x.classList.toggle("on",x===b));
+    if(abPlaying){const i=abIndex;stopAudio();playFrom(i);}
+  });
+  function setVP(key,val){
+    voicePref[key]=val;
+    localStorage.setItem('nh-voice-pref',JSON.stringify(voicePref));
+    pickVoice();
+    view.querySelectorAll("#vcUS,#vcGB").forEach(b=>b.classList.toggle('on',(b.id==='vcUS'&&voicePref.accent==='US')||(b.id==='vcGB'&&voicePref.accent==='GB')));
+    view.querySelectorAll("#vcM,#vcF").forEach(b=>b.classList.toggle('on',(b.id==='vcM'&&voicePref.gender==='M')||(b.id==='vcF'&&voicePref.gender==='F')));
+    if(abPlaying){const i=abIndex;stopAudio();playFrom(i);}
   }
+  $("#vcUS").onclick=()=>setVP('accent','US');
+  $("#vcGB").onclick=()=>setVP('accent','GB');
+  $("#vcM").onclick=()=>setVP('gender','M');
+  $("#vcF").onclick=()=>setVP('gender','F');
   $("#dlPdf").onclick=()=>{
     const orig=document.title;
-    document.title=s.title+" — The Story Gazette";
+    document.title=s.title+" — NovaHubs";
     window.print();
     window.onafterprint=()=>{ document.title=orig; window.onafterprint=null; };
   };
@@ -1914,12 +1908,20 @@ function onBodyClick(e){
   if(mode==="word"){
     const w=e.target.closest(".w"); if(!w) return;
     clearSel(); w.classList.add("sel"); selText=w.textContent.replace(/[.,;:!?"'()\u201C\u201D]/g,"").trim();
-    openSheet(selText,"Selected Word");
+    openSheet(selText,t("Selected Word"));
   }else{
     const sen=e.target.closest(".s"); if(!sen) return;
     clearSel(); sen.classList.add("sel"); selText=sen.dataset.text;
-    openSheet(selText,"Selected Sentence");
+    openSheet(selText,t("Selected Sentence"));
   }
+}
+/* keyboard: Enter/Space on a focused sentence selects it (in any mode) */
+function onBodyKeydown(e){
+  if(e.key!=="Enter"&&e.key!==" ") return;
+  const sen=e.target.closest(".s"); if(!sen) return;
+  e.preventDefault();
+  clearSel(); sen.classList.add("sel"); selText=sen.dataset.text;
+  openSheet(selText,t("Selected Sentence"));
 }
 function clearSel(){ document.querySelectorAll(".sel").forEach(el=>el.classList.remove("sel")); }
 
@@ -1934,19 +1936,35 @@ function openSheet(text,kicker){
 }
 function hideSheet(){ sheet.classList.remove("up"); }
 $("#sheetClose").onclick=()=>{hideSheet();clearSel();};
-$("#actListen").onclick=()=>speak(selText,1);
-$("#actSlow").onclick=()=>speak(selText,0.6);
+/* keyboard activation for div-based buttons, and Escape to close the sheet */
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"&&sheet.classList.contains("up")){ hideSheet(); clearSel(); return; }
+  if(e.key!=="Enter"&&e.key!==" ") return;
+  const el=e.target;
+  if(el instanceof Element && el.matches('[role="button"]') && el.tagName!=="BUTTON" && el.tagName!=="A"){
+    e.preventDefault(); el.click();
+  }
+});
+/* stop any running story narration first so its onend chain cannot resume over the selection */
+$("#actListen").onclick=()=>{ stopAudio(); speak(selText,1); };
+$("#actSlow").onclick=()=>{ stopAudio(); speak(selText,0.6); };
 $("#actTranslate").onclick=async()=>{
   const ar=$("#sheetAr");
   ar.className="sheet-ar show loading";
   ar.textContent=t("translating to")+" "+nativeLang.name+" …";
   ar.style.direction=nativeLang.rtl?"rtl":"ltr";
   ar.style.textAlign=nativeLang.rtl?"right":"left";
-  const out=await translate(selText);
-  ar.className="sheet-ar show"; ar.textContent=out;
+  const requested=selText;
+  const out=await translate(requested);
+  if(requested!==selText) return; /* selection changed while we were waiting */
+  if(out){ ar.className="sheet-ar show"; ar.textContent=out; }
+  else {
+    ar.className="sheet-ar show loading";
+    ar.style.direction="ltr"; ar.style.textAlign="left";
+    ar.textContent=t("Translation unavailable — check your connection and tap Translate to retry.");
+  }
 };
 $("#actSave").onclick=async()=>{
-  if(isArticle) return;
   const story=curStory||curTechStory;
   if(!story) return;
   const lvl=(!curStory&&curTechStory)?'tech':curStory.level;
@@ -1955,19 +1973,18 @@ $("#actSave").onclick=async()=>{
   await saveJSON("nh-saved",SAVED); refreshSaveBtn(); toast("Saved to "+lvl+" folder");
 };
 function refreshSaveBtn(){
-  if(isArticle) return;
   const story=curStory||curTechStory;
   const lvl=(!curStory&&curTechStory)?'tech':(story?story.level:null);
   const ex=lvl && story && SAVED[lvl] && SAVED[lvl].some(x=>x.en===selText && x.storyId===story.id);
-  const btn=$("#actSave"); btn.classList.toggle("saved",!!ex); btn.lastChild.textContent=ex?"Saved":"Save";
+  const btn=$("#actSave"); btn.classList.toggle("saved",!!ex); btn.lastChild.textContent=ex?t("Saved"):t("Save");
 }
 
 /* ---------- audio ---------- */
 function setPlayIcon(p){
   const btn=$("#abPlay");if(!btn)return;
   btn.innerHTML=p
-    ?`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>Stop`
-    :`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l13 7-13 7z"/></svg>Listen to Story`;
+    ?`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>${esc(t('Stop'))}`
+    :`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l13 7-13 7z"/></svg>${esc(t('Listen to Story'))}`;
 }
 function updatePos(){ const el=$("#abPos");if(el)el.textContent=(sentenceEls.length?(abIndex+1):0)+" / "+sentenceEls.length; }
 function hl(i){ document.querySelectorAll(".reading").forEach(e=>e.classList.remove("reading"));
@@ -1979,30 +1996,6 @@ function playFrom(i){
 }
 function stopAudio(){ abPlaying=false; if("speechSynthesis" in window) speechSynthesis.cancel(); setPlayIcon(false);
   document.querySelectorAll(".reading").forEach(e=>e.classList.remove("reading")); }
-
-/* ---------- journal ---------- */
-function renderArticles(){
-  leaveReader(); setActiveNav("articles"); setBack(false);
-  const cards=ARTICLES.map((a,i)=>`
-    <div class="art-card reveal" data-art="${a.id}" style="animation-delay:${i*50}ms">
-      <div class="ac-cov">${bannerCover(a.motif,ACCENTS[LEVELS[i%5]])}</div>
-      <div class="ac-body"><div class="ac-kicker">${esc(a.kicker)}</div>
-        <h3>${esc(a.title)}</h3><p>${esc(a.excerpt)}</p>
-        <div class="ac-meta">${esc(a.date)} &middot; ${readMin(a)} min read</div></div>
-    </div>`).join("");
-  view.innerHTML=`<div class="wrap">
-      <div class="sec-head"><div class="sec-kicker">The Journal</div>
-        <h1 class="sec-title">Reading &amp; Learning Notes</h1>
-        <div class="sec-sub">Practical guides on reading, listening and remembering English. Tap any to read with audio and translation.</div></div>
-      <div class="art-grid">${cards}</div></div>`;
-  view.querySelectorAll(".art-card").forEach(c=>c.onclick=()=>openArticle(c.dataset.art,false));
-  window.scrollTo(0,0);
-}
-function openArticle(id, listView){
-  curArticle=ARTICLES.find(a=>a.id===id);
-  if(listView){ renderArticles(); return; }
-  renderReader(true);
-}
 
 /* ---------- folders ---------- */
 const _FC={A1:'#5b7d4f',A2:'#3f6b8a',B1:'#a63422',B2:'#8a5a1f',C1:'#5a3a6b',tech:'#2e7a8a'};
@@ -2023,9 +2016,9 @@ function renderSaved(){
     {key:'library',label:'English Stories',desc:'English Levels A1 – C1',color:LIB_C,cnt:libFiles},
     {key:'tech',label:'Tech',desc:'Technology',color:TECH_C,cnt:techSubCnt}
   ];
-  const folders=top.map(f=>`<div class="fds-card${f.cnt?'':' fds-empty'}" data-section="${f.key}" style="--fc:${f.color}">
+  const folders=top.map(f=>`<div class="fds-card${f.cnt?'':' fds-empty'}" data-section="${f.key}" style="--fc:${f.color}" role="button" tabindex="0" aria-label="${esc(f.label)} folder">
     <div class="fds-icon">${_FOLD_SVG(f.color)}</div>
-    <div class="fds-label">${f.label}</div>
+    <div class="fds-label">${t(f.label)}</div>
     <div class="fds-desc">${f.desc}</div>
     <div class="fds-cnt" style="color:${f.color}">${f.cnt}</div>
   </div>`).join('');
@@ -2058,17 +2051,17 @@ function renderSavedLibrary(){
   const lvlFolders=LEVELS.map(l=>{
     const fileCnt=new Set(SAVED[l].map(it=>it.storyId)).size;
     const c=_FC[l];
-    return `<div class="fds-card${fileCnt?'':' fds-empty'}" data-folder="${l}" style="--fc:${c}">
+    return `<div class="fds-card${fileCnt?'':' fds-empty'}" data-folder="${l}" style="--fc:${c}" role="button" tabindex="0" aria-label="${_FL[l]} folder — ${_FD[l]}">
       <div class="fds-icon">${_FOLD_SVG(c)}</div>
       <div class="fds-label">${_FL[l]}</div>
-      <div class="fds-desc">${_FD[l]}</div>
+      <div class="fds-desc">${t(_FD[l])}</div>
       <div class="fds-cnt" style="color:${c}">${fileCnt}</div>
     </div>`;
   }).join('');
   view.innerHTML=`<div class="wrap">
     <div class="sec-head">
-      <div class="sec-kicker" style="color:${LIB_C}">English Stories</div>
-      <h1 class="sec-title">English Levels</h1>
+      <div class="sec-kicker" style="color:${LIB_C}">${t('English Stories')}</div>
+      <h1 class="sec-title">${t('English Levels')}</h1>
     </div>
     <div class="fds-grid">${lvlFolders}</div>
   </div>`;
@@ -2088,7 +2081,7 @@ function renderSavedFolder(lvl){
     const subs=Object.entries(_TECH_SUB).map(([key,sub])=>{
       const cnt=items.filter(it=>_getTechCat(it.storyId)===key).length;
       const groupCnt=new Set(items.filter(it=>_getTechCat(it.storyId)===key).map(it=>it.storyId)).size;
-      return `<div class="fds-card${cnt?'':' fds-empty'}" data-sub="${key}" style="--fc:${sub.color}">
+      return `<div class="fds-card${cnt?'':' fds-empty'}" data-sub="${key}" style="--fc:${sub.color}" role="button" tabindex="0" aria-label="${esc(sub.label)} folder">
         <div class="fds-icon">${_FOLD_SVG(sub.color)}</div>
         <div class="fds-label">${sub.label}</div>
         <div class="fds-desc">${sub.desc}</div>
@@ -2103,7 +2096,7 @@ function renderSavedFolder(lvl){
     items.forEach(it=>{ if(!groupMap[it.storyId]) groupMap[it.storyId]={title:it.story,storyId:it.storyId,cnt:0}; groupMap[it.storyId].cnt++; });
     const groups=Object.values(groupMap);
     content=groups.length
-      ? `<div class="fds-file-grid">${groups.map(g=>`<div class="fds-file" data-sid="${esc(g.storyId)}">
+      ? `<div class="fds-file-grid">${groups.map(g=>`<div class="fds-file" data-sid="${esc(g.storyId)}" role="button" tabindex="0" aria-label="${esc(g.title)} — ${g.cnt} saved">
           <div class="fds-file-icon">${_FILE_SVG(c)}</div>
           <div class="fds-file-title">${esc(g.title)}</div>
           <div class="fds-file-cnt" style="color:${c}">${g.cnt} saved</div>
@@ -2112,20 +2105,20 @@ function renderSavedFolder(lvl){
     const fileCount=groups.length;
     view.innerHTML=`<div class="wrap">
       <div class="sec-head">
-        <div class="sec-kicker" style="color:${c}">${_FL[lvl]} &mdash; ${_FD[lvl]}</div>
+        <div class="sec-kicker" style="color:${c}">${_FL[lvl]} &mdash; ${t(_FD[lvl])}</div>
         <h1 class="sec-title">${fileCount} ${fileCount===1?'File':'Files'}</h1>
       </div>
       ${content}
       ${items.length?`<div class="rev-row"><button class="rev-btn" id="revBtn">${REV_SVG}${t("Start Review")} &middot; ${_FL[lvl]}</button></div>`:''}
     </div>`;
     view.querySelectorAll('.fds-file').forEach(el=>el.onclick=()=>renderSavedFile(lvl,el.dataset.sid));
-    if($('#revBtn')) $('#revBtn').onclick=()=>startQuiz(qzGenReview(lvl),'review',null);
+    if($('#revBtn')) $('#revBtn').onclick=()=>{ qzReviewLevel=lvl; startQuiz(qzGenReview(lvl),'review',null); };
     window.scrollTo(0,0); return;
   }
   const subCount=Object.keys(_TECH_SUB).filter(k=>items.some(it=>_getTechCat(it.storyId)===k)).length;
   view.innerHTML=`<div class="wrap">
     <div class="sec-head">
-      <div class="sec-kicker" style="color:${c}">${_FL[lvl]} &mdash; ${_FD[lvl]}</div>
+      <div class="sec-kicker" style="color:${c}">${_FL[lvl]} &mdash; ${t(_FD[lvl])}</div>
       <h1 class="sec-title">${subCount} ${subCount===1?'Folder':'Folders'}</h1>
     </div>
     ${content}
@@ -2144,7 +2137,7 @@ function renderSavedTechSub(subcat){
   items.forEach(it=>{ if(!groupMap[it.storyId]) groupMap[it.storyId]={title:it.story,storyId:it.storyId,cnt:0}; groupMap[it.storyId].cnt++; });
   const groups=Object.values(groupMap);
   const content=groups.length
-    ? `<div class="fds-file-grid">${groups.map(g=>`<div class="fds-file" data-sid="${esc(g.storyId)}">
+    ? `<div class="fds-file-grid">${groups.map(g=>`<div class="fds-file" data-sid="${esc(g.storyId)}" role="button" tabindex="0" aria-label="${esc(g.title)} — ${g.cnt} saved">
         <div class="fds-file-icon">${_FILE_SVG(c)}</div>
         <div class="fds-file-title">${esc(g.title)}</div>
         <div class="fds-file-cnt" style="color:${c}">${g.cnt} saved</div>
@@ -2180,13 +2173,13 @@ function renderSavedFile(lvl, storyId){
   } else {
     list=`<div class="clip-list">`+items.map(it=>`
       <div class="clip reveal">
-        <div class="clip-en" data-en="${esc(it.en)}">${esc(it.en)}</div>
+        <div class="clip-en" data-en="${esc(it.en)}" role="button" tabindex="0" title="Play this sentence">${esc(it.en)}</div>
         ${it.ar?`<div class="clip-ar" style="direction:${nativeLang.rtl?'rtl':'ltr'};text-align:${nativeLang.rtl?'right':'left'}">${esc(it.ar)}</div>`:''}
         <div class="clip-src"><span class="from">From &ldquo;${esc(it.story)}&rdquo; &middot; ${_FL[lvl]}</span>
           <span class="clip-tools">
-            <button class="ct play" data-en="${esc(it.en)}">${PL_SVG}Hear</button>
-            ${it.ar?'':`<button class="ct tr" data-ri="${it._ri}">${TR_SVG}Translate</button>`}
-            <button class="ct del" data-ri="${it._ri}">${DL_SVG}</button>
+            <button class="ct play" data-en="${esc(it.en)}">${PL_SVG}${esc(t('Hear'))}</button>
+            ${it.ar?'':`<button class="ct tr" data-ri="${it._ri}">${TR_SVG}${esc(t('Translate'))}</button>`}
+            <button class="ct del" data-ri="${it._ri}" aria-label="Delete saved sentence">${DL_SVG}</button>
           </span>
         </div>
       </div>`).join('')+`</div>`;
@@ -2208,8 +2201,9 @@ function renderSavedFile(lvl, storyId){
     toast(t("Removed"));
   });
   view.querySelectorAll('.ct.tr').forEach(b=>b.onclick=async()=>{
-    const i=+b.dataset.ri; b.textContent="…";
+    const i=+b.dataset.ri; b.textContent="…"; b.disabled=true;
     const out=await translate(SAVED[lvl][i].en);
+    if(!out){ toast(t("Translation unavailable — check your connection and tap Translate to retry.")); renderSavedFile(lvl,storyId); return; }
     SAVED[lvl][i].ar=out;
     await saveJSON("nh-saved",SAVED);
     renderSavedFile(lvl,storyId);
@@ -2263,11 +2257,10 @@ function qzGenReview(level){
     return{type:"dictation",text:it.en};
   }).filter(Boolean);
 }
-let qzQ=[],qzIdx=0,qzScore=0,qzSrc="",qzStory=null,qzLog=[];
+let qzQ=[],qzIdx=0,qzScore=0,qzSrc="",qzStory=null,qzLog=[],qzReviewLevel=null;
 function startQuiz(questions,src,story){
-  if(!questions||!questions.length){toast("No items yet — read more stories and save words first!");return;}
+  if(!questions||!questions.length){toast(t("No items yet — read more stories and save words first!"));return;}
   qzQ=questions;qzIdx=0;qzScore=0;qzSrc=src;qzStory=story||null;qzLog=[];
-  document.body.classList.add("reading-mode");
   leaveReader();
   setActiveNav(src==="review"?"saved":"library");
   setBack(true,src==="review"?"Folders":"Story",src==="review"?renderSaved:renderDetail);
@@ -2372,14 +2365,14 @@ function qzNextBtn(){
   const btns=view.querySelector(".qz-btns");if(!btns)return;
   const b=document.createElement("button");
   b.className="btn btn-ghost";
-  b.textContent=qzIdx+1<qzQ.length?"Next →":"See Results";
+  b.textContent=qzIdx+1<qzQ.length?t("Next →"):t("See Results");
   b.onclick=qzAdvance;btns.appendChild(b);
   const sk=$("#qzSkip");if(sk)sk.style.display="none";
 }
 function qzAdvance(){qzIdx++;if(qzIdx>=qzQ.length)qzResult();else qzShowQ();}
 function qzResult(){
   const total=qzQ.length,pct=Math.round((qzScore/total)*100);
-  const msg=pct>=80?"Excellent!":pct>=60?"Well done!":pct>=40?"Good effort!":"Keep practising!";
+  const msg=pct>=80?t("Excellent!"):pct>=60?t("Well done!"):pct>=40?t("Good effort!"):t("Keep practising!");
   const rows=qzLog.map((a,i)=>`<div class="qr-row"><span>${i+1}. ${esc((a.q.answer||a.q.text||"").slice(0,48))}</span><span class="${a.ok?"qr-ok":"qr-no"}">${a.ok?"✓":"✗"}</span></div>`).join("");
   const story=qzStory;
   if(story && qzSrc!=="review"){ DONE.add(story.id); saveJSON("nh-done",[...DONE]); }
@@ -2396,7 +2389,7 @@ function qzResult(){
     </div></div>`;
   if($("#qrBack"))$("#qrBack").onclick=renderDetail;
   if($("#qrFolders"))$("#qrFolders").onclick=renderSaved;
-  $("#qrAgain").onclick=()=>startQuiz(qzSrc==="review"?qzGenReview(curLevel):qzGenStory(story),qzSrc,story);
+  $("#qrAgain").onclick=()=>startQuiz(qzSrc==="review"?qzGenReview(qzReviewLevel||curLevel):qzGenStory(story),qzSrc,story);
   window.scrollTo(0,0);
 }
 
@@ -2419,17 +2412,24 @@ async function importProgress(file){
   let data;
   try{ data=JSON.parse(text); }catch(e){ toast(t("Invalid file")); return; }
   if(!data.version||!data.saved){ toast(t("Invalid file")); return; }
-  if(Array.isArray(data.done)){ data.done.forEach(id=>DONE.add(id)); await saveJSON("nh-done",[...DONE]); }
+  if(Array.isArray(data.done)){ data.done.forEach(id=>{ if(typeof id==="string") DONE.add(id); }); await saveJSON("nh-done",[...DONE]); }
   if(data.saved){
     [...LEVELS,'tech'].forEach(l=>{
       if(!Array.isArray(data.saved[l])) return;
       if(!SAVED[l]) SAVED[l]=[];
       const seen=new Set(SAVED[l].map(x=>x.en+"||"+x.storyId));
-      data.saved[l].forEach(it=>{ if(!seen.has(it.en+"||"+it.storyId)){ SAVED[l].push(it); seen.add(it.en+"||"+it.storyId); } });
+      data.saved[l].forEach(it=>{
+        if(!it||typeof it.en!=="string"||typeof it.storyId!=="string") return;
+        const item={en:it.en, ar:typeof it.ar==="string"?it.ar:"", story:typeof it.story==="string"?it.story:"", storyId:it.storyId, ts:typeof it.ts==="number"?it.ts:Date.now()};
+        if(!seen.has(item.en+"||"+item.storyId)){ SAVED[l].push(item); seen.add(item.en+"||"+item.storyId); }
+      });
     });
     await saveJSON("nh-saved",SAVED);
   }
-  if(data.tr && typeof data.tr==="object"){ Object.assign(TR,data.tr); await saveJSON("nh-tr",TR); }
+  if(data.tr && typeof data.tr==="object"){
+    Object.entries(data.tr).forEach(([k,v])=>{ if(typeof v==="string") TR[k]=v; });
+    await saveJSON("nh-tr",TR);
+  }
   renderSaved();
   toast(t("Progress restored!"));
 }
@@ -2438,7 +2438,7 @@ async function importProgress(file){
 function renderSettings(){
   leaveReader(); setActiveNav("settings"); setBack(false);
   const today=new Date();
-  const rawStats=JSON.parse(localStorage.getItem("nh-stats")||"{}");
+  let rawStats={}; try{ rawStats=JSON.parse(localStorage.getItem("nh-stats")||"{}")||{}; }catch(e){}
   const dayMap=rawStats.days||{};
   const chartDays=[];
   let activeDays=0, totalSecs=0;
@@ -2583,7 +2583,7 @@ function renderSettings(){
 
 /* ---------- toast ---------- */
 let toastT;
-function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("show"),1700); }
+function toast(msg){ const el=$("#toast"); el.textContent=msg; el.classList.add("show"); clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove("show"),1700); }
 
 /* ---------- time tracking ---------- */
 let sessionStart=Date.now();
@@ -2593,10 +2593,10 @@ function saveSessionTime(){
   sessionStart=now;
   if(secs<5) return;
   const key=new Date().toISOString().slice(0,10);
-  const st=JSON.parse(localStorage.getItem("nh-stats")||"{}");
+  let st={}; try{ st=JSON.parse(localStorage.getItem("nh-stats")||"{}")||{}; }catch(e){}
   if(!st.days) st.days={};
   st.days[key]=(st.days[key]||0)+secs;
-  localStorage.setItem("nh-stats",JSON.stringify(st));
+  try{ localStorage.setItem("nh-stats",JSON.stringify(st)); }catch(e){}
 }
 setInterval(saveSessionTime,60000);
 document.addEventListener("visibilitychange",()=>{ if(document.hidden) saveSessionTime(); });
@@ -2631,6 +2631,8 @@ document.querySelectorAll(".tb-nav button[data-nav]").forEach(b=>b.onclick=()=>s
   DONE=new Set(Array.isArray(dn)?dn:[]);
   const ul=lsGet("nh-user-level");
   if(ul&&LEVELS.includes(ul)) curLevel=ul;
+  /* returning user with a language but no saved level: finish onboarding */
+  else if(lsGet("nh-native-lang")||lsGet("nh-lang")) showLevelModal(false);
   await translateUIStrings();
   applyUITranslations();
   const tab=new URLSearchParams(window.location.search).get("tab");
