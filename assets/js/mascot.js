@@ -1,63 +1,78 @@
-/** @file Hoot — the NovaHubs reading companion.
- *  A cozy SVG owl injected once into the page shell so it persists across every
- *  view render (views only replace #view, not the body). It:
+/** @file Echo — the NovaHubs reading companion.
+ *  A cozy SVG bat injected once into the page shell. It appears on the HOME hub
+ *  only and hides the moment the reader opens any tab or section. It:
  *   • follows the cursor with its pupils and blinks on an idle timer,
- *   • reacts happily to story completion, navigation, and theme changes,
- *   • shows contextual chat bubbles (tips, encouragement, and today's stats).
+ *   • reacts happily to story completion and theme changes,
+ *   • shows contextual chat bubbles (a greeting, tips, and today's stats) — text
+ *     only, no emoji.
  *  Listens for the global events emitted elsewhere: "nh:navigate",
- *  "nh:storydone", "nh:themechange". */
+ *  "nh:storydone", "nh:themechange".
+ *  (Internal class/flag names keep the historical `nh-owl` prefix so the
+ *   stylesheet keeps working; the character itself is now a bat.) */
 (function(){
   if(window.__nhOwl) return;            /* guard against double-injection */
   window.__nhOwl=true;
 
   const reduce = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
 
-  /* ---------- owl SVG ---------- (terracotta body so it sits in the brand palette) */
-  const OWL = `
+  /* ---------- bat SVG ---------- (terracotta body so it sits in the brand palette).
+     Re-uses the .eyeball / .pupil / .lid / .smile-eye hooks so the existing
+     blink, happy and cursor-tracking CSS/JS all keep working unchanged. */
+  const BAT = `
   <svg viewBox="0 0 100 104" role="img" aria-hidden="true">
-    <!-- ear tufts -->
-    <path d="M26 16 L34 4 L42 18 Z" fill="var(--accent)"/>
-    <path d="M74 16 L66 4 L58 18 Z" fill="var(--accent)"/>
+    <!-- ears (tall, pointed) -->
+    <path d="M32 36 L22 5 L48 30 Z" fill="var(--accent)" stroke="var(--ink)" stroke-width="2"/>
+    <path d="M68 36 L78 5 L52 30 Z" fill="var(--accent)" stroke="var(--ink)" stroke-width="2"/>
+    <path d="M31 31 L26 14 L41 28 Z" fill="var(--accent-2)"/>
+    <path d="M69 31 L74 14 L59 28 Z" fill="var(--accent-2)"/>
+    <!-- wings: scalloped membranes, drawn behind the body -->
+    <path d="M33 52 L6 42 Q2 47 4 53 C9 66 14 63 17 72 C19 64 25 66 27 78 C29 73 32 79 33 84 Z"
+          fill="var(--accent)" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M67 52 L94 42 Q98 47 96 53 C91 66 86 63 83 72 C81 64 75 66 73 78 C71 73 68 79 67 84 Z"
+          fill="var(--accent)" stroke="var(--ink)" stroke-width="2" stroke-linejoin="round"/>
+    <!-- wing finger struts -->
+    <path d="M10 47 L16 66 M19 51 L25 70" stroke="var(--ink)" stroke-width="1" opacity=".4" fill="none"/>
+    <path d="M90 47 L84 66 M81 51 L75 70" stroke="var(--ink)" stroke-width="1" opacity=".4" fill="none"/>
     <!-- body -->
-    <path d="M50 8 C78 8 90 30 90 56 C90 87 72 100 50 100 C28 100 10 87 10 56 C10 30 22 8 50 8 Z"
+    <path d="M50 28 C69 28 75 44 75 60 C75 82 63 93 50 93 C37 93 25 82 25 60 C25 44 31 28 50 28 Z"
           fill="var(--accent)" stroke="var(--ink)" stroke-width="2"/>
-    <!-- wings -->
-    <path d="M14 52 C12 74 20 90 30 96 C26 78 26 64 30 50 Z" fill="rgba(0,0,0,.13)"/>
-    <path d="M86 52 C88 74 80 90 70 96 C74 78 74 64 70 50 Z" fill="rgba(0,0,0,.13)"/>
     <!-- belly -->
-    <ellipse cx="50" cy="70" rx="24" ry="26" fill="var(--paper-2)" opacity=".55"/>
+    <ellipse cx="50" cy="68" rx="20" ry="22" fill="var(--paper-2)" opacity=".5"/>
     <!-- eye discs -->
-    <circle cx="38" cy="46" r="15" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
-    <circle cx="62" cy="46" r="15" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
+    <circle cx="38" cy="48" r="13" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
+    <circle cx="62" cy="48" r="13" fill="var(--paper)" stroke="var(--ink)" stroke-width="2"/>
     <!-- round (default) eyes: pupil + glint, grouped so they can move -->
     <g class="eyeball">
-      <g class="pupil"><circle cx="38" cy="46" r="6.5" fill="var(--ink)"/><circle cx="40.4" cy="43.6" r="2" fill="var(--paper)"/></g>
-      <g class="pupil"><circle cx="62" cy="46" r="6.5" fill="var(--ink)"/><circle cx="64.4" cy="43.6" r="2" fill="var(--paper)"/></g>
+      <g class="pupil"><circle cx="38" cy="48" r="5.5" fill="var(--ink)"/><circle cx="40" cy="45.8" r="1.8" fill="var(--paper)"/></g>
+      <g class="pupil"><circle cx="62" cy="48" r="5.5" fill="var(--ink)"/><circle cx="64" cy="45.8" r="1.8" fill="var(--paper)"/></g>
       <!-- blink lids -->
-      <circle class="lid" cx="38" cy="46" r="15.5" fill="var(--accent)"/>
-      <circle class="lid" cx="62" cy="46" r="15.5" fill="var(--accent)"/>
+      <circle class="lid" cx="38" cy="48" r="13.5" fill="var(--accent)"/>
+      <circle class="lid" cx="62" cy="48" r="13.5" fill="var(--accent)"/>
     </g>
     <!-- happy ^‿^ eyes (revealed in .is-happy) -->
     <g class="smile-eye" fill="none" stroke="var(--ink)" stroke-width="3" stroke-linecap="round">
-      <path d="M30 47 Q38 55 46 47"/>
-      <path d="M54 47 Q62 55 70 47"/>
+      <path d="M31 49 Q38 56 45 49"/>
+      <path d="M55 49 Q62 56 69 49"/>
     </g>
-    <!-- beak -->
-    <path d="M50 54 L56 60 L50 66 L44 60 Z" fill="var(--accent-2)" stroke="var(--ink)" stroke-width="1.4"/>
+    <!-- nose + smiling mouth + little fangs -->
+    <path d="M50 60 l-3 4 h6 Z" fill="var(--accent-2)" stroke="var(--ink)" stroke-width="1"/>
+    <path d="M44 68 Q50 74 56 68" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linecap="round"/>
+    <path d="M46 69 L48 74 L50 69 Z" fill="var(--paper)" stroke="var(--ink)" stroke-width=".8"/>
+    <path d="M50 69 L52 74 L54 69 Z" fill="var(--paper)" stroke="var(--ink)" stroke-width=".8"/>
     <!-- feet -->
-    <path d="M40 99 l-4 5 M40 99 l0 5 M40 99 l4 5" stroke="var(--accent-2)" stroke-width="2.4" stroke-linecap="round" fill="none"/>
-    <path d="M60 99 l-4 5 M60 99 l0 5 M60 99 l4 5" stroke="var(--accent-2)" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+    <path d="M42 92 l-3 5 M42 92 l0 5 M42 92 l3 5" stroke="var(--accent-2)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+    <path d="M58 92 l-3 5 M58 92 l0 5 M58 92 l3 5" stroke="var(--accent-2)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
   </svg>`;
 
-  /* ---------- build + mount ---------- */
+  /* ---------- build + mount ---------- (starts hidden; shown only on the hub) */
   const wrap=document.createElement("div");
-  wrap.className="nh-owl-wrap";
+  wrap.className="nh-owl-wrap is-hidden";
   wrap.innerHTML =
     `<div class="nh-owl-bubble" id="nhOwlBubble" role="status">
-       <span class="nh-owl-bubble-kicker">Hoot says</span>
+       <span class="nh-owl-bubble-kicker">Echo says</span>
        <span class="nh-owl-bubble-text"></span>
      </div>
-     <button type="button" class="nh-owl" id="nhOwl" aria-label="Hoot, your reading companion — tap for a tip or your stats">${OWL}</button>`;
+     <button type="button" class="nh-owl" id="nhOwl" aria-label="Echo, your reading companion — tap for a tip or your stats">${BAT}</button>`;
   document.body.appendChild(wrap);
 
   const owl=wrap.querySelector("#nhOwl");
@@ -98,33 +113,21 @@
     window.addEventListener("mousemove",e=>{ mx=e.clientX; my=e.clientY; if(!raf) raf=requestAnimationFrame(track); },{passive:true});
   }
 
-  /* ---------- copy ---------- */
-  const VIEW_MSG={
-    renderHome:["Welcome back to NovaHubs! Pick a hub and let's read. 📚",
-                "Two collections, one cozy habit — where shall we begin? 🦉"],
-    renderLibraryFolders:"Choose a level that feels just right — you can always level up. 📈",
-    renderLibrary:"Tip: while reading, tap any word to hear, translate, or save it. 🦉",
-    renderDetail:"When you start, tap the words you don't know — I'll help you remember them. ✨",
-    renderTechCats:"Code stories ahead! Pick a track and dive in. 💡",
-    renderTechLevels:"Start gentle and build up — every expert began at Zero. 🌱",
-    renderTech:"Tip: read a sentence, then listen to it. Hearing it locks it in. 🔊",
-    renderTechReader:"Reading along with the audio helps memory — give it a try! 🔊",
-    renderSaved:"Reviewing saved sentences is how they stick. Fancy a quick review? 🔁",
-    renderSavedLibrary:"Your memory folders — revisit them often. 🗂️",
-    renderSettings:"Try Sepia mode for warm, low-glare reading. 🌙"
-  };
+  /* ---------- copy (text only, no emoji) ---------- */
+  const HOME_MSG=["Welcome back to NovaHubs! Pick a hub and let's read.",
+                  "Two collections, one cozy habit — where shall we begin?"];
   const TIPS=[
-    "Read a little every day — ten minutes beats one long cram. ⏳",
-    "Say new words out loud. Your ears teach your memory. 🔊",
-    "Don't translate every word — try to guess from context first. 🧠",
-    "Save the tricky sentences, then review them tomorrow. 🔁",
-    "Finished a story? Take the quiz to make it stick. ✅",
-    "Tired eyes? Switch to Sepia or Dark mode for cozy reading. 🌙"
+    "Read a little every day — ten minutes beats one long cram.",
+    "Say new words out loud. Your ears teach your memory.",
+    "Don't translate every word — try to guess from context first.",
+    "Save the tricky sentences, then review them tomorrow.",
+    "Finished a story? Take the quiz to make it stick.",
+    "Tired eyes? Switch to Sepia or Dark mode for cozy reading."
   ];
   const THEME_MSG={
-    light:"Lights on — bright and crisp. ☀️",
-    dark:"Night reading mode. Easy on the eyes. 🌑",
-    sepia:"Cozy sepia — warm and low-glare. 🌙"
+    light:"Lights on — bright and crisp.",
+    dark:"Night reading mode. Easy on the eyes.",
+    sepia:"Cozy sepia — warm and low-glare."
   };
   const pick=a=>a[Math.floor(Math.random()*a.length)];
 
@@ -137,30 +140,40 @@
     }catch(e){}
     read=(window.DONE&&typeof DONE.size==="number")?DONE.size:0;
     const mins=Math.round(secs/60);
-    if(mins<=0) return `No reading yet today — shall we start a story? 📖`;
-    return `📖 You've read <b>${mins} min</b> today · <b>${read}</b> ${read===1?"story":"stories"} finished. Keep it up!`;
+    if(mins<=0) return `No reading yet today — shall we start a story?`;
+    return `You've read <b>${mins} min</b> today · <b>${read}</b> ${read===1?"story":"stories"} finished. Keep it up!`;
+  }
+
+  /* ---------- visibility: HOME hub only ---------- */
+  function setVisible(on){
+    wrap.classList.toggle("is-hidden", !on);
+    if(!on) bubble.classList.remove("show");
   }
 
   /* ---------- events ---------- */
   document.addEventListener("nh:navigate",e=>{
-    const m=VIEW_MSG[e.detail&&e.detail.view];
+    const onHome = (e.detail && e.detail.view) === "renderHome";
+    setVisible(onHome);
+    if(!onHome) return;          /* hidden on every tab / section */
     blink();
-    if(m) say(Array.isArray(m)?pick(m):m);
+    say(pick(HOME_MSG));
   });
 
   document.addEventListener("nh:storydone",e=>{
+    if(wrap.classList.contains("is-hidden")) return;   /* only chime in on the hub */
     happy();
     const read=(window.DONE&&typeof DONE.size==="number")?DONE.size:0;
-    say(`🎉 Story complete! That's <b>${read}</b> ${read===1?"story":"stories"} read now. Brilliant work!`,6800);
+    say(`Story complete! That's <b>${read}</b> ${read===1?"story":"stories"} read now. Brilliant work!`,6800);
   });
 
   document.addEventListener("nh:themechange",e=>{
+    if(wrap.classList.contains("is-hidden")) return;
     const th=e.detail&&e.detail.theme;
     happy();
-    say(THEME_MSG[th]||"Theme switched. ✨",3600);
+    say(THEME_MSG[th]||"Theme switched.",3600);
   });
 
-  /* tap the owl: alternate between an encouraging tip and today's stats */
+  /* tap the bat: alternate between an encouraging tip and today's stats */
   let toggle=0;
   owl.addEventListener("click",()=>{ happy(); toggle^=1; say(toggle?statsMessage():pick(TIPS)); });
 })();

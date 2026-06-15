@@ -1,4 +1,4 @@
-/* NovaHubs reading companion — a cozy owl that lives on every view.
+/* NovaHubs reading companion — a cozy bat that appears on the HOME hub only.
    Uses the shared design tokens so it adapts to light / dark / sepia.
    All motion is purely decorative and is automatically neutralised by the
    prefers-reduced-motion rule in shared.css. */
@@ -6,8 +6,10 @@
 .nh-owl-wrap{
   position:fixed; left:16px; bottom:16px; z-index:55;
   display:flex; flex-direction:column; align-items:flex-start; gap:10px;
-  pointer-events:none; /* only the owl + bubble catch clicks */
+  pointer-events:none; /* only the bat + bubble catch clicks */
 }
+/* hidden on every view except the home hub (toggled from mascot.js) */
+.nh-owl-wrap.is-hidden{ display:none; }
 
 /* ---------- speech bubble ---------- */
 .nh-owl-bubble{
