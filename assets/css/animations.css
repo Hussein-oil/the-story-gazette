@@ -20,6 +20,11 @@
   /* ---- shared values ---- */
   --a-lift:10px; --a-stagger:70ms;
   --a-shadow:6px 8px 0 rgba(33,29,23,.18);
+  /* ---- motion blur ---- (focus-in on reveals; velocity-driven on interactions) */
+  --a-blur:7px;          /* entrance focus-in blur for text + elements */
+  --a-blur-move:2.6px;   /* max blur on magnetic-button movement       */
+  --a-blur-tilt:1.8px;   /* max blur on card tilt                      */
+  --a-blur-scroll:3.4px; /* max blur on fast scroll (parallax/h-track) */
 }
 
 /* While JS is preparing a cinematic entrance, hold opted-in elements hidden so
@@ -79,8 +84,10 @@ html.nh-anim-ready [data-anim].is-in{opacity:1;}
    motion (which zeroes transition-duration globally) degrades cleanly.
    ========================================================================== */
 [data-anim]{
+  filter:blur(var(--a-blur));                       /* motion-blur: starts soft … */
   transition:opacity var(--a-base) var(--a-ease),
              transform var(--a-base) var(--a-ease),
+             filter var(--a-base) var(--a-ease),
              clip-path var(--a-slow) var(--a-out-expo);
 }
 [data-anim="rise"]{transform:translateY(22px);}
@@ -94,7 +101,7 @@ html.nh-anim-ready [data-anim].is-in{opacity:1;}
 [data-anim="clip-r"]{clip-path:inset(0 100% 0 0);}
 /* 3D perspective entrance for scroll sections */
 [data-anim="tilt-in"]{transform:perspective(1100px) rotateX(14deg) translateY(40px);transform-origin:50% 100%;opacity:0;}
-[data-anim].is-in{opacity:1;transform:none;clip-path:inset(0 0 0 0);}
+[data-anim].is-in{opacity:1;transform:none;filter:blur(0);clip-path:inset(0 0 0 0);}  /* … resolves sharp */
 
 /* ============================================================================
    4 · FLOATING SHAPES / "INK" PARTICLES (cinematic backdrop)
@@ -216,7 +223,9 @@ html.nh-anim-ready [data-anim].is-in{opacity:1;}
    ========================================================================== */
 .nh-split .nh-char{display:inline-block;will-change:transform;
   transition:transform var(--a-fast) var(--a-spring),color var(--a-fast) var(--a-ease);}
-.nh-split:hover .nh-char{transform:translateY(-6px);color:var(--accent);}
+/* motion blur on the lift, resolving sharp so hovered text stays readable */
+.nh-split:hover .nh-char{transform:translateY(-6px);color:var(--accent);animation:nh-char-mblur var(--a-fast) var(--a-ease);}
+@keyframes nh-char-mblur{0%{filter:blur(0);}50%{filter:blur(1.4px);}100%{filter:blur(0);}}
 .nh-split .nh-char.is-space{width:.3em;}
 
 /* ============================================================================
@@ -243,6 +252,8 @@ html.nh-anim-ready [data-anim].is-in{opacity:1;}
 @media (prefers-reduced-motion: reduce){
   html.nh-anim-ready [data-anim]{opacity:1!important;}
   [data-anim]{transform:none!important;clip-path:none!important;}
+  /* never blur anything when reduced motion is requested (keeps text crisp) */
+  [data-anim],[data-magnetic],[data-tilt],[data-parallax],.nh-h-track,.nh-split .nh-char{filter:none!important;}
   .nh-particles,#nh-veil,#nh-loader{display:none!important;}
   #nh-progress{display:none!important;}
   .nh-flip:hover .nh-flip-inner,.nh-flip:focus-within .nh-flip-inner{transform:none!important;}

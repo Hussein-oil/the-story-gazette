@@ -38,6 +38,37 @@
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   const onceFlag = (el, key) => { if (el["__nh_" + key]) return false; el["__nh_" + key] = true; return true; };
 
+  /* ---- motion blur ---- (velocity-driven; cleared the moment movement stops) */
+  let MB = { move: 2.6, tilt: 1.8, scroll: 3.4 };  /* maxima, refreshed from CSS vars at boot */
+  function readBlurVars() {
+    const px = (n, fb) => { const v = parseFloat(getComputedStyle(root).getPropertyValue(n)); return isNaN(v) ? fb : v; };
+    MB = { move: px("--a-blur-move", 2.6), tilt: px("--a-blur-tilt", 1.8), scroll: px("--a-blur-scroll", 3.4) };
+  }
+  /** Blur an element in proportion to how fast the pointer is moving over it. */
+  function velBlur(el, x, y, maxB) {
+    const s = el.__mb || (el.__mb = {});
+    const now = (window.performance && performance.now) ? performance.now() : Date.now();
+    if (s.t != null) {
+      const dt = Math.max(now - s.t, 8);
+      const v = Math.hypot(x - s.x, y - s.y) / dt;        /* px per ms */
+      const b = Math.min(v * 1.5, maxB);
+      el.style.filter = b > 0.25 ? "blur(" + b.toFixed(2) + "px)" : "";
+    }
+    s.x = x; s.y = y; s.t = now;
+    clearTimeout(s.to); s.to = setTimeout(() => { el.style.filter = ""; s.t = null; }, 110);
+  }
+  function clearBlur(el) { const s = el.__mb; if (s) { clearTimeout(s.to); s.t = null; } el.style.filter = ""; }
+  /** ScrollTrigger onUpdate handler that blurs an element by scroll velocity. */
+  function scrollBlurUpdater(el, maxB) {
+    let to = null;
+    return (self) => {
+      let v = 0; try { v = Math.abs(self.getVelocity()); } catch (e) {}
+      const b = Math.min(v / 520, maxB);
+      el.style.filter = b > 0.25 ? "blur(" + b.toFixed(2) + "px)" : "";
+      clearTimeout(to); to = setTimeout(() => { el.style.filter = ""; }, 90);
+    };
+  }
+
   /* register ScrollTrigger if GSAP shipped */
   function initGSAP() {
     if (!gsapOK()) return;
@@ -165,9 +196,10 @@
         const my = e.clientY - (r.top + r.height / 2);
         el.classList.add("nh-animating");
         setXY(el, mx * strength, my * strength);
+        velBlur(el, e.clientX, e.clientY, MB.move);   /* motion blur while it chases the cursor */
       });
       el.addEventListener("pointermove", move);
-      el.addEventListener("pointerleave", () => { setXY(el, 0, 0); el.classList.remove("nh-animating"); });
+      el.addEventListener("pointerleave", () => { setXY(el, 0, 0); clearBlur(el); el.classList.remove("nh-animating"); });
     });
   }
   /* auto-apply magnetism to primary CTAs that lack the attribute */
@@ -201,10 +233,11 @@
         const ry = (px - 0.5) * max * 2;
         el.style.transform = "perspective(800px) rotateX(" + rx.toFixed(2) + "deg) rotateY(" + ry.toFixed(2) + "deg)";
         if (glare) { glare.style.setProperty("--gx", (px * 100).toFixed(1) + "%"); glare.style.setProperty("--gy", (py * 100).toFixed(1) + "%"); }
+        velBlur(el, e.clientX, e.clientY, MB.tilt);   /* motion blur on fast tilt */
       });
       el.addEventListener("pointerenter", () => el.classList.add("nh-animating"));
       el.addEventListener("pointermove", move);
-      el.addEventListener("pointerleave", () => { el.style.transform = ""; el.classList.remove("nh-animating"); });
+      el.addEventListener("pointerleave", () => { el.style.transform = ""; clearBlur(el); el.classList.remove("nh-animating"); });
     });
   }
 
@@ -328,7 +361,7 @@
       gsap.to(el, {
         yPercent: -depth * 100,
         ease: "none",
-        scrollTrigger: { trigger: el.closest("[data-parallax-scene]") || el, start: "top bottom", end: "bottom top", scrub: true },
+        scrollTrigger: { trigger: el.closest("[data-parallax-scene]") || el, start: "top bottom", end: "bottom top", scrub: true, onUpdate: scrollBlurUpdater(el, MB.scroll) },
       });
     });
 
@@ -353,6 +386,7 @@
         scrollTrigger: {
           trigger: section, start: "top top", end: () => "+=" + dist(),
           scrub: 1, pin: true, anticipatePin: 1, invalidateOnRefresh: true,
+          onUpdate: scrollBlurUpdater(track, MB.scroll),   /* sideways motion blur on the panels */
         },
       });
     });
@@ -427,8 +461,8 @@
         /* cinematic clip reveal on the masthead block */
         const heads = wrap.querySelectorAll(".sec-kicker,.sec-title,.sec-sub");
         if (gsapReady) {
-          gsap.set(heads, { clipPath: "inset(0 0 100% 0)", y: 16, opacity: 0 });
-          gsap.to(heads, { clipPath: "inset(0 0 0% 0)", y: 0, opacity: 1, duration: 0.9, ease: "expo.out", stagger: 0.12, clearProps: "clipPath,transform" });
+          gsap.set(heads, { clipPath: "inset(0 0 100% 0)", y: 16, opacity: 0, filter: "blur(10px)" });
+          gsap.to(heads, { clipPath: "inset(0 0 0% 0)", y: 0, opacity: 1, filter: "blur(0px)", duration: 0.9, ease: "expo.out", stagger: 0.12, clearProps: "clipPath,transform,filter" });
         }
         viewEl.querySelectorAll(".hub-card").forEach((c) => c.setAttribute("data-tilt", "6"));
         wireTilt(viewEl);
@@ -459,6 +493,7 @@
 
   function boot() {
     root.classList.add("nh-anim-ready");
+    readBlurVars();
     initGSAP();
     buildShell();
     buildLoader();
