@@ -21,6 +21,16 @@
   --sel:rgba(196,66,50,.22); --read:rgba(208,106,48,.28);
   --grid-line:rgba(255,255,255,.04);
 }
+/* Sepia — a warm, low-glare reading mode between light and dark */
+[data-theme="sepia"]{
+  --bg-outer:#dcc9a0; --app-border:#c0a878;
+  --paper:#f3e7cc; --paper-2:#e9dab6;
+  --ink:#2e2415; --ink-soft:#5a4a30; --faint:#8a7550;
+  --line:#6f5c38;
+  --accent:#a6532a; --accent-2:#bf7a2a;
+  --sel:rgba(166,83,42,.18); --read:rgba(191,122,42,.24);
+  --grid-line:rgba(80,60,30,.10);
+}
 .theme-ready *{transition:background-color .25s,color .2s,border-color .2s,box-shadow .2s;}
 ::selection{background:var(--sel);}
 ::-webkit-scrollbar{width:7px;height:7px;}

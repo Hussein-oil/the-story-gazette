@@ -1,7 +1,7 @@
 /** @file Settings view: preferences, progress stats and weekly reading chart, data export/import. */
 /* ---------- settings ---------- */
 function renderSettings(){
-  leaveReader(); setActiveNav("settings"); setBack(false);
+  leaveReader(); setActiveNav("settings"); setBack(true,"Back",closePanel);
   const today=new Date();
   let rawStats={}; try{ rawStats=JSON.parse(localStorage.getItem("nh-stats")||"{}")||{}; }catch(e){}
   const dayMap=rawStats.days||{};
@@ -34,8 +34,6 @@ function renderSettings(){
   const cp=bez(pts);
   const fp=cp+` L${pts[pts.length-1][0].toFixed(1)},${H-PY} L${pts[0][0].toFixed(1)},${H-PY} Z`;
   const dots=pts.map(([x,y],i)=>`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3" fill="var(--accent)" opacity=".9"><title>${chartDays[i].mins} min</title></circle>`).join("");
-  const SUN='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.5"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.05" y2="7.05"/><line x1="16.95" y1="16.95" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.05" y2="16.95"/><line x1="16.95" y1="7.05" x2="19.07" y2="4.93"/></svg>';
-  const MOON='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
   view.innerHTML=`<div class="settings-wrap reveal">
     <div class="sec-head" style="margin-bottom:28px">
       <div class="sec-kicker">${t("Your Account")}</div>
@@ -52,7 +50,7 @@ function renderSettings(){
         <button class="settings-btn" id="setChangeSiteLang">${t("Change")}</button>
       </div>
       <div class="settings-row">
-        <div><div class="settings-label">${t("Appearance")}</div><div class="settings-val" id="setThemeVal">${document.documentElement.dataset.theme==='dark'?t('Dark mode'):t('Light mode')}</div></div>
+        <div><div class="settings-label">${t("Appearance")}</div><div class="settings-val" id="setThemeVal">${t(NHTheme.label(NHTheme.get()))}</div></div>
         <button class="settings-btn" id="setThemeToggle">${t("Toggle")}</button>
       </div>
       <div class="settings-row">
@@ -66,11 +64,6 @@ function renderSettings(){
           <div class="vs-g">
             <button class="sp${voicePref.accent==='US'?' on':''}" id="vpUS">US</button>
             <button class="sp${voicePref.accent==='GB'?' on':''}" id="vpGB">GB</button>
-          </div>
-          <span class="vl">Voice</span>
-          <div class="vs-g">
-            <button class="sp${voicePref.gender==='M'?' on':''}" id="vpM">Male</button>
-            <button class="sp${voicePref.gender==='F'?' on':''}" id="vpF">Female</button>
           </div>
         </div>
       </div>
@@ -121,25 +114,18 @@ function renderSettings(){
     setVoicePref(key,val);
     $("#vpUS").classList.toggle('on',voicePref.accent==='US');
     $("#vpGB").classList.toggle('on',voicePref.accent==='GB');
-    $("#vpM").classList.toggle('on',voicePref.gender==='M');
-    $("#vpF").classList.toggle('on',voicePref.gender==='F');
   }
   $("#vpUS").onclick=()=>applyVP('accent','US');
   $("#vpGB").onclick=()=>applyVP('accent','GB');
-  $("#vpM").onclick=()=>applyVP('gender','M');
-  $("#vpF").onclick=()=>applyVP('gender','F');
   $("#setThemeToggle").onclick=()=>{
-    const html=document.documentElement;
-    const dark=html.dataset.theme==='dark';
-    html.dataset.theme=dark?'':'dark';
-    localStorage.setItem('nh-theme',dark?'light':'dark');
-    document.getElementById('themeBtn').innerHTML=html.dataset.theme==='dark'?SUN:MOON;
-    document.getElementById('setThemeVal').textContent=html.dataset.theme==='dark'?t('Dark mode'):t('Light mode');
+    NHTheme.cycle();   /* light → dark → sepia → light; updates #themeBtn + emits event */
+    document.getElementById('setThemeVal').textContent=t(NHTheme.label(NHTheme.get()));
   };
   $("#setExport").onclick=exportProgress;
   $("#setImport").onclick=()=>{
     const inp=document.createElement("input"); inp.type="file"; inp.accept=".json";
     inp.onchange=()=>importProgress(inp.files[0]); inp.click();
   };
+  mountPanelClose();
   window.scrollTo(0,0);
 }

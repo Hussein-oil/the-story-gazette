@@ -15,7 +15,7 @@ const _FOLD_SVG=(c)=>`<svg viewBox="0 0 56 44" fill="none"><path d="M2 10Q2 7 5 
 const _FILE_SVG=(c)=>`<svg viewBox="0 0 40 48" fill="none" stroke="${c}" stroke-width="1.5" stroke-linecap="round"><path d="M6 2L26 2 36 12 36 44Q36 46 34 46L6 46Q4 46 4 44L4 4Q4 2 6 2Z" fill="${c}" fill-opacity="0.09"/><path d="M26 2L26 12 36 12" fill="none"/><line x1="10" y1="21" x2="30" y2="21"/><line x1="10" y1="28" x2="30" y2="28"/><line x1="10" y1="35" x2="22" y2="35"/></svg>`;
 
 function renderSaved(){
-  leaveReader(); setActiveNav("saved"); setBack(false);
+  leaveReader(); setActiveNav("saved"); setBack(true,"Back",closePanel);
   curSavedFolder=null; curSavedSubFolder=null; curSavedFile=null;
   const EX_SVG=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`;
   const IM_SVG=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>`;
@@ -50,6 +50,7 @@ function renderSaved(){
   view.querySelector('[data-section="tech"]').onclick=()=>renderSavedFolder('tech');
   $('#btnExport').onclick=exportProgress;
   $('#importFile').onchange=function(){importProgress(this.files[0]);this.value='';};
+  mountPanelClose();
   window.scrollTo(0,0);
 }
 

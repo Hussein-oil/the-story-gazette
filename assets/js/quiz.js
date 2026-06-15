@@ -186,7 +186,11 @@ function qzResult(){
   const msg=pct>=80?t("Excellent!"):pct>=60?t("Well done!"):pct>=40?t("Good effort!"):t("Keep practising!");
   const rows=qzLog.map((a,i)=>`<div class="qr-row"><span>${i+1}. ${esc((a.q.answer||a.q.text||"").slice(0,48))}</span><span class="${a.ok?"qr-ok":"qr-no"}">${a.ok?"✓":"✗"}</span></div>`).join("");
   const story=qzStory;
-  if(story && qzSrc!=="review"){ DONE.add(story.id); saveJSON("nh-done",[...DONE]); }
+  if(story && qzSrc!=="review"){
+    const firstTime=!DONE.has(story.id);
+    DONE.add(story.id); saveJSON("nh-done",[...DONE]);
+    document.dispatchEvent(new CustomEvent("nh:storydone",{detail:{story,pct,firstTime}}));
+  }
   view.innerHTML=`<div class="quiz-wrap">
     <div class="qz-results reveal">
       <div class="qr-ring">${qzScore}/${total}</div>

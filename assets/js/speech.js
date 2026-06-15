@@ -1,110 +1,90 @@
-/** @file Speech synthesis: voice selection (accent + gender) and the speak() primitive. */
+/** @file Text to speech via Google Translate TTS: streams real US/UK English
+ *  voices over the web (no system voice install needed). Audio plays through a
+ *  plain <audio> element, so it works from file:// with no CORS setup and the
+ *  speed is driven natively by HTMLMediaElement.playbackRate.
+ *
+ *  Public API kept stable for callers: voicePref, setVoicePref(), speak(),
+ *  cancelSpeech(). Only an accent (US/GB) preference is supported — Google
+ *  Translate exposes one voice per accent, so there is no gender option. */
 /* ---------- text to speech ---------- */
-let VOICE=null;
-let VOICE_GENDER_MATCHED=false;
-let voicePref=(()=>{ try{ const p=JSON.parse(localStorage.getItem('nh-voice-pref'))||{}; return {accent:p.accent==='US'?'US':'GB', gender:p.gender==='M'?'M':'F'}; }catch(e){ return {accent:'GB',gender:'F'}; } })();
-/* common voice-name hints per gender across Windows/macOS/Android/iOS voice packs */
-const _VOICE_F=/female|zira|hazel|susan|libby|sonia|aria|jenny|jessa|samantha|victoria|karen|serena|moira|tessa|fiona|kate|emma|ava|allison|stephanie|catherine/i;
-const _VOICE_M=/male|david|mark|george|ryan|guy|daniel|james|alex\b|fred|oliver|thomas|arthur|brian|christopher|eric/i;
 
-/** @returns {string} BCP-47 code for the preferred accent, e.g. "en-GB". */
+let voicePref=(()=>{ try{ const p=JSON.parse(localStorage.getItem('nh-voice-pref'))||{}; return {accent:p.accent==='US'?'US':'GB'}; }catch(e){ return {accent:'GB'}; } })();
+
+/** @returns {string} BCP-47 code Google TTS uses for the preferred accent. */
 function prefLang(){ return voicePref.accent==='US'?'en-US':'en-GB'; }
 
 /**
- * Resolve with the voice list, waiting for `voiceschanged` on engines that
- * populate it asynchronously. Resolves with whatever is available after 2s
- * so an engine with no voices installed cannot hang callers forever.
- * @returns {Promise<SpeechSynthesisVoice[]>}
- */
-function getVoices(){
-  return new Promise(resolve=>{
-    if(!("speechSynthesis" in window)) return resolve([]);
-    const voices=speechSynthesis.getVoices();
-    if(voices.length) return resolve(voices);
-    let settled=false;
-    const settle=()=>{ if(!settled){ settled=true; resolve(speechSynthesis.getVoices()); } };
-    speechSynthesis.addEventListener("voiceschanged",settle,{once:true});
-    setTimeout(settle,2000);
-  });
-}
-
-/**
- * Pick the best voice for the saved preference. Accent always wins:
- * exact language pool first, then any English, then everything; the gender
- * preference is only applied WITHIN a pool, falling back to the pool's first
- * voice, so switching US/GB always switches voice when both accents exist.
- * @param {SpeechSynthesisVoice[]} vs
- * @returns {?SpeechSynthesisVoice}
- */
-function chooseVoice(vs){
-  const want=prefLang().toLowerCase();
-  const isF=v=>_VOICE_F.test(v.name);
-  const matchGender=voicePref.gender==='M'?(v=>!isF(v)&&_VOICE_M.test(v.name)):isF;
-  const norm=v=>(v.lang||"").replace("_","-").toLowerCase();
-  const pools=[
-    vs.filter(v=>norm(v).startsWith(want)),
-    vs.filter(v=>norm(v).startsWith("en")),
-    vs
-  ];
-  for(const p of pools){
-    if(!p.length) continue;
-    const g=p.find(matchGender);
-    VOICE_GENDER_MATCHED=!!g;
-    return g||p[0];
-  }
-  VOICE_GENDER_MATCHED=false;
-  return null;
-}
-
-/** Refresh the cached voice from the current preference (async, fire-and-forget). */
-async function pickVoice(){
-  VOICE=chooseVoice(await getVoices());
-}
-
-/**
- * Update one voice preference, persist it (including the resolved BCP-47
- * lang code), and re-pick the voice immediately.
- * @param {("accent"|"gender")} key
- * @param {string} val "US"/"GB" or "M"/"F"
+ * Update a voice preference (currently only "accent") and persist it. Stops
+ * any current speech so the new accent takes effect on the next utterance.
+ * @param {string} key  "accent"
+ * @param {string} val  "US" | "GB"
  */
 function setVoicePref(key,val){
   voicePref[key]=val;
-  try{ localStorage.setItem('nh-voice-pref',JSON.stringify({accent:voicePref.accent,gender:voicePref.gender,lang:prefLang()})); }catch(e){}
-  pickVoice();
+  try{ localStorage.setItem('nh-voice-pref',JSON.stringify({accent:voicePref.accent,lang:prefLang()})); }catch(e){}
+  cancelSpeech();
 }
 
-if("speechSynthesis" in window){ pickVoice(); speechSynthesis.onvoiceschanged=()=>{ pickVoice(); }; }
+/* Google Translate TTS rejects requests longer than ~200 chars, so long text
+ * is split into word-boundary chunks and played back to back as one phrase. */
+const _TTS_MAX=200;
 
-let _speakSeq=0;
+/** @param {string} text @returns {string[]} <=200-char chunks (word boundaries). */
+function _chunk(text){
+  const words=String(text||"").trim().split(/\s+/);
+  const out=[]; let cur="";
+  for(const w of words){
+    if(cur && (cur.length+1+w.length)>_TTS_MAX){ out.push(cur); cur=w; }
+    else cur=cur?cur+" "+w:w;
+  }
+  if(cur) out.push(cur);
+  return out;
+}
+
+/** @param {string} text @returns {string} Google Translate TTS endpoint URL. */
+function _ttsUrl(text){
+  return "https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob"
+    +"&tl="+encodeURIComponent(prefLang())
+    +"&q="+encodeURIComponent(text);
+}
+
+let _audio=null;   /* the <audio> element currently playing, if any */
+let _seq=0;        /* playback-session id; bumping it abandons in-flight chains */
+
 /** Stop any current or pending speech immediately. */
 function cancelSpeech(){
-  _speakSeq++;
-  if("speechSynthesis" in window) speechSynthesis.cancel();
+  _seq++;
+  if(_audio){ _audio.onended=_audio.onerror=null; _audio.pause(); _audio.src=""; _audio=null; }
 }
 
+/** @returns {boolean} Whether audio is currently playing. */
+function isSpeaking(){ return !!_audio && !_audio.paused; }
+
 /**
- * Speak text with the voice matching the saved preference.
- * Cancels anything already speaking, then awaits the voice list and
- * re-applies the preference on this utterance, so an accent change always
- * takes effect on the very next thing spoken.
+ * Speak text with the voice matching the saved accent preference. Cancels
+ * anything already playing first, so an accent change always takes effect on
+ * the very next thing spoken. Long text is chunked and played seamlessly.
  * @param {string} text
- * @param {number} rate   Playback rate (0.5 slow ... 2 fast).
- * @param {()=>void} [onend] Called when the utterance finishes (not when cancelled mid-way on some engines).
+ * @param {number} rate   Playback rate (0.5 slow ... 2 fast); pitch is preserved.
+ * @param {()=>void} [onend] Called once the whole text finishes (not on cancel).
  */
-async function speak(text, rate, onend){
-  if(!("speechSynthesis" in window)) return;
-  const seq=++_speakSeq;
-  speechSynthesis.cancel();
-  const voices=await getVoices();
-  if(seq!==_speakSeq) return; /* superseded by a newer speak() or cancelSpeech() while waiting */
-  const v=chooseVoice(voices);
-  VOICE=v;
-  const u=new SpeechSynthesisUtterance(text);
-  if(v){ u.voice=v; u.lang=v.lang; }
-  else { u.lang=prefLang(); }
-  u.rate=rate;
-  /* pitch shift only as a fallback when no genuinely gendered voice was found */
-  u.pitch=VOICE_GENDER_MATCHED?1:(voicePref.gender==='M'?0.75:1.2);
-  if(onend) u.onend=onend;
-  speechSynthesis.speak(u);
+function speak(text, rate, onend){
+  cancelSpeech();
+  const chunks=_chunk(text);
+  if(!chunks.length){ if(onend) onend(); return; }
+  const seq=_seq;
+  const r=Math.max(0.5, Math.min(2, rate||1));
+  let i=0;
+  const playNext=()=>{
+    if(seq!==_seq) return;                 /* superseded by another speak()/cancelSpeech() */
+    if(i>=chunks.length){ _audio=null; if(onend) onend(); return; }
+    const a=new Audio(_ttsUrl(chunks[i++]));
+    a.preservesPitch=a.mozPreservesPitch=a.webkitPreservesPitch=true;
+    a.playbackRate=r;
+    a.onended=playNext;
+    a.onerror=()=>{ if(seq===_seq) playNext(); }; /* skip a chunk that failed to load */
+    _audio=a;
+    a.play().catch(()=>{});
+  };
+  playNext();
 }

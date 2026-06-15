@@ -1,12 +1,11 @@
 /** @file Story library, story detail, the reader (word/sentence selection, narration), and the selection sheet. */
 function renderLibrary(){
-  leaveReader(); setActiveNav("library"); setBack(false);
+  leaveReader(); setActiveNav("library"); setBack(true,"English Stories",renderLibraryFolders);
   const stories=STORIES.filter(s=>s.level===curLevel);
-  const tabs=LEVELS.map(l=>`<button data-level="${l}" class="${l===curLevel?'on':''}" aria-pressed="${l===curLevel}">${l}<span class="lab">${l==='A1'?t('Start'):l==='C1'?t('Master'):t('Grow')}</span></button>`).join("");
   const CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
   let cards=stories.map((s,i)=>`
     <div class="card reveal" data-story="${s.id}" style="animation-delay:${i*50}ms" role="button" tabindex="0" aria-label="${esc(s.title)} — ${s.level}, ${readMin(s)} min read">
-      ${cover(s.motif,s.level,ACCENTS[s.level])}
+      ${coverFor(s)}
       ${DONE.has(s.id)?`<div class="done-stamp">${CHECK}${t('Read')}</div>`:''}
       <div class="cap"><div class="tt">${esc(s.title)}</div><div class="au">by ${esc(s.author)}</div>
       <div class="meta">${s.level} &middot; ${readMin(s)} ${t('min read')}</div></div>
@@ -30,14 +29,15 @@ function renderLibrary(){
       </div>
       <button class="save-hint-close" id="dismissHint" title="Dismiss">&times;</button>
     </div>`;
+  const crumbs=[{label:"Home",go:renderHome},{label:"English Stories",go:renderLibraryFolders},{label:curLevel}];
   view.innerHTML=`<div class="wrap">
+      ${crumbBar(crumbs)}
       <div class="sec-head"><div class="sec-kicker">${t('English Stories — Reading Press')}</div>
         <h1 class="sec-title">${t('Choose a Tale to Your Level')}</h1>
         <div class="sec-sub">${LEVEL_DESC[curLevel]}.</div></div>
       ${hint}
-      <div class="levels">${tabs}</div>
       <div class="grid">${cards}</div></div>`;
-  view.querySelectorAll(".levels button").forEach(b=>b.onclick=()=>{curLevel=b.dataset.level;renderLibrary();});
+  bindCrumbs(crumbs);
   view.querySelectorAll(".card[data-story]").forEach(c=>c.onclick=()=>openStory(c.dataset.story));
   if($("#dismissHint")) $("#dismissHint").onclick=()=>{ lsSet("nh-hint-dismissed","1"); $("#saveHint").remove(); };
   window.scrollTo(0,0);
@@ -50,7 +50,7 @@ function renderDetail(){
   const s=curStory;
   view.innerHTML=`<div class="wrap-read reveal">
       <div class="detail-cover">
-        ${cover(s.motif,s.level,ACCENTS[s.level])}
+        ${coverFor(s)}
         <div class="detail-head"><span class="lvl-tag">Level ${s.level}</span>
           <h1>${esc(s.title)}</h1><div class="by">by ${esc(s.author)}</div>
           <div class="nar">${t('Narrated by the NovaHubs reader')}</div></div>
@@ -82,23 +82,20 @@ function renderReader(){
   setBack(true, "Details", renderDetail);
 
   let si=0;
-  const dim=s.imgSize?` width="${s.imgSize[0]}" height="${s.imgSize[1]}"`:"";
-  const fig=src=>`<figure class="story-figure"><img src="${esc(src)}" alt="${esc("Illustration from "+s.title)}" class="story-img" loading="lazy" decoding="async"${dim}></figure>`;
+  /* Pre-generate every paragraph's image URL once (stable ref), then build the
+     page in a single pass with plain static <img> tags above each paragraph. */
+  prefillStoryUrls(s.id, s.body);
   const paras=s.body.map((p,i)=>{
     const inner=splitSentences(p).map(sent=>{
       const words=sent.split(/(\s+)/).map(tok=> /^\s+$/.test(tok)?tok:`<span class="w">${esc(tok)}</span>`).join("");
       return `<span class="s" data-si="${si++}" data-text="${esc(sent)}" tabindex="0">${words}</span>`;
     }).join(" ");
-    const slot=s.images&&s.images[i];
-    const img=!slot?"":Array.isArray(slot)
-      ?`<div class="story-fig-row">${slot.map(fig).join("")}</div>`
-      :fig(slot);
-    return `<p>${inner}</p>${img}`;
-  }).join("")+(s.images&&s.images[s.body.length]&&!Array.isArray(s.images[s.body.length])?fig(s.images[s.body.length]):"");
+    return `<div class="paragraph-block">${paraImg(s.id,i)}<p data-ptext="${esc(p)}">${inner}</p></div>`;
+  }).join("");
 
   const head = `<span class="lvl-tag">Chapter One &middot; Level ${s.level}</span><h1>${esc(s.title)}</h1><div class="by">by ${esc(s.author)}</div>`;
 
-  const audioPanel=`<div class="reader-audio reveal" style="animation-delay:120ms">
+  const audioPanel=`<div class="reader-audio">
     <div class="ra-main">
       <button class="ra-play" id="abPlay"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l13 7-13 7z"/></svg>${t('Listen to Story')}</button>
       <div class="ra-nav">
@@ -116,24 +113,20 @@ function renderReader(){
         <button class="sp${voicePref.accent==='US'?' on':''}" id="vcUS">US</button>
         <button class="sp${voicePref.accent==='GB'?' on':''}" id="vcGB">GB</button>
       </div>
-      <span class="vl">Voice</span>
-      <div class="vs-g">
-        <button class="sp${voicePref.gender==='M'?' on':''}" id="vcM">Male</button>
-        <button class="sp${voicePref.gender==='F'?' on':''}" id="vcF">Female</button>
-      </div>
     </div>
   </div>`;
 
   view.innerHTML=`<div class="wrap-read">
       <article>
-      <div class="reader-head reveal">${head}</div>
+      <div class="reader-head">${head}</div>
       ${audioPanel}
-      <div class="mode-toggle reveal">
+      <div class="mode-toggle">
         <button data-mode="word" class="${mode==='word'?'on':''}" aria-pressed="${mode==='word'}">${t('Tap a word')}</button>
         <button data-mode="sentence" class="${mode==='sentence'?'on':''}" aria-pressed="${mode==='sentence'}">${t('Tap a sentence')}</button>
+        <button data-mode="paragraph" class="${mode==='paragraph'?'on':''}" aria-pressed="${mode==='paragraph'}">${t('Tap a paragraph')}</button>
       </div>
-      <div class="hint reveal">${siteLang.code==='en'?'Tap any <b>word</b> or switch to <b>sentence</b> mode, then choose: listen, slow down, translate, or save it to your level folder.':esc(t('Tap any word or switch to sentence mode, then choose: listen, slow down, translate, or save it to your level folder.'))}</div>
-      <div class="story-body ${mode}-mode reveal" id="storyBody">${paras}</div>
+      <div class="hint">${siteLang.code==='en'?'Tap any <b>word</b> or switch to <b>sentence</b> mode, then choose: listen, slow down, translate, or save it to your level folder.':esc(t('Tap any word or switch to sentence mode, then choose: listen, slow down, translate, or save it to your level folder.'))}</div>
+      <div class="story-body ${mode}-mode" id="storyBody">${paras}</div>
       <div class="endcap">${esc(t('THE END'))}</div>
       <div class="done-row">
         <button class="done-btn" id="doneBtn">
@@ -154,16 +147,11 @@ function renderReader(){
     mode=b.dataset.mode; clearSel(); hideSheet();
     body.classList.toggle("word-mode",mode==="word");
     body.classList.toggle("sentence-mode",mode==="sentence");
+    body.classList.toggle("paragraph-mode",mode==="paragraph");
     view.querySelectorAll(".mode-toggle button").forEach(x=>{
       const on=x.dataset.mode===mode;
       x.classList.toggle("on",on); x.setAttribute("aria-pressed",on);
     });
-  });
-  /* fade illustrations in as they finish loading */
-  view.querySelectorAll(".story-img").forEach(img=>{
-    if(img.complete) return;
-    img.style.opacity="0";
-    img.addEventListener("load",()=>{ img.style.transition="opacity .45s ease"; img.style.opacity="1"; },{once:true});
   });
   body.onclick=onBodyClick;
   body.onkeydown=onBodyKeydown;
@@ -181,13 +169,10 @@ function renderReader(){
   function setVP(key,val){
     setVoicePref(key,val);
     view.querySelectorAll("#vcUS,#vcGB").forEach(b=>b.classList.toggle('on',(b.id==='vcUS'&&voicePref.accent==='US')||(b.id==='vcGB'&&voicePref.accent==='GB')));
-    view.querySelectorAll("#vcM,#vcF").forEach(b=>b.classList.toggle('on',(b.id==='vcM'&&voicePref.gender==='M')||(b.id==='vcF'&&voicePref.gender==='F')));
     if(abPlaying){const i=abIndex;stopAudio();playFrom(i);}
   }
   $("#vcUS").onclick=()=>setVP('accent','US');
   $("#vcGB").onclick=()=>setVP('accent','GB');
-  $("#vcM").onclick=()=>setVP('gender','M');
-  $("#vcF").onclick=()=>setVP('gender','F');
   $("#dlPdf").onclick=()=>{
     const orig=document.title;
     document.title=s.title+" — NovaHubs";
@@ -200,11 +185,17 @@ function renderReader(){
 function onBodyClick(e){
   if(mode==="word"){
     const w=e.target.closest(".w"); if(!w) return;
-    clearSel(); w.classList.add("sel"); selText=w.textContent.replace(/[.,;:!?"'()\u201C\u201D]/g,"").trim();
+    selSpans=[]; clearSel(); w.classList.add("sel"); selText=w.textContent.replace(/[.,;:!?"'()\u201C\u201D]/g,"").trim();
     openSheet(selText,t("Selected Word"));
+  }else if(mode==="paragraph"){
+    const p=e.target.closest("p"); if(!p||!p.dataset.ptext) return;
+    clearSel(); stopAudio(); p.classList.add("sel");
+    selSpans=Array.from(p.querySelectorAll(".s"));
+    selText=p.dataset.ptext;
+    openSheet(selText,t("Selected Text"));
   }else{
     const sen=e.target.closest(".s"); if(!sen) return;
-    clearSel(); sen.classList.add("sel"); selText=sen.dataset.text;
+    selSpans=[]; clearSel(); sen.classList.add("sel"); selText=sen.dataset.text;
     openSheet(selText,t("Selected Sentence"));
   }
 }
@@ -213,7 +204,7 @@ function onBodyKeydown(e){
   if(e.key!=="Enter"&&e.key!==" ") return;
   const sen=e.target.closest(".s"); if(!sen) return;
   e.preventDefault();
-  clearSel(); sen.classList.add("sel"); selText=sen.dataset.text;
+  selSpans=[]; clearSel(); sen.classList.add("sel"); selText=sen.dataset.text;
   openSheet(selText,t("Selected Sentence"));
 }
 function clearSel(){ document.querySelectorAll(".sel").forEach(el=>el.classList.remove("sel")); }
@@ -228,10 +219,10 @@ function openSheet(text,kicker){
   sheet.classList.add("up");
 }
 function hideSheet(){ sheet.classList.remove("up"); }
-$("#sheetClose").onclick=()=>{hideSheet();clearSel();};
+$("#sheetClose").onclick=()=>{hideSheet();clearSel();stopAudio();};
 /* keyboard activation for div-based buttons, and Escape to close the sheet */
 document.addEventListener("keydown",e=>{
-  if(e.key==="Escape"&&sheet.classList.contains("up")){ hideSheet(); clearSel(); return; }
+  if(e.key==="Escape"&&sheet.classList.contains("up")){ hideSheet(); clearSel(); stopAudio(); return; }
   if(e.key!=="Enter"&&e.key!==" ") return;
   const el=e.target;
   if(el instanceof Element && el.matches('[role="button"]') && el.tagName!=="BUTTON" && el.tagName!=="A"){
@@ -239,8 +230,32 @@ document.addEventListener("keydown",e=>{
   }
 });
 /* stop any running story narration first so its onend chain cannot resume over the selection */
-$("#actListen").onclick=()=>{ stopAudio(); speak(selText,1); };
-$("#actSlow").onclick=()=>{ stopAudio(); speak(selText,0.6); };
+$("#actListen").onclick=()=>{ stopAudio(); playSelection(1); };
+$("#actSlow").onclick=()=>{ stopAudio(); playSelection(0.6); };
+
+/* In paragraph mode, read the selection sentence-by-sentence so we can show a
+   progress highlight; otherwise speak the whole selection in one go. Both honour
+   the current accent (US/GB) and speed via speak(). */
+let _selSeq=0;
+function playSelection(rate){
+  if(mode==="paragraph" && selSpans.length>1) speakSpans(selSpans,rate);
+  else speak(selText,rate);
+}
+function speakSpans(spans,rate){
+  const seq=++_selSeq;
+  let i=0;
+  const step=()=>{
+    if(seq!==_selSeq) return; /* cancelled by stopAudio()/new selection */
+    document.querySelectorAll(".reading").forEach(e=>e.classList.remove("reading"));
+    if(i>=spans.length) return;
+    const el=spans[i];
+    el.classList.add("reading");
+    const smooth=!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches);
+    el.scrollIntoView({behavior:smooth?"smooth":"auto",block:"center"});
+    speak(el.dataset.text,rate,()=>{ i++; step(); });
+  };
+  step();
+}
 $("#actTranslate").onclick=async()=>{
   const ar=$("#sheetAr");
   ar.className="sheet-ar show loading";
@@ -289,5 +304,5 @@ function playFrom(i){
   abIndex=i; abPlaying=true; setPlayIcon(true); updatePos(); hl(i);
   speak(sentenceEls[i].dataset.text, abRate, ()=>{ if(abPlaying) playFrom(i+1); });
 }
-function stopAudio(){ abPlaying=false; cancelSpeech(); setPlayIcon(false);
+function stopAudio(){ abPlaying=false; _selSeq++; cancelSpeech(); setPlayIcon(false);
   document.querySelectorAll(".reading").forEach(e=>e.classList.remove("reading")); }

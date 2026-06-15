@@ -1,0 +1,70 @@
+/* NovaHubs reading companion — a cozy owl that lives on every view.
+   Uses the shared design tokens so it adapts to light / dark / sepia.
+   All motion is purely decorative and is automatically neutralised by the
+   prefers-reduced-motion rule in shared.css. */
+
+.nh-owl-wrap{
+  position:fixed; left:16px; bottom:16px; z-index:55;
+  display:flex; flex-direction:column; align-items:flex-start; gap:10px;
+  pointer-events:none; /* only the owl + bubble catch clicks */
+}
+
+/* ---------- speech bubble ---------- */
+.nh-owl-bubble{
+  pointer-events:auto;
+  max-width:240px; background:var(--paper); color:var(--ink);
+  border:1px solid var(--line); box-shadow:4px 5px 0 rgba(33,29,23,.16);
+  padding:11px 14px; position:relative;
+  font-family:var(--serif); font-size:13.5px; line-height:1.5;
+  opacity:0; visibility:hidden; transform:translateY(8px) scale(.96);
+  transform-origin:bottom left; transition:opacity .25s, transform .25s, visibility .25s;
+}
+.nh-owl-bubble.show{ opacity:1; visibility:visible; transform:none; }
+.nh-owl-bubble b{ color:var(--accent); font-weight:700; }
+.nh-owl-bubble-kicker{
+  font-family:var(--type); font-size:8px; letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--accent); display:block; margin-bottom:3px;
+}
+/* little newspaper-style tail pointing down at the owl */
+.nh-owl-bubble::after{
+  content:""; position:absolute; left:24px; bottom:-8px; width:14px; height:14px;
+  background:var(--paper); border-right:1px solid var(--line); border-bottom:1px solid var(--line);
+  transform:rotate(45deg);
+}
+
+/* ---------- the owl button ---------- */
+.nh-owl{
+  pointer-events:auto; cursor:pointer; background:none; border:none; padding:0;
+  width:84px; height:84px; display:block; -webkit-tap-highlight-color:transparent;
+  filter:drop-shadow(3px 4px 0 rgba(33,29,23,.18));
+  animation:nhOwlFloat 5.5s ease-in-out infinite;
+  transition:transform .2s;
+}
+.nh-owl:hover{ transform:scale(1.06); }
+.nh-owl:focus-visible{ outline:2px solid var(--accent); outline-offset:4px; border-radius:8px; }
+.nh-owl svg{ width:100%; height:100%; display:block; overflow:visible; }
+
+@keyframes nhOwlFloat{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-5px);} }
+@keyframes nhOwlBounce{
+  0%{transform:translateY(0);} 25%{transform:translateY(-12px) scale(1.04);}
+  45%{transform:translateY(0) scale(.98);} 65%{transform:translateY(-5px);}
+  100%{transform:translateY(0) scale(1);}
+}
+.nh-owl.is-happy{ animation:nhOwlBounce .9s ease; }
+
+/* eyelids: scaleY(0) = open. Blink closes them; happy mode hides the round
+   eyes and reveals the ^‿^ arcs instead. */
+.nh-owl .lid{ transform-box:fill-box; transform-origin:center; transform:scaleY(0);
+  transition:transform .09s ease; }
+.nh-owl.is-happy .eyeball{ opacity:0; }
+.nh-owl.is-happy .smile-eye{ opacity:1; }
+.nh-owl .smile-eye{ opacity:0; transition:opacity .15s; }
+.nh-owl.blink .lid{ transform:scaleY(1.05); }   /* declared last so a blink wins over happy */
+
+.nh-owl .pupil{ transition:transform .12s ease-out; transform-box:fill-box; }
+
+/* keep the companion out of the way of the reading dock on small screens,
+   and never print it */
+@media(max-width:760px){ body.reading-mode .nh-owl-wrap{ display:none; } }
+@media(max-width:480px){ .nh-owl{ width:66px; height:66px; } .nh-owl-bubble{ max-width:200px; font-size:12.5px; } }
+@media print{ .nh-owl-wrap{ display:none!important; } }
