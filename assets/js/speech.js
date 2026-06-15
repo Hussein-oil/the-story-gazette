@@ -73,6 +73,7 @@ let _audioEl=null;            /* the one reused <audio> element                 
 let _seq=0;                   /* playback-session id; bumping it abandons a chain */
 let _playing=false;           /* whether a speak() chain is currently sounding   */
 let _useNative=false;         /* once Google fails on this device, stay native   */
+let _probed=false;            /* whether the silent Google reachability probe ran */
 let audioUnlocked=false;      /* set once both engines have run inside a gesture  */
 
 function _emit(name){ try{ document.dispatchEvent(new CustomEvent(name)); }catch(e){} }
@@ -129,6 +130,9 @@ function unlockAudio(){
   }catch(e){}
   /* bless speechSynthesis with a silent utterance (inside this gesture) */
   if(_SS){ try{ _SS.resume(); const u=new SpeechSynthesisUtterance(" "); u.volume=0; _SS.speak(u); _loadVoices(); }catch(e){} }
+  /* silently work out NOW whether Google is reachable, so the user's first real
+     "Listen" plays instantly on the right engine instead of stalling 1.4s. */
+  _probeGoogle();
   _markUnlocked();
 }
 if(typeof document!=="undefined"){
@@ -233,3 +237,29 @@ function speak(text, rate, onend){
 
 /** @returns {boolean} Whether the Google <audio> engine is worth trying. */
 function _audioCapable(){ return typeof Audio!=="undefined"; }
+
+/**
+ * Silently (muted) test whether the Google TTS endpoint is reachable on this
+ * device/network. Runs once, on unlock. If it errors or stalls — the typical
+ * mobile case where the endpoint is blocked — we switch the session to the
+ * native engine up front, so the first real utterance has no fallback delay.
+ */
+function _probeGoogle(){
+  if(_probed || _useNative || !_audioCapable() || !_SS) return; /* no native engine? keep trying Google */
+  _probed=true;
+  try{
+    const t=new Audio();
+    t.muted=true; t.preload="auto";
+    let settled=false, to=null;
+    const done=native=>{ if(settled) return; settled=true; if(to) clearTimeout(to);
+      t.onplaying=t.onerror=t.oncanplay=null; try{ t.pause(); }catch(e){} t.removeAttribute("src");
+      if(native) _useNative=true; };
+    t.onplaying=()=>done(false);   /* reachable → keep Google */
+    t.oncanplay=()=>done(false);
+    t.onerror=()=>done(true);      /* blocked/403/offline → go native */
+    t.src=_ttsUrl("hi"); t.playbackRate=1;
+    const p=t.play();
+    if(p&&p.then) p.catch(()=>done(true));
+    to=setTimeout(()=>done(true),1500);  /* stalled (commonly blocked) → go native */
+  }catch(e){ _useNative=true; }
+}
