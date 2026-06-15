@@ -550,6 +550,36 @@
    animation would strip its `forwards` fill and leave them at opacity:0. */
 .wrap:not(.reveal),.wrap-read:not(.reveal),.quiz-wrap:not(.reveal),.settings-wrap:not(.reveal){animation:viewfade .28s ease;}
 @keyframes viewfade{from{opacity:.45;}to{opacity:1;}}
+
+/* ===== audio: "tap to enable" banner (mobile autoplay unlock) ===== */
+.audio-unlock{position:fixed;left:50%;bottom:18px;transform:translate(-50%,150%);z-index:200;
+  display:flex;align-items:stretch;background:var(--ink);color:var(--paper);
+  border:1px solid var(--line);box-shadow:4px 5px 0 rgba(0,0,0,.32);
+  transition:transform .35s cubic-bezier(.2,.7,.2,1);max-width:calc(100vw - 28px);}
+.audio-unlock.show{transform:translate(-50%,0);}
+.audio-unlock-main{display:flex;align-items:center;gap:11px;background:transparent;border:none;color:inherit;
+  cursor:pointer;padding:11px 15px;text-align:left;}
+.audio-unlock-ic{color:var(--accent-2);flex-shrink:0;}
+.audio-unlock-ic svg{width:22px;height:22px;display:block;}
+.audio-unlock.show .audio-unlock-ic{animation:nh-aud-pulse 1.4s ease-in-out infinite;}
+.audio-unlock-txt{display:flex;flex-direction:column;line-height:1.2;}
+.audio-unlock-txt b{font-family:var(--display);font-weight:700;font-size:14px;letter-spacing:.3px;}
+.audio-unlock-txt span{font-family:var(--type);font-size:8.5px;letter-spacing:.5px;opacity:.72;text-transform:uppercase;margin-top:3px;}
+.audio-unlock-x{background:transparent;border:none;border-left:1px solid rgba(255,255,255,.18);
+  color:inherit;cursor:pointer;padding:0 13px;display:flex;align-items:center;opacity:.7;}
+.audio-unlock-x:hover{opacity:1;}
+.audio-unlock-x svg{width:14px;height:14px;}
+@keyframes nh-aud-pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.16);}}
+
+/* ===== audio: playing waveform indicator (in the reader player) ===== */
+.ra-wave{display:inline-flex;align-items:flex-end;gap:3px;height:20px;flex-shrink:0;}
+.ra-wave i{width:3px;height:35%;background:var(--ink);opacity:.42;border-radius:1px;transform-origin:bottom;}
+body.audio-playing .ra-wave i{animation:nh-eq .85s ease-in-out infinite;opacity:.7;}
+.ra-wave i:nth-child(2){animation-delay:.12s;}
+.ra-wave i:nth-child(3){animation-delay:.28s;}
+.ra-wave i:nth-child(4){animation-delay:.05s;}
+.ra-wave i:nth-child(5){animation-delay:.20s;}
+@keyframes nh-eq{0%,100%{transform:scaleY(.32);}50%{transform:scaleY(1);}}
 /* richer empty state */
 .empty svg{width:36px;height:36px;display:block;margin:0 auto 12px;opacity:.45;}
 .empty p{margin:0 0 4px;}

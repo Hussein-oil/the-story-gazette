@@ -1,0 +1,253 @@
+/* ============================================================================
+   NovaHubs · animations.css
+   A professional motion layer for the gazette identity. Compositor-friendly
+   (transform/opacity only), fully reduced-motion aware, and driven by CSS
+   custom properties so timings/easings can be tuned in one place.
+
+   Pairs with animations.js (GSAP timelines + IntersectionObserver/WAAPI
+   fallbacks). Every effect is a progressive enhancement: with JS or motion
+   disabled, content is fully visible and usable.
+   ========================================================================== */
+:root{
+  /* ---- durations ---- */
+  --a-fast:.22s; --a-base:.5s; --a-slow:.9s; --a-xslow:1.4s;
+  /* ---- easings (the "expensive" feel lives here) ---- */
+  --a-ease:cubic-bezier(.22,.61,.36,1);          /* smooth ease-out         */
+  --a-ease-in-out:cubic-bezier(.76,0,.24,1);     /* dramatic in-out          */
+  --a-spring:cubic-bezier(.34,1.56,.64,1);       /* overshoot / spring       */
+  --a-spring-soft:cubic-bezier(.16,1.1,.3,1);    /* gentle settle            */
+  --a-out-expo:cubic-bezier(.16,1,.3,1);         /* long, luxurious tail     */
+  /* ---- shared values ---- */
+  --a-lift:10px; --a-stagger:70ms;
+  --a-shadow:6px 8px 0 rgba(33,29,23,.18);
+}
+
+/* While JS is preparing a cinematic entrance, hold opted-in elements hidden so
+   there is no flash of un-animated content. .nh-anim-ready is set on <html> by
+   animations.js the moment it boots; if JS never runs, the rule below never
+   applies and everything stays visible. */
+html.nh-anim-ready [data-anim]{opacity:0;}
+html.nh-anim-ready [data-anim].is-in{opacity:1;}
+
+/* ============================================================================
+   1 · LOADING SCREEN (branded letterpress entrance)
+   ========================================================================== */
+#nh-loader{
+  position:fixed;inset:0;z-index:4000;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:22px;
+  background:var(--paper);color:var(--ink);
+  transition:opacity .6s var(--a-ease),visibility .6s;
+}
+#nh-loader.is-done{opacity:0;visibility:hidden;pointer-events:none;}
+.nh-loader-plate{
+  font-family:var(--display);font-weight:900;font-size:clamp(34px,8vw,64px);
+  letter-spacing:.5px;line-height:1;position:relative;
+  /* the nameplate is "printed" via an expanding clip */
+  clip-path:inset(0 100% 0 0);
+  animation:nh-print var(--a-xslow) var(--a-out-expo) forwards;
+}
+.nh-loader-plate em{color:var(--accent);font-style:normal;}
+.nh-loader-kicker{
+  font-family:var(--type);font-size:11px;letter-spacing:4px;text-transform:uppercase;
+  color:var(--faint);opacity:0;animation:nh-fade-up .7s var(--a-ease) .55s forwards;
+}
+.nh-loader-bar{
+  width:min(220px,52vw);height:2px;background:var(--line);opacity:.25;position:relative;overflow:hidden;
+  opacity:0;animation:nh-fade-up .6s var(--a-ease) .7s forwards;
+}
+.nh-loader-bar::after{
+  content:"";position:absolute;inset:0;transform-origin:left;transform:scaleX(0);
+  background:var(--accent);animation:nh-load-fill 1.1s var(--a-ease-in-out) .75s forwards;
+}
+@keyframes nh-print{to{clip-path:inset(0 0 0 0);}}
+@keyframes nh-load-fill{to{transform:scaleX(1);}}
+
+/* ============================================================================
+   2 · READING / SCROLL PROGRESS BAR (top of page)
+   ========================================================================== */
+#nh-progress{
+  position:fixed;top:0;left:0;right:0;height:3px;z-index:3000;pointer-events:none;
+  transform-origin:0 50%;transform:scaleX(0);
+  background:linear-gradient(90deg,var(--accent),var(--accent-2));
+  box-shadow:0 0 10px rgba(166,52,34,.35);
+  will-change:transform;
+}
+
+/* ============================================================================
+   3 · ENTRANCE PRIMITIVES (data-anim driven; JS adds .is-in)
+   The transition handles the motion; JS only toggles the class, so reduced
+   motion (which zeroes transition-duration globally) degrades cleanly.
+   ========================================================================== */
+[data-anim]{
+  transition:opacity var(--a-base) var(--a-ease),
+             transform var(--a-base) var(--a-ease),
+             clip-path var(--a-slow) var(--a-out-expo);
+}
+[data-anim="rise"]{transform:translateY(22px);}
+[data-anim="fall"]{transform:translateY(-22px);}
+[data-anim="left"]{transform:translateX(-34px);}
+[data-anim="right"]{transform:translateX(34px);}
+[data-anim="scale"]{transform:scale(.92);}
+[data-anim="spring"]{transform:translateY(28px) scale(.96);transition-timing-function:var(--a-spring);transition-duration:var(--a-slow);}
+/* staggered clip-path text reveal — the signature headline move */
+[data-anim="clip"]{clip-path:inset(0 0 100% 0);transform:translateY(14px);}
+[data-anim="clip-r"]{clip-path:inset(0 100% 0 0);}
+/* 3D perspective entrance for scroll sections */
+[data-anim="tilt-in"]{transform:perspective(1100px) rotateX(14deg) translateY(40px);transform-origin:50% 100%;opacity:0;}
+[data-anim].is-in{opacity:1;transform:none;clip-path:inset(0 0 0 0);}
+
+/* ============================================================================
+   4 · FLOATING SHAPES / "INK" PARTICLES (cinematic backdrop)
+   Rendered behind content, pointer-events off. Kept faint + slow so it reads
+   as paper grain / drifting ink, not neon confetti.
+   ========================================================================== */
+.nh-particles{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0;}
+.nh-particle{
+  position:absolute;border-radius:50%;background:var(--ink);opacity:.07;
+  will-change:transform;animation:nh-float linear infinite;
+}
+.nh-particle.is-ring{background:transparent;border:1px solid var(--accent);opacity:.16;}
+.nh-particle.is-square{border-radius:1px;transform:rotate(45deg);opacity:.06;}
+@keyframes nh-float{
+  0%{transform:translate3d(0,0,0) rotate(0);}
+  50%{transform:translate3d(var(--dx,16px),var(--dy,-26px),0) rotate(180deg);}
+  100%{transform:translate3d(0,0,0) rotate(360deg);}
+}
+/* a section that hosts particles needs a stacking context + room */
+.nh-stage{position:relative;}
+.nh-stage > *{position:relative;z-index:1;}
+
+/* ============================================================================
+   5 · MAGNETIC BUTTONS + RIPPLE + PRESS
+   ========================================================================== */
+[data-magnetic]{
+  transition:transform var(--a-fast) var(--a-spring-soft),
+             box-shadow var(--a-fast) var(--a-ease),
+             background-color var(--a-fast) var(--a-ease),
+             color var(--a-fast) var(--a-ease);
+  will-change:transform;
+}
+[data-magnetic] .nh-mag-inner{display:inline-flex;align-items:center;gap:inherit;transition:transform var(--a-fast) var(--a-spring-soft);}
+
+/* ripple is injected by JS as a positioned span; host just needs clipping */
+.nh-ripple-host{position:relative;overflow:hidden;}
+.nh-ripple{
+  position:absolute;border-radius:50%;transform:translate(-50%,-50%) scale(0);
+  background:currentColor;opacity:.28;pointer-events:none;
+  animation:nh-ripple .6s var(--a-ease) forwards;
+}
+@keyframes nh-ripple{to{transform:translate(-50%,-50%) scale(1);opacity:0;}}
+.nh-press{transition:transform .12s var(--a-ease);}
+.nh-press:active{transform:scale(.96);}
+
+/* ============================================================================
+   6 · CARD TILT (mouse-position parallax) + 3D BOOK-COVER FLIP
+   ========================================================================== */
+[data-tilt]{transform-style:preserve-3d;transition:transform var(--a-fast) var(--a-ease);will-change:transform;}
+[data-tilt] .nh-tilt-glare{
+  position:absolute;inset:0;pointer-events:none;border-radius:inherit;opacity:0;
+  background:radial-gradient(circle at var(--gx,50%) var(--gy,50%),rgba(255,255,255,.35),transparent 55%);
+  transition:opacity var(--a-fast) var(--a-ease);mix-blend-mode:soft-light;
+}
+[data-tilt]:hover .nh-tilt-glare{opacity:1;}
+
+/* flip: wrap the existing cover SVG in .nh-flip; JS adds .nh-flip on library cards */
+.nh-flip{position:relative;perspective:1400px;}
+.nh-flip-inner{
+  position:relative;transition:transform var(--a-slow) var(--a-ease-in-out);
+  transform-style:preserve-3d;will-change:transform;
+}
+.nh-flip:hover .nh-flip-inner,
+.nh-flip:focus-within .nh-flip-inner{transform:rotateY(180deg);}
+.nh-flip-face{backface-visibility:hidden;}
+.nh-flip-back{
+  position:absolute;inset:0;transform:rotateY(180deg);
+  background:var(--paper);border:1px solid var(--line);box-shadow:var(--a-shadow);
+  display:flex;flex-direction:column;justify-content:center;gap:8px;
+  padding:18px 16px;box-sizing:border-box;text-align:left;
+}
+.nh-flip-back .fb-kicker{font-family:var(--type);font-size:8.5px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);}
+.nh-flip-back .fb-title{font-family:var(--display);font-weight:700;font-size:17px;line-height:1.1;color:var(--ink);}
+.nh-flip-back .fb-blurb{font-family:var(--serif);font-size:11.5px;line-height:1.45;color:var(--ink-soft);
+  display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden;}
+.nh-flip-back .fb-meta{margin-top:auto;font-family:var(--type);font-size:8px;letter-spacing:1.2px;
+  text-transform:uppercase;color:var(--faint);border-top:1px solid var(--line);padding-top:7px;}
+/* parallax depth: the cover art drifts slightly inside its frame on hover */
+.nh-flip-face .cover{transition:transform var(--a-slow) var(--a-ease);}
+.nh-flip:hover .nh-flip-face .cover{transform:translateZ(40px) scale(1.04);}
+
+/* ============================================================================
+   7 · SHIMMER LOADING SKELETON (before covers paint)
+   ========================================================================== */
+.nh-skeleton{position:relative;overflow:hidden;background:var(--paper-2);
+  border:1px solid var(--line);aspect-ratio:300/420;}
+.nh-skeleton::after{
+  content:"";position:absolute;inset:0;transform:translateX(-100%);
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent);
+  animation:nh-shimmer 1.3s var(--a-ease) infinite;
+}
+[data-theme="dark"] .nh-skeleton::after{background:linear-gradient(90deg,transparent,rgba(255,255,255,.09),transparent);}
+@keyframes nh-shimmer{100%{transform:translateX(100%);}}
+
+/* ============================================================================
+   8 · INPUT FOCUS — animated underline
+   ========================================================================== */
+.nh-field{position:relative;}
+.nh-field::after{
+  content:"";position:absolute;left:0;bottom:0;height:2px;width:100%;
+  background:var(--accent);transform:scaleX(0);transform-origin:left;
+  transition:transform var(--a-base) var(--a-out-expo);
+}
+.nh-field:focus-within::after{transform:scaleX(1);}
+
+/* ============================================================================
+   9 · SUCCESS / ERROR — spring feedback
+   ========================================================================== */
+.nh-pop{animation:nh-pop .5s var(--a-spring) both;}
+@keyframes nh-pop{0%{transform:scale(.6);opacity:0;}60%{transform:scale(1.08);}100%{transform:scale(1);opacity:1;}}
+.nh-shake{animation:nh-shake .45s var(--a-ease) both;}
+@keyframes nh-shake{10%,90%{transform:translateX(-2px);}20%,80%{transform:translateX(4px);}
+  30%,50%,70%{transform:translateX(-7px);}40%,60%{transform:translateX(7px);}}
+.nh-check-draw{stroke-dasharray:40;stroke-dashoffset:40;animation:nh-draw .5s var(--a-ease) .05s forwards;}
+@keyframes nh-draw{to{stroke-dashoffset:0;}}
+
+/* ============================================================================
+   10 · TEXT SPLIT (character-by-character hover)
+   ========================================================================== */
+.nh-split .nh-char{display:inline-block;will-change:transform;
+  transition:transform var(--a-fast) var(--a-spring),color var(--a-fast) var(--a-ease);}
+.nh-split:hover .nh-char{transform:translateY(-6px);color:var(--accent);}
+.nh-split .nh-char.is-space{width:.3em;}
+
+/* ============================================================================
+   11 · LIQUID / MORPHING SECTION TRANSITION (between views)
+   A full-screen ink veil that wipes across using a morphing SVG path.
+   ========================================================================== */
+#nh-veil{position:fixed;inset:0;z-index:2500;pointer-events:none;visibility:hidden;}
+#nh-veil svg{position:absolute;inset:0;width:100%;height:100%;}
+#nh-veil path{fill:var(--accent);}
+#nh-veil.is-active{visibility:visible;}
+
+/* generic horizontal-scroll track (pinned section on demo/home) */
+.nh-h-track{display:flex;gap:26px;will-change:transform;}
+.nh-h-panel{flex:0 0 auto;}
+
+/* utility: only promote to its own layer while actively animating */
+.nh-animating{will-change:transform,opacity;}
+
+/* ============================================================================
+   REDUCED MOTION — make the whole layer calm and static.
+   shared.css already zeroes durations; here we also remove transforms/visuals
+   that would otherwise sit in a mid-animation state, and reveal hidden content.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce){
+  html.nh-anim-ready [data-anim]{opacity:1!important;}
+  [data-anim]{transform:none!important;clip-path:none!important;}
+  .nh-particles,#nh-veil,#nh-loader{display:none!important;}
+  #nh-progress{display:none!important;}
+  .nh-flip:hover .nh-flip-inner,.nh-flip:focus-within .nh-flip-inner{transform:none!important;}
+  .nh-flip-back{display:none!important;}
+  .nh-skeleton::after{animation:none!important;}
+  .nh-split:hover .nh-char{transform:none!important;}
+  [data-tilt]{transform:none!important;}
+}

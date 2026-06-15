@@ -81,6 +81,7 @@ function renderTechReader(){
       <div class="reader-audio">
         <div class="ra-main">
           <button class="ra-play" id="abPlay" style="background:${accent};border-color:${accent}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5l13 7-13 7z"/></svg>${t('Listen to Story')}</button>
+          <span class="ra-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
           <div class="ra-nav">
             <button class="ra-nav-btn" id="abPrev"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 5h2v14H7zM20 5L10 12l10 7z"/></svg></button>
             <span class="ra-pos" id="abPos">— / —</span>
