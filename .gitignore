@@ -1,0 +1,5 @@
+# Agent memory (belongs in ~/.claude, not the repo)
+memory/
+
+# Local scratch / test files
+tts-test.html
